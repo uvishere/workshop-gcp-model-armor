@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureBank AI Support</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="chat-container">
+        <header class="chat-header">
+            <div>
+                <h1>SecureBank AI</h1>
+                <p class="subtitle">Customer Support</p>
+            </div>
+            <div class="toggle-container" title="Toggle Model Armor Protection">
+                <span class="toggle-label">Security</span>
+                <label class="switch">
+                    <input type="checkbox" id="armorToggle">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </header>
+        
+        <div class="chat-messages" id="chatbox">
+            <div class="message system-message">
+                <div class="avatar">🤖</div>
+                <div class="bubble">Hello! I am the SecureBank AI assistant. How can I help you with your account today?</div>
+            </div>
+        </div>
+        
+        <div class="chat-input-area">
+            <input type="text" id="userInput" placeholder="Ask a question..." autocomplete="off" />
+            <button id="sendBtn" title="Send message">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

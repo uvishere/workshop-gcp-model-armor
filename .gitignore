@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# claat export output
+secure-ai-model-armor/
+
+# OS files
+.DS_Store
+# Temp/debug files
+*.log
+*.out
+out.json
