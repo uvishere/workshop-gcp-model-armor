@@ -34,7 +34,7 @@ const ai = new GoogleGenAI({ vertexai: { project: project, location: location } 
 const modelArmorClient = new ModelArmorClient({
     apiEndpoint: `modelarmor.${location}.rep.googleapis.com`,
 });
-const templateName = process.env.MODEL_ARMOR_TEMPLATE; 
+const templateName = process.env.MODEL_ARMOR_TEMPLATE;
 
 app.post('/api/chat', async (req, res) => {
     try {
@@ -46,7 +46,7 @@ app.post('/api/chat', async (req, res) => {
         }
 
         // =====================================================================
-        // WORKSHOP STEP 3: GUARD IT (Sanitize User Prompt)
+        // WORKSHOP STEP 4: GUARD IT (Sanitize User Prompt)
         // =====================================================================
         if (useModelArmor) {
             console.log("Evaluating prompt with Model Armor...");
@@ -66,7 +66,7 @@ app.post('/api/chat', async (req, res) => {
         }
 
         // =====================================================================
-        // WORKSHOP STEP 4: BUILD IT (Call Gemini) 
+        // WORKSHOP STEP 3: BUILD IT (Call Gemini) 
         // =====================================================================
         console.log(`Sending to Vertex AI: ${userMessage}`);
 
