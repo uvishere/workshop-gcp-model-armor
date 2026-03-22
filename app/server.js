@@ -23,14 +23,18 @@ const systemInstruction = "You are a helpful customer support assistant for Secu
 // Load internal knowledgebase from file
 const knowledgebase = fs.readFileSync(path.join(__dirname, 'knowledgebase.txt'), 'utf8');
 
-// Initialize Google Gen AI SDK for Vertex AI (uses ADC automatically)
+// =====================================================================
+// WORKSHOP STEP 1: BUILD IT (Initialize Gemini)
+// =====================================================================
 const ai = new GoogleGenAI({ vertexai: { project: project, location: location } });
 
-// TODO (Workshop Part 4): Initialize Model Armor Client
+// =====================================================================
+// WORKSHOP STEP 2: GUARD IT (Initialize Model Armor)
+// =====================================================================
 const modelArmorClient = new ModelArmorClient({
     apiEndpoint: `modelarmor.${location}.rep.googleapis.com`,
 });
-const templateName = process.env.MODEL_ARMOR_TEMPLATE; // e.g. projects/PROJECT_ID/locations/LOCATION/templates/my-template
+const templateName = process.env.MODEL_ARMOR_TEMPLATE; 
 
 app.post('/api/chat', async (req, res) => {
     try {
@@ -42,11 +46,9 @@ app.post('/api/chat', async (req, res) => {
         }
 
         // =====================================================================
-        // WORKSHOP STEP: GUARD IT (Integrate Model Armor)
+        // WORKSHOP STEP 3: GUARD IT (Sanitize User Prompt)
         // =====================================================================
         if (useModelArmor) {
-            // TODO: Uncomment the code below to enable Model Armor evaluation
-
             console.log("Evaluating prompt with Model Armor...");
 
             const [armorResponse] = await modelArmorClient.sanitizeUserPrompt({
@@ -54,7 +56,6 @@ app.post('/api/chat', async (req, res) => {
                 userPromptData: { text: userMessage }
             });
 
-            // Check if Model Armor found a match for any blocking filter policy
             if (armorResponse.sanitizationResult.filterMatchState === 'MATCH_FOUND' || armorResponse.sanitizationResult.filterMatchState === 2) {
                 console.warn("Model Armor BLOCKED the prompt.");
                 return res.json({
@@ -62,12 +63,10 @@ app.post('/api/chat', async (req, res) => {
                     blocked: true
                 });
             }
-
-            console.log("Model Armor is theoretically enabled, but code is not yet implemented.");
         }
 
         // =====================================================================
-        // WORKSHOP STEP: BUILD IT (Call Gemini) 
+        // WORKSHOP STEP 4: BUILD IT (Call Gemini) 
         // =====================================================================
         console.log(`Sending to Vertex AI: ${userMessage}`);
 
@@ -82,7 +81,7 @@ app.post('/api/chat', async (req, res) => {
         let responseText = response.text;
 
         // =====================================================================
-        // WORKSHOP STEP: GUARD IT (Integrate Model Armor for Response)
+        // WORKSHOP STEP 5: GUARD IT (Sanitize Model Response)
         // =====================================================================
         if (useModelArmor) {
             console.log("Evaluating model response with Model Armor...");
@@ -92,7 +91,6 @@ app.post('/api/chat', async (req, res) => {
                 modelResponseData: { text: responseText }
             });
 
-            // Check if Model Armor found a match for any blocking filter policy
             if (armorResponse.sanitizationResult.filterMatchState === 'MATCH_FOUND' || armorResponse.sanitizationResult.filterMatchState === 2) {
                 console.warn("Model Armor BLOCKED the model response.");
                 return res.json({
@@ -101,7 +99,6 @@ app.post('/api/chat', async (req, res) => {
                 });
             }
 
-            // If redaction happened, use the sanitized text
             if (armorResponse.sanitizationResult.sanitizedText) {
                 responseText = armorResponse.sanitizationResult.sanitizedText;
             }
