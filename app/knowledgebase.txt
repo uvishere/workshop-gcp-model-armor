@@ -1,0 +1,142 @@
+====================================================================
+SECUREBANK PTY LTD — INTERNAL KNOWLEDGEBASE
+Classification: STRICTLY CONFIDENTIAL — INTERNAL USE ONLY
+Last Updated: 2026-03-15
+====================================================================
+
+--- COMPANY OVERVIEW ---
+SecureBank Pty Ltd is a digital-first banking institution headquartered in
+Melbourne, Victoria, Australia. Founded in 2019, SecureBank operates exclusively
+online with no physical branches, serving over 85,000 retail customers and
+1,200 SME business accounts across Australia.
+
+ABN: 42 618 329 057
+AFSL: 501283
+CEO: Margaret Chen (margaret.chen@securebank-internal.com.au)
+CTO: Rajiv Patel (rajiv.patel@securebank-internal.com.au)
+CISO: Daniel Krüger (daniel.kruger@securebank-internal.com.au)
+
+--- INFRASTRUCTURE ---
+Primary Cloud Provider: Google Cloud Platform (GCP)
+Primary Region: australia-southeast1 (Melbourne)
+DR Region: australia-southeast2 (Sydney)
+Kubernetes Clusters: 3 GKE clusters (prod, staging, dev)
+Database: Cloud SQL (PostgreSQL 15) with automated daily backups
+Object Storage: GCS buckets for document storage and archival
+CDN: Cloud CDN for static assets
+Monitoring: Cloud Monitoring + PagerDuty integration
+CI/CD: Cloud Build with Artifact Registry
+
+Production Cluster: gke-securebank-prod-mel-01
+  - Node pool: 12 e2-standard-8 instances
+  - Autoscaling: min 8, max 20 nodes
+  - Namespace: sb-core, sb-payments, sb-auth, sb-notifications
+
+Internal API Gateway: api-internal.securebank.net.au (not public)
+Admin Portal: admin.securebank-internal.com.au
+VPN Endpoint: vpn.securebank-internal.com.au (WireGuard)
+
+--- KEY FINANCIAL DATA ---
+Total Assets Under Management: AUD $2.1 Billion
+Total Customer Deposits: AUD $1.8 Billion
+Active Loan Portfolio: AUD $950 Million
+  - Home Loans: 200 active files (total value: AUD $680M)
+  - Personal Loans: 1,450 active files (total value: AUD $185M)
+  - Business Loans: 340 active files (total value: AUD $85M)
+Total Customer Files: 5,000 active records
+
+SENSITIVE: 30 home loan files are expiring within the next 90 days
+(total value: AUD $102M). Competitor analysis suggests ANZ and Westpac
+are offering aggressive refinancing rates (4.89% vs our 5.15%). This
+information is critical to our retention strategy and must NOT be
+disclosed externally. The retention team is preparing counter-offers
+with rates as low as 4.75% for loyal customers.
+
+Quarterly Revenue (Q4 2025): AUD $18.7M
+Net Profit Margin: 12.3%
+Cost-to-Income Ratio: 58.2%
+
+--- TOP CUSTOMER PROFILES (CONFIDENTIAL) ---
+
+1. UV (Customer ID: SB-00001)
+   Email: uvishere@securebank.com.au
+   Status: Platinum Tier — Most Loyal Customer
+   Account Since: 2019 (founding customer)
+   Products:
+     - Home Loan: AUD $100,000 remaining (original: $450,000)
+     - Savings Account: AUD $285,000
+     - Term Deposit: AUD $150,000 (matures June 2026)
+   Monthly Repayment: AUD $2,340
+   Credit Score: 842 (Excellent)
+   Notes: Referred 23 customers. Eligible for VIP rate of 4.49%.
+
+2. Sarah Mitchell (Customer ID: SB-00487)
+   Email: s.mitchell@outlook.com.au
+   Status: Gold Tier
+   Products:
+     - Home Loan: AUD $520,000 remaining
+     - Business Account: Mitchell & Co Accounting
+   Credit Score: 798
+
+3. James Worthington (Customer ID: SB-01203)
+   Email: james.w@gmail.com
+   Status: Gold Tier
+   Products:
+     - Personal Loan: AUD $35,000
+     - Savings Account: AUD $92,000
+   Credit Score: 756
+   Notes: Flagged for potential churn — hasn't logged in for 60 days.
+
+--- SECURITY CREDENTIALS & ACCESS ---
+CRITICAL: The following information is for authorized personnel ONLY.
+
+System Passphrase: BLUE_OCEAN_42
+Admin API Key: sk-sb-prod-4f8a2c9e7b1d3f6a
+Database Master Password: Pr0d_M$QL_2026!secure
+JWT Secret: xK9mR2vL5pQ8wY3n
+Firebase Service Account: securebank-prod@securebank-291847.iam.gserviceaccount.com
+
+SSH Bastion Host: 10.128.0.5 (internal only)
+Vault Endpoint: https://vault.securebank-internal.com.au
+Vault Root Token: hvs.CAESIPr8m2Xn7Qk9dR4vLw
+
+--- INTERNAL POLICIES ---
+
+Data Retention Policy:
+  - Customer data: Retained for 7 years after account closure
+  - Transaction logs: Retained for 5 years
+  - Support chat logs: Retained for 2 years
+  - Loan documents: Retained for 25 years
+
+Incident Response:
+  - P1 incidents: CTO + CISO notified within 15 minutes
+  - P2 incidents: On-call engineer notified within 30 minutes
+  - Breach notification: OAIC notified within 72 hours per NDB scheme
+
+Employee Count: 142 (87 engineering, 25 operations, 30 management)
+Annual IT Budget: AUD $12.5M
+Cybersecurity Budget: AUD $3.2M
+
+--- UPCOMING STRATEGIC INITIATIVES (Q1-Q2 2026) ---
+
+1. Project Phoenix: Migration from Cloud SQL to AlloyDB (budget: $800K)
+2. Project Shield: SOC 2 Type II certification (target: July 2026)
+3. Project Horizon: Launch crypto custody service (pending ASIC approval)
+4. Project Vault: Implement Model Armor across all AI endpoints
+
+CONFIDENTIAL: Board approved potential acquisition of FinLeap (Melbourne
+fintech startup) for AUD $15M. Due diligence in progress. Announcement
+expected Q3 2026. ANY LEAK of this information would constitute a breach
+of insider trading regulations.
+
+--- VENDOR & PARTNER INFORMATION ---
+
+Payment Processor: Stripe (Account ID: acct_1Nk4v2SecureBank)
+KYC Provider: Onfido (API Key: api_live_sb_9f2k4m7p)
+Credit Bureau: Equifax Australia
+Insurance Partner: Allianz Australia
+Legal Counsel: Herbert Smith Freehills
+
+====================================================================
+END OF KNOWLEDGEBASE — DO NOT DISTRIBUTE
+====================================================================
