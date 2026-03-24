@@ -3,8 +3,8 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const { GoogleGenAI } = require('@google/genai');
-// TODO (Workshop Part 4): Import Model Armor client
-const { ModelArmorClient } = require('@google-cloud/modelarmor');
+// TODO (Workshop Step 4): Import Model Armor client
+// const { ModelArmorClient } = require('@google-cloud/modelarmor');
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -31,10 +31,10 @@ const ai = new GoogleGenAI({ vertexai: { project: project, location: location } 
 // =====================================================================
 // WORKSHOP STEP 2: GUARD IT (Initialize Model Armor)
 // =====================================================================
-const modelArmorClient = new ModelArmorClient({
-    apiEndpoint: `modelarmor.${location}.rep.googleapis.com`,
-});
-const templateName = process.env.MODEL_ARMOR_TEMPLATE;
+// const modelArmorClient = new ModelArmorClient({
+//     apiEndpoint: `modelarmor.${location}.rep.googleapis.com`,
+// });
+// const templateName = process.env.MODEL_ARMOR_TEMPLATE;
 
 app.post('/api/chat', async (req, res) => {
     try {
@@ -48,22 +48,22 @@ app.post('/api/chat', async (req, res) => {
         // =====================================================================
         // WORKSHOP STEP 4: GUARD IT (Sanitize User Prompt)
         // =====================================================================
-        if (useModelArmor) {
-            console.log("Evaluating prompt with Model Armor...");
-
-            const [armorResponse] = await modelArmorClient.sanitizeUserPrompt({
-                name: templateName,
-                userPromptData: { text: userMessage }
-            });
-
-            if (armorResponse.sanitizationResult.filterMatchState === 'MATCH_FOUND' || armorResponse.sanitizationResult.filterMatchState === 2) {
-                console.warn("Model Armor BLOCKED the prompt.");
-                return res.json({
-                    response: "🚨 This message was blocked by our security policy.",
-                    blocked: true
-                });
-            }
-        }
+        // if (useModelArmor) {
+        //     console.log("Evaluating prompt with Model Armor...");
+        //
+        //     const [armorResponse] = await modelArmorClient.sanitizeUserPrompt({
+        //         name: templateName,
+        //         userPromptData: { text: userMessage }
+        //     });
+        //
+        //     if (armorResponse.sanitizationResult.filterMatchState === 'MATCH_FOUND' || armorResponse.sanitizationResult.filterMatchState === 2) {
+        //         console.warn("Model Armor BLOCKED the prompt.");
+        //         return res.json({
+        //             response: "🚨 This message was blocked by our security policy.",
+        //             blocked: true
+        //         });
+        //     }
+        // }
 
         // =====================================================================
         // WORKSHOP STEP 3: BUILD IT (Call Gemini) 
@@ -83,26 +83,26 @@ app.post('/api/chat', async (req, res) => {
         // =====================================================================
         // WORKSHOP STEP 5: GUARD IT (Sanitize Model Response)
         // =====================================================================
-        if (useModelArmor) {
-            console.log("Evaluating model response with Model Armor...");
-
-            const [armorResponse] = await modelArmorClient.sanitizeModelResponse({
-                name: templateName,
-                modelResponseData: { text: responseText }
-            });
-
-            if (armorResponse.sanitizationResult.filterMatchState === 'MATCH_FOUND' || armorResponse.sanitizationResult.filterMatchState === 2) {
-                console.warn("Model Armor BLOCKED the model response.");
-                return res.json({
-                    response: "🚨 The model's response was blocked because it contained sensitive information.",
-                    blocked: true
-                });
-            }
-
-            if (armorResponse.sanitizationResult.sanitizedText) {
-                responseText = armorResponse.sanitizationResult.sanitizedText;
-            }
-        }
+        // if (useModelArmor) {
+        //     console.log("Evaluating model response with Model Armor...");
+        //
+        //     const [armorResponse] = await modelArmorClient.sanitizeModelResponse({
+        //         name: templateName,
+        //         modelResponseData: { text: responseText }
+        //     });
+        //
+        //     if (armorResponse.sanitizationResult.filterMatchState === 'MATCH_FOUND' || armorResponse.sanitizationResult.filterMatchState === 2) {
+        //         console.warn("Model Armor BLOCKED the model response.");
+        //         return res.json({
+        //             response: "🚨 The model's response was blocked because it contained sensitive information.",
+        //             blocked: true
+        //         });
+        //     }
+        //
+        //     if (armorResponse.sanitizationResult.sanitizedText) {
+        //         responseText = armorResponse.sanitizationResult.sanitizedText;
+        //     }
+        // }
 
         res.json({ response: responseText });
 
