@@ -41,7 +41,7 @@ Alternatively, navigate to [shell.cloud.google.com](https://shell.cloud.google.c
 
 ```bash
 git clone https://github.com/uvishere/workshop-gcp-model-armor.git
-cd workshop-model-armor
+cd workshop-gcp-model-armor
 ```
 
 ### 3. Set up your project
