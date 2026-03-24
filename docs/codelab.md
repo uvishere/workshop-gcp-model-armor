@@ -50,7 +50,7 @@ In the Cloud Shell terminal, set your project ID and enable the required APIs:
 
 ```bash
 # Set your project (replace with your project ID)
-gcloud config set project YOUR_PROJECT_ID
+gcloud config set project your-project-id
 
 # Export it as an environment variable
 export PROJECT_ID=$(gcloud config get-value project)
@@ -139,7 +139,9 @@ Positive
 : **Alternative Method (CLI):** If you prefer the command line, you can generate this template instantly by running the command below.
 
 ```bash
-gcloud alpha model-armor templates create workshop-security-template \
+gcloud config set api_endpoint_overrides/modelarmor "https://modelarmor.us-central1.rep.googleapis.com/"
+
+gcloud model-armor templates create workshop-security-template \
   --location=us-central1 \
   --project=$PROJECT_ID \
   --rai-settings-filters='[{"filterType": "HATE_SPEECH", "confidenceLevel": "LOW_AND_ABOVE"}, {"filterType": "HARASSMENT", "confidenceLevel": "LOW_AND_ABOVE"}]' \
@@ -148,11 +150,11 @@ gcloud alpha model-armor templates create workshop-security-template \
 ```
 
 Once created, copy the Template Name. It will look like this:
-`projects/YOUR_PROJECT_ID/locations/us-central1/templates/workshop-security-template`
+`projects/$PROJECT_ID/locations/us-central1/templates/workshop-security-template`
 
 Add this to your `.env` file!
 ```env
-MODEL_ARMOR_TEMPLATE=projects/YOUR_PROJECT_ID/locations/us-central1/templates/workshop-security-template
+MODEL_ARMOR_TEMPLATE=projects/$PROJECT_ID/locations/us-central1/templates/workshop-security-template
 ```
 
 ## Secure the Code
@@ -190,33 +192,17 @@ Duration: 0:10:00
 
 Finally, let's ship our secured application to production using **Cloud Run**.
 
-### 1. Create an Artifact Registry repository
+### 1. Deploy to Cloud Run
 
-```bash
-gcloud artifacts repositories create workshop-repo \
-  --repository-format=docker \
-  --location=us-central1 \
-  --description="Docker repository for the secure chat app"
-```
-
-### 2. Build and push the Docker container
-
-Using Cloud Build, we can build the container based on the provided `Dockerfile`:
-
-```bash
-gcloud builds submit --tag us-central1-docker.pkg.dev/YOUR_PROJECT_ID/workshop-repo/secure-chat-app
-```
-
-### 3. Deploy to Cloud Run
-
-Deploy the newly built container image. Replace `YOUR_PROJECT_ID` appropriately.
+From the `app/` directory, deploy directly using `--source`, which builds and deploys in one step:
 
 ```bash
 gcloud run deploy secure-chat-app \
-  --image us-central1-docker.pkg.dev/YOUR_PROJECT_ID/workshop-repo/secure-chat-app \
+  --source . \
+  --project $PROJECT_ID \
   --region us-central1 \
   --allow-unauthenticated \
-  --set-env-vars="GOOGLE_CLOUD_PROJECT=YOUR_PROJECT_ID,MODEL_ARMOR_TEMPLATE=projects/YOUR_PROJECT_ID/locations/us-central1/templates/workshop-security-template"
+  --set-env-vars="GOOGLE_CLOUD_PROJECT=$PROJECT_ID,MODEL_ARMOR_TEMPLATE=projects/$PROJECT_ID/locations/us-central1/templates/workshop-security-template"
 ```
 
 When the deployment finishes, Cloud Run will provide you with a public URL. Open it, and test your fully secured, production-ready AI application!
@@ -227,8 +213,7 @@ Duration: 0:00:00
 You've successfully built an AI application, exploited it through prompt injection, secured it using Model Armor, and deployed the final fortified product to Cloud Run.
 
 ### Cleanup
-To avoid incurring charges, delete the Cloud Run service and Artifact Registry repository:
+To avoid incurring charges, delete the Cloud Run service:
 ```bash
 gcloud run services delete secure-chat-app --region us-central1
-gcloud artifacts repositories delete workshop-repo --location us-central1
 ```
