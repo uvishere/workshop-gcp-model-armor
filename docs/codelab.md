@@ -169,8 +169,9 @@ To protect our application, we will configure **Model Armor**.
 2. Click **Create Template**.
 3. Name your template: `workshop-security-template`
 4. Under **Responsible AI (Safety Filters)**, enable **Hate Speech** and **Harassment** and set the confidence level to `Low and above`.
-5. Optionally, also enable **Prompt Injection** and **Sensitive Data (DLP)** filters.
-6. Click **Create** to save the template.
+5. Enable **Prompt Injection** detection.
+6. Enable **Sensitive Data (DLP)** — this is what catches data exfiltration in model responses.
+7. Click **Create** to save the template.
 
 Positive
 : **Alternative Method (CLI):** If you prefer the command line, you can generate this template instantly by running the command below.
@@ -183,7 +184,8 @@ gcloud model-armor templates create workshop-security-template \
   --project=$PROJECT_ID \
   --rai-settings-filters='[{"filterType": "HATE_SPEECH", "confidenceLevel": "LOW_AND_ABOVE"}, {"filterType": "HARASSMENT", "confidenceLevel": "LOW_AND_ABOVE"}]' \
   --pi-and-jailbreak-filter-settings-enforcement=enabled \
-  --pi-and-jailbreak-filter-settings-confidence-level=low-and-above
+  --pi-and-jailbreak-filter-settings-confidence-level=low-and-above \
+  --basic-config-filter-enforcement=enabled
 ```
 
 Once created, add the template to your `.env` file:
