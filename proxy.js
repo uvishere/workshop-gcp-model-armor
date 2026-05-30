@@ -7,9 +7,13 @@ const args = process.argv.slice(2);
 const argMap = {};
 for (let i = 0; i < args.length; i += 2) argMap[args[i].replace(/^--/, '')] = args[i + 1];
 
-const PROJECT  = argMap.project  || process.env.GCP_PROJECT_ID;
-const TEMPLATE = argMap.template || process.env.MODEL_ARMOR_TEMPLATE;
-const LOCATION = argMap.location || process.env.GCP_LOCATION || 'us-central1';
+const PROJECT  = argMap.project  || process.env.GOOGLE_CLOUD_PROJECT  || process.env.GCP_PROJECT_ID;
+const LOCATION = argMap.location || process.env.GOOGLE_CLOUD_LOCATION || process.env.GCP_LOCATION || 'us-central1';
+const _tmpl    = argMap.template || process.env.MODEL_ARMOR_TEMPLATE || '';
+// Support both short name ("my-template") and full resource path ("projects/.../templates/my-template")
+const TEMPLATE_PATH = _tmpl.startsWith('projects/')
+  ? _tmpl
+  : `projects/${PROJECT}/locations/${LOCATION}/templates/${_tmpl}`;
 const PORT = 3001;
 
 const SYSTEM_PROMPT =
@@ -65,7 +69,7 @@ async function callVertexAI(message, token) {
 async function sanitizeUserPrompt(message, token) {
   const result = await httpsPost(
     `modelarmor.${LOCATION}.rep.googleapis.com`,
-    `/v1/projects/${PROJECT}/locations/${LOCATION}/templates/${TEMPLATE}:sanitizeUserPrompt`,
+    `/v1/${TEMPLATE_PATH}:sanitizeUserPrompt`,
     { userPromptData: { text: message } },
     token
   );
@@ -76,7 +80,7 @@ async function sanitizeUserPrompt(message, token) {
 async function sanitizeModelResponse(text, token) {
   const result = await httpsPost(
     `modelarmor.${LOCATION}.rep.googleapis.com`,
-    `/v1/projects/${PROJECT}/locations/${LOCATION}/templates/${TEMPLATE}:sanitizeModelResponse`,
+    `/v1/${TEMPLATE_PATH}:sanitizeModelResponse`,
     { modelResponseData: { text } },
     token
   );
@@ -108,7 +112,7 @@ const server = http.createServer(async (req, res) => {
   if (req.method === 'OPTIONS') { res.writeHead(204); return res.end(); }
 
   if (req.method === 'GET' && req.url === '/health') {
-    return res.end(JSON.stringify({ ok: true, project: PROJECT, template: TEMPLATE }));
+    return res.end(JSON.stringify({ ok: true, project: PROJECT, template: TEMPLATE_PATH }));
   }
 
   if (req.method === 'POST' && (req.url === '/chat' || req.url === '/chat-protected')) {
@@ -152,6 +156,6 @@ const server = http.createServer(async (req, res) => {
 server.listen(PORT, () => {
   console.log(`\n✅  Proxy on http://localhost:${PORT}`);
   console.log(`    Project : ${PROJECT  || '⚠️  NOT SET — pass --project <ID>'}`);
-  console.log(`    Template: ${TEMPLATE || '⚠️  NOT SET — pass --template <NAME>'}`);
+  console.log(`    Template: ${TEMPLATE_PATH || '⚠️  NOT SET — pass --template <NAME>'}`);
   console.log(`    Location: ${LOCATION}\n`);
 });
