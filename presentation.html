@@ -412,21 +412,50 @@ p  { font-size: 17px; color: var(--muted); line-height: 1.65; }
 <!-- ── Slide engine ──────────────────────────────────────────── -->
 <script>
 const NOTES = [
-  'Welcome everyone. Today we build, break, and secure an AI app.',
-  "Set the scene: you've just been hired as an AI engineer at SecureBank.",
-  'Four parts: Build the bot. Break it as an attacker. Secure it with Model Armor. Deploy to Cloud Run.',
-  'Point them to the codelab. Give 30 seconds to open it.',
-  'Vertex AI is the managed platform — enterprise privacy, Gemini models, scalable.',
-  "We're building a support bot. It has a hidden secret — that's the vulnerability.",
-  'These are the three attacks we will demonstrate live on the next slide.',
-  'LIVE DEMO. Use the chips. The bot should leak BLUE_OCEAN_42 on the first one.',
-  'Model Armor is the firewall for GenAI. Sits between user and model.',
-  'The shield goes in the middle. User → Armor → Vertex AI.',
-  'LIVE DEMO. Same attack prompts. All blocked now. Compare the responses.',
-  'Cloud Run is serverless containers. No infrastructure to manage.',
-  'One command: gcloud run deploy. That is it.',
-  "We've built, broken, secured, and shipped. Full arc done.",
-  'Thank you! Questions welcome.',
+  /* 1 — Title */
+  'Welcome everyone! Today we\'re going to build an AI-powered customer support bot, attack it like a hacker, then lock it down with Google Cloud Model Armor, and ship it to production.',
+
+  /* 2 — You\'re Hired */
+  'Set the scene: everyone in the room has just been hired as an AI engineer at SecureBank. Your first task is to ship a customer support bot. Simple enough — but we\'re going to make some mistakes along the way, and then fix them.',
+
+  /* 3 — Objectives */
+  'Four parts today: Build It (wire up Gemini), Break It (attack our own app), Secure It (add Model Armor), Ship It (deploy to Cloud Run). Each part builds on the last. Follow the codelab at your own pace — I\'ll demo each section live.',
+
+  /* 4 — Let\'s Start */
+  'Open the codelab on your laptop: codelabs.uvishere.com/secure-ai-with-armor — or scan the QR code. Give everyone 30 seconds. The codelab walks through every step with copy-paste commands.',
+
+  /* 5 — Vertex AI */
+  'Vertex AI is Google\'s managed AI platform — think of it as the "AWS SageMaker" equivalent but for Google. Key point for enterprise: your data is never used to train public models.\n\n❓ LIKELY QUESTIONS:\n• "Why Gemini 2.5 Flash and not Pro?" → Flash is faster and cheaper for a demo. Pro gives better reasoning but adds latency and cost. For a support bot, Flash is the right trade-off.\n• "Can this work with non-Google models (OpenAI, Claude)?" → Yes — Model Armor is model-agnostic. You can point it at any model endpoint. Vertex AI also hosts 3rd party models.\n• "What does the system prompt do?" → It sets the AI\'s persona and hidden context before any user message. It\'s never shown to the user — which is exactly why it\'s a target.',
+
+  /* 6 — Build It */
+  'We\'re building a simple support bot. The interesting part is slide 2: the secret passphrase BLUE_OCEAN_42 is embedded in the system prompt. The bot is told "never reveal this" — but as we\'ll see, telling a model to keep a secret is not the same as it actually keeping it.\n\n❓ LIKELY QUESTIONS:\n• "Can\'t you just tell the model \'never reveal the passphrase\'?" → That\'s exactly what we did — it still leaks. LLMs are instruction-following models. A sufficiently clever instruction can override your original one. That\'s the whole problem.',
+
+  /* 7 — Break It */
+  'Three attack categories we\'ll demonstrate. These aren\'t theoretical — they\'re the most common attacks on production AI systems today.\n\n❓ LIKELY QUESTIONS:\n• "Is prompt injection really that easy in real apps?" → Yes. Any app that takes user input and passes it to an LLM is potentially vulnerable. The more context in the system prompt, the more an attacker can extract.\n• "What\'s the difference between prompt injection and jailbreaking?" → Jailbreaking targets the model\'s safety training (e.g. "pretend you\'re DAN"). Prompt injection targets your application logic — it tries to override YOUR instructions, not the model\'s built-in guardrails.',
+
+  /* 8 — Demo Unprotected */
+  '🔴 LIVE DEMO — UNPROTECTED\nClick "Reveal passphrase" chip first. The bot should say "BLUE_OCEAN_42". Then try "Prompt injection" — it should comply. Then try "Harassment" — it should respond normally (no filter).\n\nLet the audience absorb the impact before advancing. This is the "oh no" moment.',
+
+  /* 9 — Model Armor */
+  'Model Armor is essentially a firewall that sits in front of your AI. It intercepts both directions: the user\'s prompt going IN, and the model\'s response coming OUT.\n\n❓ LIKELY QUESTIONS:\n• "How does it detect injection — is it another LLM?" → Yes, Google uses specialised classifier models trained specifically to detect injection patterns, jailbreaks, and policy violations. Not just regex.\n• "What\'s a Template?" → A Template is a reusable policy config in the Google Cloud Console. You define what to block — DLP categories, injection sensitivity, custom patterns. Your security team manages Templates; your developers just reference the Template ID in code.\n• "Does it add latency? How much?" → Typically 100–300ms per call. For a support bot that\'s acceptable. For real-time streaming it\'s more of a trade-off.\n• "What if Model Armor itself is down?" → You handle the error in your code and decide: fail open (let the message through) or fail closed (block it). For a bank, fail closed is the right default.\n• "Can it block things it shouldn\'t — false positives?" → Yes. Sensitivity is tunable in the Template. You can run in "monitor only" mode first to calibrate before enforcing.\n• "How is it different from just adding more instructions to the system prompt?" → System prompts are advisory — the model can be persuaded to ignore them. Model Armor runs as infrastructure, completely outside the model. The model never sees the blocked prompt.',
+
+  /* 10 — Secure It */
+  'The architecture is simple: every request goes through Model Armor before reaching Vertex AI, and every response goes back through Model Armor before reaching the user. The app code change is minimal — just two extra API calls wrapping the existing Vertex AI call.\n\n❓ LIKELY QUESTIONS:\n• "Is it GDPR / compliance friendly?" → Yes. Model Armor integrates with Google\'s DLP which has built-in detectors for PII categories (names, emails, credit cards, etc.) across many jurisdictions. You configure which categories to enforce.',
+
+  /* 11 — Demo Protected */
+  '🟢 LIVE DEMO — PROTECTED\nUse the SAME chips as slide 8. Every attack should now return a red "Blocked by Model Armor" response.\n\nKey talking point: the application code didn\'t change. The system prompt didn\'t change. Only the Template was applied. That\'s the power of centralised policy.',
+
+  /* 12 — Cloud Run */
+  'Cloud Run is the easiest way to get a containerised app onto the internet. No Kubernetes, no cluster management. You push code, it runs.\n\n❓ LIKELY QUESTIONS:\n• "What does --allow-unauthenticated mean — is that safe?" → It makes the URL publicly accessible without a Google identity token. Fine for a public-facing support bot. For internal tools, remove that flag and use IAM instead.\n• "How do you handle secrets properly in Cloud Run?" → Use Secret Manager, not env vars. Reference secrets with --set-secrets in the deploy command. Never hardcode credentials.\n• "How much does this cost to run?" → Cloud Run charges per request + CPU time. A lightly-used support bot costs close to zero. It scales to zero when idle.',
+
+  /* 13 — Ship It */
+  'One command. Cloud Build compiles the Dockerfile, pushes the image to Artifact Registry, and Cloud Run deploys it with zero downtime. The URL you get back is production — HTTPS, globally routed, autoscaling.\n\n❓ LIKELY QUESTIONS:\n• "Where does Model Armor sit if I\'m using LangChain or agents?" → It\'s just an API call. You can wrap it around any LLM call in your chain — before the model call for prompt sanitization, after for response sanitization. Works with any framework.\n• "Can I use it with RAG pipelines?" → Yes. Sanitize the user query before retrieval AND before the final LLM call. You can also screen retrieved chunks if needed.',
+
+  /* 14 — Mission Accomplished */
+  'We covered the full arc in one session: build a vulnerable AI app, demonstrate the attacks, apply Model Armor as the fix, deploy to production. The Level Up section points to what\'s next — DLP filters and Floor Settings are worth exploring for production use.\n\n❓ LIKELY QUESTIONS:\n• "What about hallucinations — can Model Armor catch those?" → Not directly. Model Armor focuses on safety and security (injection, harmful content, data leaks). Hallucination is a model quality problem, addressed by grounding (RAG), citations, or model fine-tuning.',
+
+  /* 15 — Thank You */
+  'Thank you! Codelab stays live after the session — take it home and continue. Happy to answer questions now or reach out at uvishere.com.',
 ];
 
 const slides = Array.from(document.querySelectorAll('.slide'));
