@@ -2,8 +2,8 @@
 set -e
 DIR="$(cd "$(dirname "$0")" && pwd)"
 
-# Kill any old proxy on port 3001
-lsof -ti:3001 | xargs kill -9 2>/dev/null || true
+# Kill any old server on port 8080
+lsof -ti:8080 | xargs kill -9 2>/dev/null || true
 
 # Load env vars from app/.env
 set -a
@@ -11,15 +11,15 @@ set -a
 source "$DIR/app/.env"
 set +a
 
-# Start proxy in background, log to /tmp/proxy.log
-node "$DIR/proxy.js" > /tmp/proxy.log 2>&1 &
-PROXY_PID=$!
+# Start app server in background, log to /tmp/server.log
+npm --prefix "$DIR/app" start > /tmp/server.log 2>&1 &
+SERVER_PID=$!
 
-# Wait for proxy to be ready (up to 10s)
-echo "Starting proxy..."
+# Wait for server to be ready (up to 10s)
+echo "Starting server..."
 for i in $(seq 1 20); do
-  if curl -sf http://localhost:3001/health > /dev/null 2>&1; then
-    echo "✅  Proxy ready (pid $PROXY_PID)"
+  if curl -sf http://localhost:8080/health > /dev/null 2>&1; then
+    echo "✅  Server ready (pid $SERVER_PID)"
     break
   fi
   sleep 0.5
@@ -30,5 +30,5 @@ echo "🎬  Opening presentation..."
 open "$DIR/presentation.html"
 
 echo ""
-echo "Press Ctrl+C to stop the proxy when done."
-wait $PROXY_PID
+echo "Press Ctrl+C to stop the server when done."
+wait $SERVER_PID
