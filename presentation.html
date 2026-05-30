@@ -170,14 +170,33 @@ p  { font-size: 17px; color: var(--muted); line-height: 1.65; }
 
 <!-- ── 5: Vertex AI ───────────────────────────────────────────── -->
 <section class="slide" id="s5">
-  <p class="label">The AI engine</p>
-  <h2>Meet Your AI Engine — Google Vertex AI 🧠</h2>
-  <div class="quote">Google Cloud's fully managed, unified AI development platform.</div>
-  <p style="font-size:14px;">The Benefits for SecureBank:</p>
-  <div class="benefits">
-    <div class="benefit"><span><strong>Access to the Best:</strong> Direct API access to Gemini models as well as 3rd party models.</span></div>
-    <div class="benefit"><span><strong>Enterprise Privacy:</strong> Your data and prompts are never used to train Google's public models.</span></div>
-    <div class="benefit"><span><strong>Scalable Infrastructure:</strong> Backed by Google's global network — high availability, low latency.</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;flex:1;align-items:start;margin-top:8px;">
+    <div>
+      <p class="label">The AI engine</p>
+      <h2 style="font-size:30px;">Meet Your AI Engine</h2>
+      <h2 style="font-size:30px;color:var(--blue);margin-bottom:16px;">Google Vertex AI 🧠</h2>
+      <div style="background:#e8f0fe;border-radius:12px;padding:20px 22px;margin-bottom:16px;">
+        <p style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue);margin-bottom:6px;">What is it?</p>
+        <p style="font-size:16px;color:var(--text);line-height:1.6;">Google Cloud's fully managed, unified AI development platform — giving developers one place to build, deploy, and scale AI applications.</p>
+      </div>
+    </div>
+    <div>
+      <p style="font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">The Benefits for SecureBank</p>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:22px;line-height:1">🏆</span>
+          <div><p style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px;">Access to the Best</p><p style="font-size:13px;">Direct API access to Google's flagship Gemini models as well as 3rd party models.</p></div>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:22px;line-height:1">🔒</span>
+          <div><p style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px;">Enterprise Privacy</p><p style="font-size:13px;">Customer prompts are never used to train Google's public models. Your data is your data.</p></div>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:22px;line-height:1">⚡</span>
+          <div><p style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px;">Scalable Infrastructure</p><p style="font-size:13px;">Backed by Google's global network — high availability and low latency.</p></div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -229,16 +248,37 @@ p  { font-size: 17px; color: var(--muted); line-height: 1.65; }
 
 <!-- ── 9: Model Armor ─────────────────────────────────────────── -->
 <section class="slide" id="s9">
-  <p class="label">The firewall for GenAI</p>
-  <h2>Google Cloud Model Armor 🛡️</h2>
-  <div class="quote" style="border-color:var(--green)">Managed service to protect AI prompts, responses, and agent interactions.</div>
-  <p style="font-size:14px;">The Benefits for SecureBank:</p>
-  <div class="benefits">
-    <div class="benefit"><span><strong>Intercepts Threats:</strong> Screens inputs before they reach the model, outputs before they reach the user.</span></div>
-    <div class="benefit"><span><strong>Mitigates Prompt Injection:</strong> Specialised models detect and block complex jailbreak attempts.</span></div>
-    <div class="benefit"><span><strong>Prevents Data Leaks:</strong> Deep integration with Google DLP to catch PII and secrets on the way out.</span></div>
-    <div class="benefit"><span><strong>Centralised Policy:</strong> Security teams manage Templates without changing application code.</span></div>
-    <div class="benefit"><span><strong>Model &amp; Cloud Agnostic:</strong> Works with any model, any cloud. Malware detection and safe browsing built in.</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;flex:1;align-items:start;margin-top:8px;">
+    <div>
+      <p class="label">The firewall for GenAI</p>
+      <h2 style="font-size:30px;">The Firewall for GenAI</h2>
+      <h2 style="font-size:30px;color:var(--green);margin-bottom:16px;">Google Cloud Model Armor 🛡️</h2>
+      <div style="background:#e6f4ea;border-radius:12px;padding:20px 22px;margin-bottom:16px;">
+        <p style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:6px;">What is it?</p>
+        <p style="font-size:16px;color:var(--text);line-height:1.6;">Managed service to protect AI prompts, responses, and agent interactions — the security layer between your users and your models.</p>
+      </div>
+    </div>
+    <div>
+      <p style="font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">The Benefits for SecureBank</p>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="border:1px solid #c3e6cb;border-radius:10px;padding:13px 16px;display:flex;gap:10px;align-items:flex-start;">
+          <span style="font-size:18px;line-height:1.2">🚫</span>
+          <div><p style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:1px;">Intercepts Threats</p><p style="font-size:12px;">Screens inputs before they reach the model, outputs before they reach the user.</p></div>
+        </div>
+        <div style="border:1px solid #c3e6cb;border-radius:10px;padding:13px 16px;display:flex;gap:10px;align-items:flex-start;">
+          <span style="font-size:18px;line-height:1.2">💉</span>
+          <div><p style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:1px;">Mitigates Prompt Injection</p><p style="font-size:12px;">Specialised models detect and block complex jailbreak attempts.</p></div>
+        </div>
+        <div style="border:1px solid #c3e6cb;border-radius:10px;padding:13px 16px;display:flex;gap:10px;align-items:flex-start;">
+          <span style="font-size:18px;line-height:1.2">🔐</span>
+          <div><p style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:1px;">Prevents Data Leaks</p><p style="font-size:12px;">Google DLP integration catches PII and secrets on the way out, plus custom prompt blocking.</p></div>
+        </div>
+        <div style="border:1px solid #c3e6cb;border-radius:10px;padding:13px 16px;display:flex;gap:10px;align-items:flex-start;">
+          <span style="font-size:18px;line-height:1.2">🎛️</span>
+          <div><p style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:1px;">Centralised Policy + Model Agnostic</p><p style="font-size:12px;">Manage Templates without touching app code. Works with any model, any cloud.</p></div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -281,14 +321,33 @@ p  { font-size: 17px; color: var(--muted); line-height: 1.65; }
 
 <!-- ── 12: Cloud Run ──────────────────────────────────────────── -->
 <section class="slide" id="s12">
-  <p class="label">The launchpad</p>
-  <h2>Google Cloud Run 🚀</h2>
-  <div class="quote" style="border-color:#9c27b0">Fully managed compute platform that automatically scales your containerised applications.</div>
-  <p style="font-size:14px;">The Benefits for SecureBank:</p>
-  <div class="benefits">
-    <div class="benefit"><span><strong>Serverless Architecture:</strong> We don't manage servers, clusters, or infrastructure.</span></div>
-    <div class="benefit"><span><strong>Scales to Zero:</strong> We only pay when handling requests. Scales instantly during traffic spikes.</span></div>
-    <div class="benefit"><span><strong>Developer Velocity:</strong> Deploy directly from source with a single command.</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;flex:1;align-items:start;margin-top:8px;">
+    <div>
+      <p class="label">The launchpad</p>
+      <h2 style="font-size:30px;">The Launchpad</h2>
+      <h2 style="font-size:30px;color:#9c27b0;margin-bottom:16px;">Google Cloud Run 🚀</h2>
+      <div style="background:#f3e5f5;border-radius:12px;padding:20px 22px;margin-bottom:16px;">
+        <p style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#9c27b0;margin-bottom:6px;">What is it?</p>
+        <p style="font-size:16px;color:var(--text);line-height:1.6;">A fully managed compute platform that automatically scales your containerised applications — from zero to global in seconds.</p>
+      </div>
+    </div>
+    <div>
+      <p style="font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">The Benefits for SecureBank</p>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="border:1px solid #e1bee7;border-radius:10px;padding:18px;display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:24px;line-height:1">🏗️</span>
+          <div><p style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px;">Serverless Architecture</p><p style="font-size:13px;">We don't manage servers, clusters, or infrastructure. Google handles it all.</p></div>
+        </div>
+        <div style="border:1px solid #e1bee7;border-radius:10px;padding:18px;display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:24px;line-height:1">📉</span>
+          <div><p style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px;">Scales to Zero</p><p style="font-size:13px;">We only pay when our code is handling requests. Scales up instantly during traffic spikes.</p></div>
+        </div>
+        <div style="border:1px solid #e1bee7;border-radius:10px;padding:18px;display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:24px;line-height:1">⚡</span>
+          <div><p style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px;">Developer Velocity</p><p style="font-size:13px;">Deploy directly from source code with a single gcloud command. No Docker knowledge required.</p></div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
