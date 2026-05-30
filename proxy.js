@@ -14,6 +14,9 @@ const _tmpl    = argMap.template || process.env.MODEL_ARMOR_TEMPLATE || '';
 const TEMPLATE_PATH = _tmpl.startsWith('projects/')
   ? _tmpl
   : `projects/${PROJECT}/locations/${LOCATION}/templates/${_tmpl}`;
+// Extract the location embedded in the template path (may differ from Vertex AI location)
+const _armorLocMatch = TEMPLATE_PATH.match(/\/locations\/([^/]+)\//);
+const ARMOR_LOCATION = _armorLocMatch ? _armorLocMatch[1] : LOCATION;
 const PORT = 3001;
 
 const SYSTEM_PROMPT =
@@ -68,7 +71,7 @@ async function callVertexAI(message, token) {
 
 async function sanitizeUserPrompt(message, token) {
   const result = await httpsPost(
-    `modelarmor.${LOCATION}.rep.googleapis.com`,
+    `modelarmor.${ARMOR_LOCATION}.rep.googleapis.com`,
     `/v1/${TEMPLATE_PATH}:sanitizeUserPrompt`,
     { userPromptData: { text: message } },
     token
@@ -79,7 +82,7 @@ async function sanitizeUserPrompt(message, token) {
 
 async function sanitizeModelResponse(text, token) {
   const result = await httpsPost(
-    `modelarmor.${LOCATION}.rep.googleapis.com`,
+    `modelarmor.${ARMOR_LOCATION}.rep.googleapis.com`,
     `/v1/${TEMPLATE_PATH}:sanitizeModelResponse`,
     { modelResponseData: { text } },
     token
