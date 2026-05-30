@@ -49,7 +49,7 @@ No npm install, no build step, no framework. The presenter opens `presentation.h
 | 1 | Build It, Guard It, Ship It! — title + GDG/SecureBank branding | Title |
 | 2 | Congratulations, You're Hired!! — SecureBank onboarding letter narrative | Narrative |
 | 3 | Objectives — 4-step agenda: Build → Break → Secure → Ship | Agenda |
-| 4 | Let's Start! — codelab URL + generated QR code | CTA |
+| 4 | Let's Start! — codelab URL + QR code (generated inline via a small embedded JS function, no CDN) | CTA |
 | 5 | What is Vertex AI? — quote card + 3 benefits for SecureBank | Explainer |
 | 6 | Part 1 — Build It 🛠️ — 3 cards: The Brains / The Secret / The Risk | Part header |
 | 7 | Part 2 — Break It 💥 — 3 attack types listed with example prompts | Part header |
