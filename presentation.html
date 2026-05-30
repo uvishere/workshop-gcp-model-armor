@@ -447,6 +447,7 @@ function goTo(n) {
 }
 
 document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
   if (['ArrowRight', 'ArrowDown', ' '].includes(e.key)) { e.preventDefault(); goTo(cur + 1); }
   else if (['ArrowLeft', 'ArrowUp'].includes(e.key))    { e.preventDefault(); goTo(cur - 1); }
   else if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
