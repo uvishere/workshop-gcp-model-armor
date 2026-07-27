@@ -9,6 +9,11 @@ secure-ai-model-armor/
 
 # OS files
 .DS_Store
+
+# Tool scratch output
+.playwright-mcp/
+.superpowers/
+
 # Temp/debug files
 *.log
 *.out
