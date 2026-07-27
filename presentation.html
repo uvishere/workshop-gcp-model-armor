@@ -2615,7 +2615,7 @@ window.addEventListener('message', e => {
 
     <!-- ── Chat engine ───────────────────────────────────────────── -->
     <script>
-      const PROXY = 'http://localhost:8080';
+      const PROXY = 'http://localhost:3001';
 
       function fill(id, txt) {
         const el = document.getElementById(id);
@@ -2656,10 +2656,11 @@ window.addEventListener('message', e => {
         addMsg(boxId, 'user', msg, false);
         const spinner = addMsg(boxId, 'bot loading', '…', false);
         try {
-          const r = await fetch(PROXY + '/api/chat', {
+          const route = useModelArmor ? '/chat-protected' : '/chat';
+          const r = await fetch(PROXY + route, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: msg, useModelArmor }),
+            body: JSON.stringify({ message: msg }),
           });
           const d = await r.json();
           spinner.remove();
@@ -2677,7 +2678,7 @@ window.addEventListener('message', e => {
           addMsg(
             boxId,
             'bot',
-            'Cannot reach server on port 8080. Is it running?',
+            'Cannot reach proxy on port 3001. Is it running?',
             true,
           );
         }
