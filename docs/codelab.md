@@ -1,5 +1,5 @@
 summary: Build It, Guard It, Ship It: Building Secure AI Apps with Model Armor
-id: secure-ai-with-armor
+id: secure-ai-model-armor
 categories: Security, AI, Cloud Run
 environments: Web
 status: Published 
