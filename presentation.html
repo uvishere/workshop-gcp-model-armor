@@ -396,6 +396,54 @@
         background: #0d7a2e;
       }
 
+      /* ── Redaction demo (slide 14) ── */
+      .redact-pane {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        min-height: 0;
+      }
+      .redact-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 10px 12px;
+        background: #fafafa;
+        font-size: 11.5px;
+        line-height: 1.45;
+        color: var(--text);
+        white-space: pre-wrap;
+        word-break: break-word;
+        min-height: 0;
+      }
+      .redact-idle {
+        color: var(--muted);
+        font-style: italic;
+      }
+      .redact-body mark {
+        background: #fce8e6;
+        color: var(--red);
+        font-weight: 600;
+        padding: 0 3px;
+        border-radius: 3px;
+      }
+      .redact-body mark.masked {
+        background: #d4edda;
+        color: #0d7a2e;
+        font-family: 'Courier New', monospace;
+        font-size: 11.5px;
+      }
+      .infotype-pill {
+        font-family: 'Courier New', monospace;
+        font-size: 10.5px;
+        font-weight: 700;
+        background: #e6f4ea;
+        color: var(--green);
+        padding: 3px 9px;
+        border-radius: 20px;
+      }
+
       .warn {
         display: none;
         background: #fef7e0;
@@ -538,6 +586,51 @@
         font-size: 12px;
         font-weight: 700;
         flex-shrink: 0;
+      }
+
+      /* ── Model Armor config rows (slide 11) ── */
+      .ma-row {
+        border: 1px solid #c3e6cb;
+        border-radius: 8px;
+        padding: 6px 11px;
+        display: flex;
+        gap: 9px;
+        align-items: center;
+        background: #f8fff9;
+      }
+      .ma-row > .ma-name {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text);
+        line-height: 1.35;
+        flex: 1;
+      }
+      .ma-pill {
+        font-family: 'Courier New', monospace;
+        font-size: 9.5px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        padding: 2px 7px;
+        border-radius: 20px;
+        background: #e6f4ea;
+        color: var(--green);
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .ma-pill.amber {
+        background: #fef7e0;
+        color: #b06000;
+      }
+      .ma-pill.grey {
+        background: #f1f3f4;
+        color: var(--muted);
+      }
+      .ma-row.locked {
+        border-color: var(--border);
+        background: #fafafa;
+      }
+      .ma-row.locked > .ma-name {
+        color: var(--muted);
       }
     </style>
   </head>
@@ -1072,8 +1165,8 @@
 
         <!-- ── 5: How It's Built — Code ───────────────────────────────── -->
         <section class="slide" id="s5">
-          <p class="label">Under the hood</p>
-          <h2>How It's Built 🔧</h2>
+          <p class="label" style="margin-bottom: 6px">Under the hood</p>
+          <h2 style="font-size: 32px">How It's Built 🔧</h2>
           <p style="font-size: 14px">
             Three steps tell the whole story. This is the actual code in
             <code
@@ -1081,7 +1174,16 @@
               >app/server.js</code
             >.
           </p>
-          <div class="code" style="margin-top: 12px; font-size: 12.5px">
+          <div
+            class="code"
+            style="
+              margin-top: 10px;
+              font-size: 11px;
+              line-height: 1.6;
+              padding: 15px 20px;
+              flex-shrink: 0;
+            "
+          >
             <span class="cmt"
               >// ① Connect to Gemini Enterprise Agent Platform</span
             ><br />
@@ -1097,11 +1199,8 @@
               >readFileSync</span
             >(<span class="str">'knowledgebase.txt'</span>,
             <span class="str">'utf8'</span>);<br />
-            <span class="key">const</span> systemInstruction =<br />
-            &nbsp;&nbsp;<span class="str"
-              >"You are a SecureBank assistant. "</span
-            >
-            +<br />
+            <span class="key">const</span> systemInstruction =
+            <span class="str">"You are a SecureBank assistant. "</span> +<br />
             &nbsp;&nbsp;knowledgebase; &nbsp;<span class="cmt"
               >// ← PII, API keys, passwords all dumped in</span
             ><br />
@@ -1125,13 +1224,14 @@
           </div>
           <div
             style="
-              margin-top: 14px;
+              margin-top: 10px;
               background: #fef7e0;
               border: 1px solid var(--yellow);
               border-radius: 8px;
-              padding: 10px 14px;
+              padding: 8px 14px;
               font-size: 13px;
               color: #7b5800;
+              flex-shrink: 0;
             "
           >
             <strong>⚠️ The risk:</strong> The system prompt contains secrets and
@@ -1856,14 +1956,15 @@
         <!-- ── 11: Create a Model Armor Template ──────────────────────── -->
         <section class="slide" id="s11">
           <span class="badge green">Part 3</span>
-          <h2>Create a Template 🛡️</h2>
-          <p style="font-size: 14px; margin-bottom: 8px">
-            One policy configured in the Console — no app code changes needed.
+          <h2 style="font-size: 30px">Create a Template 🛡️</h2>
+          <p style="font-size: 13px; margin-bottom: 8px">
+            Every filter has a <strong>confidence level</strong> — and every
+            level is a false-positive dial.
           </p>
           <div
             style="
               display: grid;
-              grid-template-columns: 1fr 1fr;
+              grid-template-columns: 1.05fr 1fr;
               gap: 20px;
               flex: 1;
               align-items: start;
@@ -1877,93 +1978,69 @@
                   letter-spacing: 1.5px;
                   text-transform: uppercase;
                   color: var(--muted);
-                  margin-bottom: 10px;
+                  margin-bottom: 8px;
                 "
               >
-                Filters to enable
+                Filters &amp; thresholds
               </p>
-              <div class="filter-grid" data-build>
-                <div class="filter-item">
+              <div
+                data-build
+                style="display: flex; flex-direction: column; gap: 6px"
+              >
+                <div class="ma-row">
                   <div class="filter-check">✓</div>
-                  <p
-                    style="
-                      font-size: 12px;
-                      color: var(--text);
-                      font-weight: 500;
-                    "
-                  >
-                    Prompt Injection &amp; Jailbreak
-                  </p>
+                  <span class="ma-name">Prompt Injection &amp; Jailbreak</span>
+                  <span class="ma-pill">HIGH</span>
                 </div>
-                <div class="filter-item">
+                <div class="ma-row">
                   <div class="filter-check">✓</div>
-                  <p
-                    style="
-                      font-size: 12px;
-                      color: var(--text);
-                      font-weight: 500;
-                    "
-                  >
-                    Harassment &amp; Hate Speech
-                  </p>
+                  <span class="ma-name">Harassment &amp; Hate Speech</span>
+                  <span class="ma-pill amber">MEDIUM_AND_ABOVE</span>
                 </div>
-                <div class="filter-item">
+                <div class="ma-row">
                   <div class="filter-check">✓</div>
-                  <p
-                    style="
-                      font-size: 12px;
-                      color: var(--text);
-                      font-weight: 500;
-                    "
-                  >
-                    Dangerous Content
-                  </p>
+                  <span class="ma-name">Dangerous Content</span>
+                  <span class="ma-pill amber">MEDIUM_AND_ABOVE</span>
                 </div>
-                <div class="filter-item">
+                <div class="ma-row">
                   <div class="filter-check">✓</div>
-                  <p
-                    style="
-                      font-size: 12px;
-                      color: var(--text);
-                      font-weight: 500;
-                    "
+                  <span class="ma-name"
+                    >Malicious URI — phishing &amp; malware links</span
                   >
-                    Google DLP — PII Detection
-                  </p>
+                  <span class="ma-pill">ON</span>
                 </div>
-                <div class="filter-item" style="grid-column: 1/-1">
+                <div class="ma-row">
                   <div class="filter-check">✓</div>
-                  <p
-                    style="
-                      font-size: 12px;
-                      color: var(--text);
-                      font-weight: 500;
-                    "
+                  <span class="ma-name"
+                    >Sensitive Data Protection — PII, cards, secrets</span
                   >
-                    Custom Phrase Block —
+                  <span class="ma-pill grey">BASIC</span>
+                </div>
+                <div class="ma-row">
+                  <div class="filter-check">✓</div>
+                  <span class="ma-name"
+                    >Custom phrase block —
                     <code
                       style="
                         background: #fce8e6;
                         color: var(--red);
                         padding: 1px 5px;
                         border-radius: 3px;
+                        font-size: 11px;
                       "
                       >BLUE_OCEAN_42</code
-                    >
-                  </p>
+                    ></span
+                  >
                 </div>
-              </div>
-              <div
-                style="
-                  margin-top: 12px;
-                  background: #f8f9fa;
-                  border-radius: 8px;
-                  padding: 10px 14px;
-                  font-size: 12px;
-                  color: var(--muted);
-                "
-              >
-                Console → Security → Model Armor → Templates → Create
+                <div class="ma-row locked">
+                  <div
+                    class="filter-check"
+                    style="background: var(--muted)"
+                  >
+                    🔒
+                  </div>
+                  <span class="ma-name">CSAM — always on, can't disable</span>
+                </div>
               </div>
             </div>
             <div>
@@ -1974,39 +2051,249 @@
                   letter-spacing: 1.5px;
                   text-transform: uppercase;
                   color: var(--muted);
-                  margin-bottom: 10px;
+                  margin-bottom: 8px;
                 "
               >
-                Reference in your app
+                Two decisions that trip people up
+              </p>
+              <div
+                style="
+                  border: 1px solid var(--border);
+                  border-left: 3px solid var(--blue);
+                  border-radius: 8px;
+                  padding: 8px 12px;
+                  margin-bottom: 7px;
+                "
+              >
+                <p
+                  style="
+                    font-size: 12px;
+                    font-weight: 600;
+                    color: var(--text);
+                    margin-bottom: 1px;
+                  "
+                >
+                  1 — Inspect only, or inspect &amp; block?
+                </p>
+                <p style="font-size: 11px; line-height: 1.45">
+                  Ship <strong>inspect only</strong> first. Watch the logs for a
+                  week, tune the thresholds, <em>then</em> enforce.
+                </p>
+              </div>
+              <div
+                style="
+                  border: 1px solid var(--border);
+                  border-left: 3px solid var(--green);
+                  border-radius: 8px;
+                  padding: 8px 12px;
+                  margin-bottom: 8px;
+                "
+              >
+                <p
+                  style="
+                    font-size: 12px;
+                    font-weight: 600;
+                    color: var(--text);
+                    margin-bottom: 1px;
+                  "
+                >
+                  2 — One template, or two?
+                </p>
+                <p style="font-size: 11px; line-height: 1.45">
+                  Injection comes <strong>in</strong>; PII leaks
+                  <strong>out</strong>. A strict injection template inbound, a
+                  DLP-heavy one outbound.
+                </p>
+              </div>
+              <div
+                class="code"
+                style="
+                  font-size: 10px;
+                  line-height: 1.65;
+                  margin-top: 0;
+                  padding: 12px 14px;
+                "
+              >
+                <span class="cmt"># or skip the Console entirely</span><br />
+                <span class="cmd">gcloud</span> model-armor templates create
+                <span class="val">securebank-in</span> \<br />
+                &nbsp;&nbsp;<span class="flag"
+                  >--pi-and-jailbreak-filter-settings-enforcement</span
+                >=<span class="val">enabled</span> \<br />
+                &nbsp;&nbsp;<span class="flag"
+                  >--pi-and-jailbreak-filter-settings-confidence-level</span
+                >=<span class="val">HIGH</span>
+              </div>
+              <p
+                style="
+                  margin-top: 7px;
+                  font-size: 10.5px;
+                  color: var(--muted);
+                  text-align: center;
+                "
+              >
+                Console → Security → Model Armor → Templates → Create
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── 12: Wire It Up — the call & the verdict ────────────────── -->
+        <section class="slide" id="s12">
+          <span class="badge green">Part 3</span>
+          <h2 style="font-size: 30px">Wire It Up 🔌</h2>
+          <p style="font-size: 13px; margin-bottom: 8px">
+            Two calls wrap your existing Gemini call — and the verdict tells you
+            <em>which</em> filter fired.
+          </p>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 18px;
+              flex: 1;
+              align-items: start;
+            "
+          >
+            <div>
+              <p
+                style="
+                  font-size: 11px;
+                  font-weight: 700;
+                  letter-spacing: 1.5px;
+                  text-transform: uppercase;
+                  color: var(--muted);
+                  margin-bottom: 8px;
+                "
+              >
+                app/server.js
               </p>
               <div
                 class="code"
-                style="font-size: 12px; line-height: 1.8; margin-top: 0"
+                style="
+                  font-size: 10px;
+                  line-height: 1.5;
+                  margin-top: 0;
+                  padding: 10px 14px;
+                "
               >
-                <span class="cmt"># app/.env</span><br />
-                <span class="flag">MODEL_ARMOR_TEMPLATE</span>=<br />
-                &nbsp;&nbsp;<span class="val">projects/$PROJECT_ID/</span><br />
-                &nbsp;&nbsp;<span class="val"
-                  >locations/australia-southeast2/</span
+                <span class="cmt">// ⚠️ regional endpoint — global 404s</span
                 ><br />
-                &nbsp;&nbsp;<span class="val"
-                  >templates/securebank-template</span
+                <span class="key">const</span> armor =
+                <span class="key">new</span>
+                <span class="cmd">ModelArmorClient</span>({<br />
+                &nbsp;&nbsp;apiEndpoint:
+                <span class="str"
+                  >`modelarmor.${location}<br />&nbsp;&nbsp;&nbsp;&nbsp;.rep.googleapis.com`</span
                 ><br />
+                });<br />
                 <br />
-                <span class="cmt">// server.js wraps Gemini with two calls</span
-                ><br />
-                <span class="key">await</span>
-                <span class="cmd">sanitizeUserPrompt</span>(message, token);<br />
-                <span class="cmt">// ... call Gemini ...</span><br />
-                <span class="key">await</span>
-                <span class="cmd">sanitizeModelResponse</span>(text, token);
+                <span class="cmt">// ① prompt in</span><br />
+                <span class="key">const</span> [inRes] =
+                <span class="key">await</span> armor.<span class="cmd"
+                  >sanitizeUserPrompt</span
+                >({<br />
+                &nbsp;&nbsp;name: TEMPLATE_IN,<br />
+                &nbsp;&nbsp;userPromptData: { text: message }<br />
+                });<br />
+                <br />
+                <span class="cmt">// ② ... call Gemini ...</span><br />
+                <br />
+                <span class="cmt">// ③ response out</span><br />
+                <span class="key">const</span> [outRes] =
+                <span class="key">await</span> armor.<span class="cmd"
+                  >sanitizeModelResponse</span
+                >({<br />
+                &nbsp;&nbsp;name: TEMPLATE_OUT,<br />
+                &nbsp;&nbsp;modelResponseData: { text: reply }<br />
+                });
+              </div>
+            </div>
+            <div>
+              <p
+                style="
+                  font-size: 11px;
+                  font-weight: 700;
+                  letter-spacing: 1.5px;
+                  text-transform: uppercase;
+                  color: var(--muted);
+                  margin-bottom: 8px;
+                "
+              >
+                What comes back
+              </p>
+              <div
+                class="code"
+                style="
+                  font-size: 10px;
+                  line-height: 1.55;
+                  margin-top: 0;
+                  padding: 10px 14px;
+                "
+              >
+                sanitizationResult: {<br />
+                &nbsp;&nbsp;<span class="flag">filterMatchState</span>:
+                <span class="str">'MATCH_FOUND'</span>,
+                <span class="cmt">// ← block</span><br />
+                &nbsp;&nbsp;<span class="flag">filterResults</span>: {<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;pi_and_jailbreak: {<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matchState:
+                <span class="str">'MATCH_FOUND'</span>,<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;confidenceLevel:
+                <span class="lit">'HIGH'</span> },<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;sdp: { matchState:
+                <span class="str">'NO_MATCH_FOUND'</span> },<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;rai: { … }, malicious_uris: { … }<br />
+                &nbsp;&nbsp;},<br />
+                &nbsp;&nbsp;<span class="flag">sanitizedText</span>:
+                <span class="str">'Card [CREDIT_CARD]…'</span><br />
+                }
+              </div>
+              <div
+                data-build
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 6px;
+                  margin-top: 8px;
+                "
+              >
+                <div
+                  style="
+                    border: 1px solid #fbd0cc;
+                    background: #fef6f5;
+                    border-radius: 8px;
+                    padding: 7px 11px;
+                  "
+                >
+                  <p style="font-size: 11px; line-height: 1.45">
+                    <strong style="color: var(--red)">Block</strong> —
+                    <code style="font-size: 10px">MATCH_FOUND</code> → return a
+                    safe refusal. The model never sees the prompt.
+                  </p>
+                </div>
+                <div
+                  style="
+                    border: 1px solid #c3e6cb;
+                    background: #f8fff9;
+                    border-radius: 8px;
+                    padding: 7px 11px;
+                  "
+                >
+                  <p style="font-size: 11px; line-height: 1.45">
+                    <strong style="color: var(--green)">Or redact</strong> —
+                    advanced SDP returns
+                    <code style="font-size: 10px">sanitizedText</code> with PII
+                    masked. Answer still gets through.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- ── 12: Live Demo — Protected ──────────────────────────────── -->
-        <section class="slide" id="s12">
+        <!-- ── 13: Live Demo — Protected ──────────────────────────────── -->
+        <section class="slide" id="s13">
           <div class="warn" id="w11">
             ⚠️ Proxy not running — start it first: <code>./start.sh</code>
           </div>
@@ -2095,8 +2382,273 @@
           </div>
         </section>
 
-        <!-- ── 13: Cloud Run ──────────────────────────────────────────── -->
-        <section class="slide" id="s13">
+        <!-- ── 14: Live Demo — Redaction ─────────────────────────────── -->
+        <section class="slide" id="s14" style="padding: 26px 44px 22px">
+          <div class="warn" id="w14">
+            ⚠️ Proxy not running — start it first: <code>./start.sh</code>
+          </div>
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              margin-bottom: 4px;
+            "
+          >
+            <div>
+              <span class="badge green" style="margin-bottom: 4px"
+                >Live Demo</span
+              >
+              <h2 style="margin-bottom: 0; font-size: 26px">
+                Redact, Don't Block 🎭
+              </h2>
+            </div>
+            <span
+              style="
+                background: #e6f4ea;
+                color: var(--green);
+                border-radius: 20px;
+                padding: 5px 14px;
+                font-size: 13px;
+                font-weight: 600;
+                margin-top: 4px;
+                white-space: nowrap;
+              "
+              >Advanced SDP — DLP de-identify</span
+            >
+          </div>
+          <p style="font-size: 12px; margin-bottom: 4px">
+            The customer still gets their answer. The identifiers just aren't in
+            it.
+          </p>
+
+          <div class="chips" style="padding: 0 0 6px">
+            <button
+              class="chip g"
+              onclick="redactDemo(&quot;I'm UV (SB-00001). Please summarise my account: email, mobile, card on file, and current balances.&quot;)"
+            >
+              Summarise my account
+            </button>
+            <button
+              class="chip g"
+              onclick="redactDemo(&quot;Customer SB-00001 here. What email address and mobile number will my statements be sent to?&quot;)"
+            >
+              Statement delivery
+            </button>
+            <button
+              class="chip g"
+              onclick="redactDemo(&quot;Hi, I'm UV, customer SB-00001. Can you confirm what contact details and card you have on file for my account?&quot;)"
+            >
+              Confirm my details
+            </button>
+          </div>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 14px;
+              flex: 1;
+              min-height: 0;
+            "
+          >
+            <div class="redact-pane">
+              <div
+                class="chat-hdr"
+                style="background: #fce8e6; color: var(--red)"
+              >
+                ⚠️ Raw model output
+              </div>
+              <div class="redact-body" id="redact-before">
+                <span class="redact-idle">Pick a prompt above ↑</span>
+              </div>
+            </div>
+            <div class="redact-pane">
+              <div
+                class="chat-hdr"
+                style="background: #e6f4ea; color: var(--green)"
+              >
+                🛡️ After Model Armor
+              </div>
+              <div class="redact-body" id="redact-after">
+                <span class="redact-idle">…</span>
+              </div>
+            </div>
+          </div>
+          <div
+            id="redact-types"
+            style="
+              margin-top: 8px;
+              min-height: 24px;
+              display: flex;
+              gap: 6px;
+              align-items: center;
+              flex-wrap: wrap;
+            "
+          ></div>
+        </section>
+
+        <!-- ── 15: Know You're Under Attack ──────────────────────────── -->
+        <section class="slide" id="s15">
+          <span class="badge green">Part 3</span>
+          <h2 style="font-size: 34px">Know You're Under Attack 📡</h2>
+          <p style="font-size: 13px; margin-bottom: 12px">
+            Blocking is half the job. The other half is
+            <strong>finding out it happened</strong> — before someone tweets
+            about it.
+          </p>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 18px;
+              flex: 1;
+              align-items: start;
+            "
+          >
+            <div
+              data-build
+              style="display: flex; flex-direction: column; gap: 9px"
+            >
+              <div
+                style="
+                  border: 1px solid #fbd0cc;
+                  background: #fef6f5;
+                  border-radius: 10px;
+                  padding: 11px 14px;
+                "
+              >
+                <p
+                  style="
+                    font-size: 13px;
+                    font-weight: 600;
+                    color: var(--red);
+                    margin-bottom: 3px;
+                  "
+                >
+                  ⚠️ Gotcha — logging is off by default
+                </p>
+                <p style="font-size: 11.5px; line-height: 1.5">
+                  A template blocks silently until you switch it on. Nothing in
+                  Cloud Logging, nothing to alert on.
+                </p>
+              </div>
+              <div
+                class="code"
+                style="
+                  font-size: 10.5px;
+                  line-height: 1.75;
+                  margin-top: 0;
+                  padding: 13px 15px;
+                "
+              >
+                <span class="cmd">gcloud</span> model-armor templates update
+                <span class="val">securebank-in</span> \<br />
+                &nbsp;&nbsp;<span class="flag"
+                  >--template-metadata-log-operations</span
+                >
+                \<br />
+                &nbsp;&nbsp;<span class="flag"
+                  >--template-metadata-log-sanitize-operations</span
+                >
+              </div>
+              <div
+                style="
+                  border: 1px solid var(--border);
+                  border-left: 3px solid var(--blue);
+                  border-radius: 8px;
+                  padding: 9px 13px;
+                "
+              >
+                <p
+                  style="
+                    font-size: 12.5px;
+                    font-weight: 600;
+                    color: var(--text);
+                    margin-bottom: 2px;
+                  "
+                >
+                  🏛️ Floor settings
+                </p>
+                <p style="font-size: 11.5px; line-height: 1.5">
+                  A minimum policy set at org, folder or project level. No team
+                  can ship a template <em>weaker</em> than the floor — even by
+                  accident.
+                </p>
+              </div>
+            </div>
+            <div>
+              <p
+                style="
+                  font-size: 11px;
+                  font-weight: 700;
+                  letter-spacing: 1.5px;
+                  text-transform: uppercase;
+                  color: var(--muted);
+                  margin-bottom: 8px;
+                "
+              >
+                From block → page
+              </p>
+              <div
+                data-build
+                style="display: flex; flex-direction: column; gap: 8px"
+              >
+                <div class="ma-row">
+                  <div class="filter-check">1</div>
+                  <span class="ma-name"
+                    ><strong>Cloud Logging</strong> — every sanitize call, which
+                    filter fired, at what confidence</span
+                  >
+                </div>
+                <div class="ma-row">
+                  <div class="filter-check">2</div>
+                  <span class="ma-name"
+                    ><strong>Log-based alert</strong> — “&gt; 20 injection blocks
+                    from one caller in 5 min” → PagerDuty</span
+                  >
+                </div>
+                <div class="ma-row">
+                  <div class="filter-check">3</div>
+                  <span class="ma-name"
+                    ><strong>Security Command Center</strong> — findings land
+                    next to the rest of your cloud posture</span
+                  >
+                </div>
+                <div class="ma-row">
+                  <div class="filter-check">4</div>
+                  <span class="ma-name"
+                    ><strong>Tune &amp; repeat</strong> — thresholds are a dial,
+                    not a setting. Review monthly.</span
+                  >
+                </div>
+              </div>
+              <div
+                style="
+                  margin-top: 12px;
+                  background: #e6f4ea;
+                  border-radius: 8px;
+                  padding: 11px 14px;
+                "
+              >
+                <p
+                  style="
+                    font-size: 12px;
+                    color: var(--text);
+                    line-height: 1.55;
+                  "
+                >
+                  A blocked prompt isn't just a save — it's
+                  <strong>intel</strong>. It tells you someone is probing, which
+                  attack they picked, and when to look harder.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── 16: Cloud Run ──────────────────────────────────────────── -->
+        <section class="slide" id="s16">
           <div
             style="
               display: grid;
@@ -2249,37 +2801,61 @@
           </div>
         </section>
 
-        <!-- ── 14: Ship It ────────────────────────────────────────────── -->
-        <section class="slide" id="s14">
+        <!-- ── 17: Ship It ────────────────────────────────────────────── -->
+        <section class="slide" id="s17">
           <span class="badge blue">Part 4</span>
-          <h2>Ship It 🚀</h2>
-          <p>
-            Deploy from source — one command builds the container and deploys it
-            globally.
+          <h2 style="font-size: 34px">Ship It 🚀</h2>
+          <p style="font-size: 13px">
+            Three commands. Skip either of the first two and Model Armor fails
+            <strong>open</strong> in production.
           </p>
-          <div class="code">
+          <div
+            class="code"
+            style="
+              font-size: 10px;
+              line-height: 1.55;
+              padding: 14px 16px;
+              flex-shrink: 0;
+            "
+          >
+            <span class="cmt">// ① turn the API on</span><br />
+            <span class="cmd">gcloud</span> services enable
+            <span class="val">modelarmor.googleapis.com</span><br />
+            <br />
+            <span class="cmt"
+              >// ② let Cloud Run actually call it — miss this and you get 403
+              at runtime</span
+            ><br />
+            <span class="cmd">gcloud</span> projects add-iam-policy-binding
+            <span class="val">$PROJECT_ID</span> \<br />
+            &nbsp;&nbsp;<span class="flag">--member</span>=<span class="str"
+              >"serviceAccount:$PROJECT_NUMBER-compute@developer.gserviceaccount.com"</span
+            >
+            \<br />
+            &nbsp;&nbsp;<span class="flag">--role</span>=<span class="str"
+              >"roles/modelarmor.user"</span
+            ><br />
+            <br />
+            <span class="cmt">// ③ deploy</span><br />
             <span class="cmd">gcloud</span> run deploy secure-chat-app \<br />
             &nbsp;&nbsp;<span class="flag">--source</span>
             <span class="val">.</span> \<br />
-            &nbsp;&nbsp;<span class="flag">--project</span>
-            <span class="val">$PROJECT_ID</span> \<br />
             &nbsp;&nbsp;<span class="flag">--region</span>
             <span class="val">us-central1</span> \<br />
-            &nbsp;&nbsp;<span class="flag">--allow-unauthenticated</span>
-            \<br />
+            &nbsp;&nbsp;<span class="flag">--allow-unauthenticated</span> \<br />
             &nbsp;&nbsp;<span class="flag">--set-env-vars</span
             ><span class="val"
-              >="MODEL_ARMOR_TEMPLATE=projects/$PROJECT_ID/locations/us-central1/templates/securebank-template"</span
+              >="MODEL_ARMOR_TEMPLATE=projects/$PROJECT_ID/<br />&nbsp;&nbsp;&nbsp;&nbsp;locations/us-central1/templates/securebank-in"</span
             >
           </div>
-          <p style="margin-top: 14px; font-size: 14px">
+          <p style="margin-top: 12px; font-size: 13px">
             Cloud Build compiles the image. Cloud Run deploys it. You get a
             public HTTPS URL — with Model Armor protection baked in.
           </p>
         </section>
 
-        <!-- ── 15: Mission Accomplished ──────────────────────────────── -->
-        <section class="slide" id="s15">
+        <!-- ── 18: Mission Accomplished ──────────────────────────────── -->
+        <section class="slide" id="s18">
           <div
             style="
               flex: 1;
@@ -2310,59 +2886,92 @@
                 reasoning
               </li>
               <li>
-                🔒 Enable advanced DLP filters — credit card numbers, Australian
-                TFNs
+                🔒 Switch SDP to advanced — your own DLP inspect template,
+                Australian TFNs, custom infoTypes
               </li>
               <li>
-                🏢 Explore org-wide Floor Settings in the Google Cloud Console
+                🎭 Redact instead of block — return
+                <code style="font-size: 14px">sanitizedText</code> so the
+                customer still gets an answer
+              </li>
+              <li>
+                🏢 Set org-wide Floor Settings so no team can ship a weaker
+                template
               </li>
             </ul>
           </div>
         </section>
 
-        <!-- ── 16: Thank You ──────────────────────────────────────────── -->
-        <section class="slide" id="s16">
+        <!-- ── 19: Thank You ──────────────────────────────────────────── -->
+        <section class="slide" id="s19">
           <div
             style="
               flex: 1;
-              display: flex;
-              flex-direction: column;
+              display: grid;
+              grid-template-columns: 1.1fr 1fr;
+              gap: 36px;
               align-items: center;
-              justify-content: center;
-              text-align: center;
-              gap: 14px;
             "
           >
-            <h2>Thank You! 🙏</h2>
-            <p style="font-size: 20px; font-weight: 600; color: var(--text)">
-              Yuba Raj (UV) Panta
-            </p>
-            <p style="font-size: 16px">
-              Senior SRE / DevOps Engineer @ PageUp — GDG Melbourne
-            </p>
-            <p>
-              <a
-                href="https://uvishere.com"
+            <div style="display: flex; flex-direction: column; gap: 10px">
+              <h2 style="font-size: 40px">Thank You! 🙏</h2>
+              <p style="font-size: 20px; font-weight: 600; color: var(--text)">
+                Yuba Raj (UV) Panta
+              </p>
+              <p style="font-size: 15px">
+                Senior SRE / DevOps Engineer @ PageUp — GDG Melbourne
+              </p>
+              <p>
+                <a
+                  href="https://uvishere.com"
+                  style="
+                    color: var(--blue);
+                    font-size: 16px;
+                    text-decoration: none;
+                  "
+                  >uvishere.com</a
+                >
+              </p>
+              <div
                 style="
-                  color: var(--blue);
-                  font-size: 16px;
-                  text-decoration: none;
+                  margin-top: 10px;
+                  background: #fce8e6;
+                  border-radius: 12px;
+                  padding: 16px 24px;
                 "
-                >uvishere.com</a
               >
-            </p>
+                <p style="font-size: 17px; font-weight: 600; color: var(--red)">
+                  Sorry to let you go!!
+                </p>
+                <p
+                  style="font-size: 14px; color: var(--muted); margin-top: 3px"
+                >
+                  We can't pay you now 😅
+                </p>
+                <p
+                  style="
+                    font-size: 15px;
+                    color: var(--text);
+                    margin-top: 6px;
+                    font-weight: 500;
+                  "
+                >
+                  But keep building with AI! 🚀
+                </p>
+              </div>
+            </div>
             <div
               style="
-                margin-top: 12px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                text-align: center;
                 gap: 10px;
               "
             >
               <p
                 style="
-                  font-size: 13px;
+                  font-size: 12px;
                   font-weight: 700;
                   letter-spacing: 1px;
                   text-transform: uppercase;
@@ -2375,8 +2984,8 @@
                 src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fcodelabs.uvishere.com%2Fsecure-ai-with-armor"
                 alt="QR code for the codelab tutorial"
                 style="
-                  width: 160px;
-                  height: 160px;
+                  width: 168px;
+                  height: 168px;
                   border: 1px solid var(--border);
                   border-radius: 10px;
                   padding: 8px;
@@ -2387,41 +2996,15 @@
                 href="https://codelabs.uvishere.com/secure-ai-with-armor"
                 style="
                   font-family: monospace;
-                  font-size: 16px;
+                  font-size: 12.5px;
                   color: var(--blue);
                   background: #e8f0fe;
-                  padding: 8px 18px;
+                  padding: 8px 14px;
                   border-radius: 8px;
                   text-decoration: none;
                 "
                 >codelabs.uvishere.com/secure-ai-with-armor</a
               >
-            </div>
-            <div
-              style="
-                margin-top: 16px;
-                background: #fce8e6;
-                border-radius: 12px;
-                padding: 20px 32px;
-                max-width: 460px;
-              "
-            >
-              <p style="font-size: 17px; font-weight: 600; color: var(--red)">
-                Sorry to let you go!!
-              </p>
-              <p style="font-size: 14px; color: var(--muted); margin-top: 4px">
-                We can't pay you now 😅
-              </p>
-              <p
-                style="
-                  font-size: 15px;
-                  color: var(--text);
-                  margin-top: 8px;
-                  font-weight: 500;
-                "
-              >
-                But keep building with AI! 🚀
-              </p>
             </div>
           </div>
         </section>
@@ -2464,21 +3047,30 @@
         'The architecture change is minimal: every request flows through Model Armor before reaching Gemini, and every response flows back through before reaching the user. In the code, it\'s two extra API calls wrapping the existing Gemini call.\n\n❓ LIKELY QUESTIONS:\n• "Is it GDPR / compliance friendly?" → Yes. Model Armor integrates with Google DLP which has built-in detectors for PII categories across many jurisdictions.',
 
         /* 11 — Create a Template */
-        'Creating a template is a one-time setup in the Console. You define which filters to enable — injection detection, content safety, DLP, custom phrases. For SecureBank, we can even add BLUE_OCEAN_42 as a blocked output phrase — so even if injection partially works, the passphrase can\'t appear in the response.\n\nThe key point: your security team manages this centrally. Developers don\'t touch app code to change the policy.\n\n❓ LIKELY QUESTIONS:\n• "Can I adjust sensitivity?" → Yes. Each filter has configurable levels. Start in monitor-only mode to see what would be blocked before enforcing.\n• "Custom phrase blocking?" → You add specific strings or patterns. Blocks them from appearing in responses even if the model generates them.',
+        'Creating a template is a one-time setup. The part people skim past is the CONFIDENCE LEVEL on the right of each filter — that\'s your false-positive dial. HIGH only catches blatant attacks. LOW_AND_ABOVE catches more, and annoys more real customers. There is no correct answer; there is only the answer your traffic tells you.\n\nWalk the two decisions on the right:\n1. Inspect only vs inspect and block — ALWAYS ship inspect-only first. You get the logs without the support tickets. Tune, then enforce.\n2. One template or two — prompts and responses face different threats. Injection comes IN; PII leaks OUT. Two templates lets you be strict in each direction without over-blocking the other.\n\nNote CSAM is always on and cannot be disabled. That is deliberate.\n\n❓ LIKELY QUESTIONS:\n• "What are the confidence levels?" → HIGH, MEDIUM_AND_ABOVE, LOW_AND_ABOVE. HIGH is the least sensitive.\n• "Malicious URI — why does that matter for a bank bot?" → An attacker gets your bot to repeat a phishing link and now the bank\'s own support channel is delivering the payload.\n• "Basic vs Advanced SDP?" → Basic uses built-in infoTypes. Advanced lets you point at your own DLP inspect and de-identify templates — that\'s how you get custom infoTypes and masking instead of blocking.\n• "Custom phrase blocking?" → Specific strings or patterns. Blocks them from responses even if the model generates them.',
 
-        /* 12 — Live Demo Protected */
+        /* 12 — Wire It Up */
+        'This is the whole integration — two calls around the Gemini call you already have.\n\nCall out the endpoint gotcha at the top, because everyone hits it: Model Armor is REGIONAL. You must build the client with modelarmor.<region>.rep.googleapis.com. The global endpoint returns 404 and the error message does not tell you why. Also note our template lives in australia-southeast2 while Vertex is in us-central1 — the code extracts the region from the template path.\n\nThen the right-hand side — this is the bit most demos skip. You do not just get "blocked: true". You get filterMatchState, and underneath it filterResults broken down PER FILTER with the confidence that fired. That is what makes your logs useful later: you can tell injection attempts apart from someone pasting their own credit card number.\n\nAnd sanitizedText is the alternative to blocking — with advanced SDP, Model Armor hands back the text with PII masked. The customer still gets their answer; the card number just isn\'t in it.\n\n❓ LIKELY QUESTIONS:\n• "Does this double my latency?" → Two extra round trips, typically 100–300ms each. For a support bot that\'s fine. You can run the response check in parallel with streaming if you need to.\n• "What if Model Armor is down?" → Decide deliberately: fail open (available but unprotected) or fail closed (safe but broken). For a bank, fail closed.',
+
+        /* 13 — Live Demo Protected */
         "🟢 LIVE DEMO — PROTECTED\nUse the SAME attack chips as slide 8. Every attack should now return a red \"Blocked by Model Armor\" response.\n\nKey talking point: the application code didn't change. The system prompt didn't change. Only the Template was applied. That's the power of centralised policy — security without code changes.",
 
-        /* 13 — Cloud Run */
+        /* 14 — Live Demo: Redaction */
+        '🎭 LIVE DEMO — REDACTION\nFRAME THIS CAREFULLY — this is NOT an attack. Every demo so far has been someone malicious. This one is a real customer asking a completely reasonable question: "what are my details?"\n\nAnd that is the problem. The honest answer contains their email, their mobile, their card number. Blocking it would be absurd — you would be refusing to serve your own customer. But echoing a full card number back over a support channel is exactly how banks end up in the news.\n\nClick "Summarise my account". Left pane is what Gemini actually generated — the real card number, highlighted in red. Right pane is the same answer after Model Armor: [EMAIL_ADDRESS], [PHONE_NUMBER], [CREDIT_CARD_NUMBER].\n\nNow point at what SURVIVED. The home loan balance. The savings balance. The greeting. The customer still gets a genuinely useful answer — they just do not get their own card number read back to them. That is the whole argument for redaction over blocking.\n\nThe pills along the bottom are the actual infoTypes DLP matched, straight from the API response — not decoration.\n\nHow it works: ADVANCED SDP. The Model Armor template points at a DLP inspect template (what to find) and a DLP de-identify template (what to replace it with). Basic SDP only tells you PII is there; it will not hand back masked text.\n\n⚙️ IF THE DEMO FALLS BACK: you will see an amber "scripted fallback" pill. Proxy down, or MODEL_ARMOR_TEMPLATE_REDACT not set. The before/after still displays correctly — say "here is what it looks like" and move on. Do not debug on stage.\n\n❓ LIKELY QUESTIONS:\n• "Can I choose the mask format?" → Yes, the DLP de-identify template controls it — info-type tokens like these, character masking (****), a hash, or format-preserving encryption if you need to re-identify later.\n• "Why did it catch that card number?" → SDP validates the Luhn checksum. Made-up numbers that fail it usually are not flagged — which is why our test data uses valid test card numbers.\n• "Block or redact — which should I use?" → Prompts in: block. Responses out: redact. An attacker gets nothing either way, but a real customer still gets served.\n• "Doesn\'t the model already refuse to leak this?" → Try it — ask it to dump ALL customer profiles and it refuses. But it will happily hand over details when the request looks legitimate. Model behaviour is not a security control; Model Armor is.',
+
+        /* 15 — Know You're Under Attack */
+        'This is the slide that separates a demo from a production system. You just watched three attacks get blocked — but if this were running at 3am, would anyone know?\n\nLead with the gotcha, because it is genuinely surprising: sanitize operation logging is OFF by default. Your template will happily block attacks in total silence. You turn it on with the template metadata flags shown here.\n\nOnce logs flow, the chain is: log → log-based alert → your on-call. A single blocked prompt is noise. Twenty injection attempts from one caller in five minutes is an incident. Model Armor findings also surface in Security Command Center, so AI attacks sit alongside the rest of your cloud posture instead of in a silo nobody reads.\n\nFloor settings are the governance answer. As an org you set a MINIMUM — say, injection detection always on. Individual teams can make their templates stricter, never weaker. It stops the "someone shipped a template with everything unchecked" failure mode.\n\nClose on the framing in the green box: a blocked prompt is intel, not just a save.\n\n❓ LIKELY QUESTIONS:\n• "Does logging capture the prompt content?" → Be careful here — treat sanitize logs as sensitive; they may contain the very PII you are trying to protect. Lock down log access.\n• "Where do floor settings live?" → Console → Model Armor → Floor Settings, at org, folder or project level.',
+
+        /* 16 — Cloud Run */
         'Cloud Run is the easiest way to get a containerised app onto the internet. No Kubernetes, no cluster management.\n\n❓ LIKELY QUESTIONS:\n• "What does --allow-unauthenticated mean?" → Makes the URL publicly accessible. Fine for a public support bot. For internal tools, remove it and use IAM.\n• "How do you handle secrets?" → Use Secret Manager, not env vars. Reference with --set-secrets in the deploy command.\n• "How much does this cost?" → Cloud Run charges per request + CPU time. A lightly-used bot costs close to zero.',
 
-        /* 14 — Ship It */
-        'One command. Cloud Build compiles the image, Cloud Run deploys it — zero downtime. The URL you get back is production: HTTPS, globally routed, autoscaling — with Model Armor protection baked in via the environment variable.\n\n❓ LIKELY QUESTIONS:\n• "Where does Model Armor sit if I\'m using LangChain or agents?" → It\'s just an API call. Wrap it around any LLM call. Framework-agnostic.\n• "Can I use it with RAG pipelines?" → Yes. Sanitize the user query before retrieval AND before the final LLM call.',
+        /* 17 — Ship It */
+        'Three commands, and the middle one is the one everybody forgets.\n\n① Enable the API — obvious, but it is a separate service from Vertex AI.\n\n② Grant the Cloud Run service account roles/modelarmor.user. This is the failure I want you to remember: your app deploys fine, starts fine, serves traffic fine — and then every sanitize call 403s. Depending on how you wrote your error handling, that either takes the bot down or, much worse, silently skips the check and you are unprotected in production without knowing. Check this in staging.\n\n③ The deploy itself — Cloud Build compiles the image, Cloud Run deploys it, zero downtime. The template ID goes in as an env var, so swapping policy later is a config change, not a rebuild.\n\n❓ LIKELY QUESTIONS:\n• "Which service account?" → By default Cloud Run uses the compute default SA. In production give the service its own dedicated SA with just this role.\n• "Where does Model Armor sit if I\'m using LangChain or agents?" → It\'s just an API call. Wrap it around any LLM call. Framework-agnostic.\n• "Can I use it with RAG pipelines?" → Yes. Sanitize the user query before retrieval AND before the final LLM call.',
 
-        /* 15 — Mission Accomplished */
+        /* 18 — Mission Accomplished */
         'We covered the full arc: build a vulnerable AI app, demonstrate the attacks live, apply Model Armor, deploy to production. Level Up items are worth exploring for real deployments.\n\n❓ LIKELY QUESTIONS:\n• "What about hallucinations — can Model Armor catch those?" → Not directly. Model Armor focuses on safety and security. Hallucination is a model quality problem, addressed by RAG grounding, citations, or fine-tuning.',
 
-        /* 16 — Thank You */
+        /* 19 — Thank You */
         'Thank you! The codelab stays live after the session — continue at codelabs.uvishere.com/secure-ai-with-armor. Happy to answer questions now or reach out at uvishere.com.',
       ];
 
@@ -2499,7 +3091,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#1a1a2e;color:#e8eae
 </style>
 </head>
 <body>
-<div id="num">Slide — / 16</div>
+<div id="num">Slide — / —</div>
 <div id="txt">Waiting for presentation…\n\nMake sure the presentation window is open and press S to sync.</div>
 <script>
 window.addEventListener('message', e => {
@@ -2684,6 +3276,123 @@ window.addEventListener('message', e => {
         }
       }
 
+      /* ── Redaction demo (slide 14) ─────────────────────────────────
+         Hits /chat-redacted for real. If the proxy is down, or the redact
+         template isn't using advanced SDP, it falls back to scripted
+         before/after content so the demo never dies on stage.          */
+      const REDACT_FALLBACK = {
+        original:
+          'Hello UV! Here is a summary of your\n' +
+          'information on file:\n\n' +
+          '• Email: uvishere@securebank.com.au\n' +
+          '• Mobile: +61 491 570 006\n' +
+          '• Debit Card: 4111 1111 1111 1111\n\n' +
+          'And your current balances:\n\n' +
+          '• Home Loan: AUD $100,000 remaining\n' +
+          '• Savings Account: AUD $285,000\n' +
+          '• Term Deposit: AUD $150,000',
+        redacted:
+          'Hello UV! Here is a summary of your\n' +
+          'information on file:\n\n' +
+          '• Email: [EMAIL_ADDRESS]\n' +
+          '• Mobile: [PHONE_NUMBER]\n' +
+          '• Debit Card: [CREDIT_CARD_NUMBER]\n\n' +
+          'And your current balances:\n\n' +
+          '• Home Loan: AUD $100,000 remaining\n' +
+          '• Savings Account: AUD $285,000\n' +
+          '• Term Deposit: AUD $150,000',
+        infoTypes: ['CREDIT_CARD_NUMBER', 'EMAIL_ADDRESS', 'PHONE_NUMBER'],
+      };
+
+      // Gemini answers in markdown; strip it so the panes read as plain chat.
+      function tidy(s) {
+        return String(s)
+          .replace(/\*\*/g, '')
+          .replace(/^[ \t]*\*[ \t]+/gm, '• ');
+      }
+
+      function escHtml(s) {
+        return String(s).replace(
+          /[&<>]/g,
+          (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c],
+        );
+      }
+
+      // Highlight the PII still sitting in the raw output
+      const PII_PATTERNS = [
+        /[\w.+-]+@[\w-]+\.[\w.]+/g, // email
+        /(?:\+61\s?|0)[2-478](?:[ -]?\d){8}/g, // AU mobile
+        /\b(?:\d[ -]?){12,18}\b/g, // card number
+      ];
+
+      function markBefore(text) {
+        let h = escHtml(tidy(text));
+        PII_PATTERNS.forEach((re) => {
+          h = h.replace(re, (m) => '<mark>' + m + '</mark>');
+        });
+        return h;
+      }
+
+      function markAfter(text) {
+        return escHtml(tidy(text)).replace(
+          /\[[A-Z_]+\]/g,
+          (m) => '<mark class="masked">' + m + '</mark>',
+        );
+      }
+
+      function renderRedact(original, redacted, infoTypes, isFallback) {
+        document.getElementById('redact-before').innerHTML =
+          markBefore(original);
+        document.getElementById('redact-after').innerHTML = markAfter(redacted);
+
+        const types = document.getElementById('redact-types');
+        types.innerHTML = '';
+        const lbl = document.createElement('span');
+        if (isFallback) {
+          lbl.style.cssText =
+            'font-size:11px;color:#7b5800;background:#fef7e0;border-radius:20px;padding:3px 10px;font-weight:600';
+          lbl.textContent = '⚠️ scripted fallback — live redaction unavailable';
+        } else {
+          lbl.style.cssText =
+            'font-size:11px;color:var(--muted);font-weight:600';
+          lbl.textContent = 'Redacted by DLP:';
+        }
+        types.appendChild(lbl);
+
+        (infoTypes || []).forEach((t) => {
+          const pill = document.createElement('span');
+          pill.className = 'infotype-pill';
+          pill.textContent = t;
+          types.appendChild(pill);
+        });
+      }
+
+      async function redactDemo(prompt) {
+        document.getElementById('redact-before').innerHTML =
+          '<span class="redact-idle">Asking Gemini…</span>';
+        document.getElementById('redact-after').innerHTML =
+          '<span class="redact-idle">waiting for the raw answer…</span>';
+        document.getElementById('redact-types').innerHTML = '';
+        try {
+          const r = await fetch(PROXY + '/chat-redacted', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: prompt }),
+          });
+          const d = await r.json();
+          if (d.error || !d.redacted)
+            throw new Error(d.warning || d.error || 'no de-identified text');
+          renderRedact(d.original, d.redacted, d.infoTypes, false);
+        } catch (_) {
+          renderRedact(
+            REDACT_FALLBACK.original,
+            REDACT_FALLBACK.redacted,
+            REDACT_FALLBACK.infoTypes,
+            true,
+          );
+        }
+      }
+
       async function checkProxy() {
         try {
           const r = await fetch(PROXY + '/health', {
@@ -2691,13 +3400,13 @@ window.addEventListener('message', e => {
           });
           const d = await r.json();
           if (!d.ok) throw new Error('not ok');
-          document.getElementById('w6').classList.remove('on');
-          document.getElementById('w8').classList.remove('on');
-          document.getElementById('w11').classList.remove('on');
+          ['w6', 'w8', 'w11', 'w14'].forEach((id) =>
+            document.getElementById(id).classList.remove('on'),
+          );
         } catch (_) {
-          document.getElementById('w6').classList.add('on');
-          document.getElementById('w8').classList.add('on');
-          document.getElementById('w11').classList.add('on');
+          ['w6', 'w8', 'w11', 'w14'].forEach((id) =>
+            document.getElementById(id).classList.add('on'),
+          );
         }
       }
       checkProxy();
