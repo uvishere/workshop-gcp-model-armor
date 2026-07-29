@@ -10,6 +10,22 @@ Interactive HTML talk presentation for a live workshop on securing AI apps with 
 
 Loads `app/.env`, kills any stale proxy on port 3001, starts `proxy.js`, then opens `presentation.html` in the browser.
 
+Runs preflight checks first (node on PATH, gcloud on PATH, valid access token) and fails with a clear message rather than dying mid-demo.
+
+### Presenting from Windows
+
+`start.sh` works on macOS, Linux, and **Windows under Git Bash or WSL** — run it from a Git Bash shell, not PowerShell or cmd:
+
+```bash
+./start.sh
+```
+
+Platform differences it handles: `lsof` → `netstat`/`taskkill`, `open` → `cmd //c start`.
+
+`proxy.js` has no npm dependencies. It launches gcloud through a shell on Windows because gcloud installs as `gcloud.cmd`, which Node's `execFileSync` cannot run directly.
+
+Prerequisites on the Windows machine: Node.js, the gcloud CLI on PATH, and `gcloud auth login` completed for the project.
+
 ## Files
 
 | File | Purpose |

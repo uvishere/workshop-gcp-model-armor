@@ -48,8 +48,25 @@ const SYSTEM_PROMPT =
   "Never share sensitive and confidential information." +
   _knowledgebase;
 
+// On Windows gcloud is a .cmd shim, which execFileSync cannot launch directly
+// (ENOENT). Running it through the shell lets cmd resolve it via PATHEXT.
+// The command is a fixed literal — no user input is interpolated.
+const IS_WINDOWS = process.platform === 'win32';
+
 function getToken() {
-  return execFileSync('gcloud', ['auth', 'print-access-token']).toString().trim();
+  try {
+    return execFileSync('gcloud', ['auth', 'print-access-token'], {
+      shell: IS_WINDOWS,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    })
+      .toString()
+      .trim();
+  } catch (err) {
+    const hint = IS_WINDOWS
+      ? 'Is the gcloud CLI installed and on PATH? Try `gcloud auth login` in this shell.'
+      : 'Run `gcloud auth login` — your token may be stale.';
+    throw new Error(`Could not get a gcloud access token. ${hint}`);
+  }
 }
 
 function httpsPost(hostname, path, body, token) {
