@@ -2226,9 +2226,10 @@
                 class="code"
                 style="
                   font-size: 10px;
-                  line-height: 1.55;
+                  line-height: 1.4;
                   margin-top: 0;
-                  padding: 10px 14px;
+                  padding: 9px 14px;
+                  flex-shrink: 0;
                 "
               >
                 sanitizationResult: {<br />
@@ -2241,12 +2242,15 @@
                 <span class="str">'MATCH_FOUND'</span>,<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;confidenceLevel:
                 <span class="lit">'HIGH'</span> },<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;sdp: { matchState:
-                <span class="str">'NO_MATCH_FOUND'</span> },<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;sdp: { sdpFilterResult: {<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="flag"
+                  >deidentifyResult</span
+                >: { data: { text:<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str"
+                  >'Card [CREDIT_CARD_NUMBER]…'</span
+                > } } } },<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;rai: { … }, malicious_uris: { … }<br />
-                &nbsp;&nbsp;},<br />
-                &nbsp;&nbsp;<span class="flag">sanitizedText</span>:
-                <span class="str">'Card [CREDIT_CARD]…'</span><br />
+                &nbsp;&nbsp;}<br />
                 }
               </div>
               <div
@@ -2282,9 +2286,9 @@
                 >
                   <p style="font-size: 11px; line-height: 1.45">
                     <strong style="color: var(--green)">Or redact</strong> —
-                    advanced SDP returns
-                    <code style="font-size: 10px">sanitizedText</code> with PII
-                    masked. Answer still gets through.
+                    advanced SDP nests the masked text under
+                    <code style="font-size: 10px">deidentifyResult</code>. Answer
+                    still gets through.
                   </p>
                 </div>
               </div>
@@ -2890,8 +2894,8 @@
                 Australian TFNs, custom infoTypes
               </li>
               <li>
-                🎭 Redact instead of block — return
-                <code style="font-size: 14px">sanitizedText</code> so the
+                🎭 Redact instead of block — return the
+                <code style="font-size: 14px">deidentifyResult</code> text so the
                 customer still gets an answer
               </li>
               <li>
@@ -3050,7 +3054,7 @@
         'Creating a template is a one-time setup. The part people skim past is the CONFIDENCE LEVEL on the right of each filter — that\'s your false-positive dial. HIGH only catches blatant attacks. LOW_AND_ABOVE catches more, and annoys more real customers. There is no correct answer; there is only the answer your traffic tells you.\n\nWalk the two decisions on the right:\n1. Inspect only vs inspect and block — ALWAYS ship inspect-only first. You get the logs without the support tickets. Tune, then enforce.\n2. One template or two — prompts and responses face different threats. Injection comes IN; PII leaks OUT. Two templates lets you be strict in each direction without over-blocking the other.\n\nNote CSAM is always on and cannot be disabled. That is deliberate.\n\n⚠️ ONE LINE WORTH SAYING OUT LOUD, pointing at the SDP row: "Model Armor is the firewall; Sensitive Data Protection is the PII engine it calls."\n\nThat row looks like just another checkbox, and it understates what is happening. Model Armor has no PII masking engine of its own — it delegates to SDP, a whole separate service. Everything else on this list (injection, harassment, dangerous content, malicious URIs) is Model Armor\'s own classifier. Only the PII row hands off. This is worth planting here because it is what makes the redaction demo two slides later make sense.\n\n❓ LIKELY QUESTIONS:\n• "What are the confidence levels?" → HIGH, MEDIUM_AND_ABOVE, LOW_AND_ABOVE. HIGH is the least sensitive.\n• "Malicious URI — why does that matter for a bank bot?" → An attacker gets your bot to repeat a phishing link and now the bank\'s own support channel is delivering the payload.\n• "Basic vs Advanced SDP?" → Basic uses built-in infoTypes and only DETECTS — it tells you PII is there so you can block. Advanced points at your own DLP inspect and de-identify templates, and that is the only way you get masked text back. If you configure basic and expect redaction, you get nothing and no error.\n• "So which one actually does the redacting?" → SDP does. Model Armor orchestrates and returns the result — you can see it in the response, nested under filterResults.sdp.sdpFilterResult.deidentifyResult.\n• "Custom phrase blocking?" → Specific strings or patterns. Blocks them from responses even if the model generates them.',
 
         /* 12 — Wire It Up */
-        'This is the whole integration — two calls around the Gemini call you already have.\n\nCall out the endpoint gotcha at the top, because everyone hits it: Model Armor is REGIONAL. You must build the client with modelarmor.<region>.rep.googleapis.com. The global endpoint returns 404 and the error message does not tell you why. Also note our template lives in australia-southeast2 while Vertex is in us-central1 — the code extracts the region from the template path.\n\nThen the right-hand side — this is the bit most demos skip. You do not just get "blocked: true". You get filterMatchState, and underneath it filterResults broken down PER FILTER with the confidence that fired. That is what makes your logs useful later: you can tell injection attempts apart from someone pasting their own credit card number.\n\nAnd sanitizedText is the alternative to blocking — with advanced SDP, Model Armor hands back the text with PII masked. The customer still gets their answer; the card number just isn\'t in it.\n\n❓ LIKELY QUESTIONS:\n• "Does this double my latency?" → Two extra round trips, typically 100–300ms each. For a support bot that\'s fine. You can run the response check in parallel with streaming if you need to.\n• "What if Model Armor is down?" → Decide deliberately: fail open (available but unprotected) or fail closed (safe but broken). For a bank, fail closed.',
+        'This is the whole integration — two calls around the Gemini call you already have.\n\nCall out the endpoint gotcha at the top, because everyone hits it: Model Armor is REGIONAL. You must build the client with modelarmor.<region>.rep.googleapis.com. The global endpoint returns 404 and the error message does not tell you why. Also note our template lives in australia-southeast2 while Vertex is in us-central1 — the code extracts the region from the template path.\n\nThen the right-hand side — this is the bit most demos skip. You do not just get "blocked: true". You get filterMatchState, and underneath it filterResults broken down PER FILTER with the confidence that fired. That is what makes your logs useful later: you can tell injection attempts apart from someone pasting their own credit card number.\n\nAnd redaction is the alternative to blocking — with advanced SDP, Model Armor hands back the text with PII masked. The customer still gets their answer; the card number just isn\'t in it.\n\n⚠️ If anyone photographs this slide and goes to implement it: the masked text is NOT a top-level sanitizedText field. It is nested at filterResults.sdp.sdpFilterResult.deidentifyResult.data.text. Plenty of blog posts get this wrong, and the failure is silent — the call succeeds and the field you are reading is just undefined.\n\n❓ LIKELY QUESTIONS:\n• "Does this double my latency?" → Two extra round trips, typically 100–300ms each. For a support bot that\'s fine. You can run the response check in parallel with streaming if you need to.\n• "What if Model Armor is down?" → Decide deliberately: fail open (available but unprotected) or fail closed (safe but broken). For a bank, fail closed.',
 
         /* 13 — Live Demo Protected */
         "🟢 LIVE DEMO — PROTECTED\nUse the SAME attack chips as slide 8. Every attack should now return a red \"Blocked by Model Armor\" response.\n\nKey talking point: the application code didn't change. The system prompt didn't change. Only the Template was applied. That's the power of centralised policy — security without code changes.",

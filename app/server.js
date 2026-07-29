@@ -31,10 +31,17 @@ const ai = new GoogleGenAI({ vertexai: { project: project, location: location } 
 // =====================================================================
 // WORKSHOP STEP 2: GUARD IT (Initialize Model Armor)
 // =====================================================================
+// Model Armor is a REGIONAL service. Without the apiEndpoint below the SDK
+// talks to the global endpoint, which fails with PERMISSION_DENIED even when
+// you own the project — an error that looks like IAM but is not.
 // const modelArmorClient = new ModelArmorClient({
 //     apiEndpoint: `modelarmor.${location}.rep.googleapis.com`,
 // });
 // const templateName = process.env.MODEL_ARMOR_TEMPLATE;
+//
+// Optional second template, configured with ADVANCED SDP, used by Step 6 to
+// mask PII instead of blocking the whole answer. See ./setup-redaction.sh
+// const redactTemplateName = process.env.MODEL_ARMOR_TEMPLATE_REDACT;
 
 app.post('/api/chat', async (req, res) => {
     try {
@@ -81,6 +88,37 @@ app.post('/api/chat', async (req, res) => {
         let responseText = response.text;
 
         // =====================================================================
+        // WORKSHOP STEP 6: REDACT (Optional — "Redact, Don't Block")
+        // =====================================================================
+        // Deliberately placed BEFORE the block check in Step 5. Blocking and
+        // redacting are competing policies for the same event: if SDP matches
+        // and Step 5 checks filterMatchState first, it returns a block and this
+        // code never runs.
+        // if (useModelArmor && redactTemplateName) {
+        //     const [redactResponse] = await modelArmorClient.sanitizeModelResponse({
+        //         name: redactTemplateName,
+        //         modelResponseData: { text: responseText }
+        //     });
+        //
+        //     // The masked text is NOT at the top level of the response — it is
+        //     // nested under the SDP filter result. There is no `sanitizedText`.
+        //     const sdpResult = redactResponse.sanitizationResult
+        //         .filterResults?.sdp?.sdpFilterResult?.deidentifyResult;
+        //     const deidentified = sdpResult?.data?.text;
+        //
+        //     if (deidentified) {
+        //         // infoTypes is a flat array of STRINGS, not objects. Log what
+        //         // was found without logging the values themselves.
+        //         console.log(`Redacted: ${(sdpResult.infoTypes || []).join(', ')}`);
+        //         return res.json({ response: deidentified, redacted: true });
+        //     }
+        //
+        //     // Fell through with no masked text? The template is almost
+        //     // certainly using BASIC SDP, which only detects. Redaction needs
+        //     // ADVANCED SDP pointed at a DLP de-identify template.
+        // }
+
+        // =====================================================================
         // WORKSHOP STEP 5: GUARD IT (Sanitize Model Response)
         // =====================================================================
         // if (useModelArmor) {
@@ -99,9 +137,10 @@ app.post('/api/chat', async (req, res) => {
         //         });
         //     }
         //
-        //     if (armorResponse.sanitizationResult.sanitizedText) {
-        //         responseText = armorResponse.sanitizationResult.sanitizedText;
-        //     }
+        //
+        //     // Want to know WHICH filter fired? It is in filterResults —
+        //     // far more useful in an incident than "we blocked it":
+        //     // console.log(JSON.stringify(armorResponse.sanitizationResult.filterResults));
         // }
 
         res.json({ response: responseText });

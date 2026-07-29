@@ -34,6 +34,8 @@ Prerequisites on the Windows machine: Node.js, the gcloud CLI on PATH, and `gclo
 | `proxy.js` | Local Node.js proxy (no npm deps) — relays chat to Vertex AI / Model Armor |
 | `start.sh` | One-command launcher: starts proxy + opens presentation |
 | `setup-redaction.sh` | One-time: creates DLP inspect + de-identify templates and an advanced-SDP Model Armor template for the slide 14 demo |
+| `docs/codelab.md` | claat source for the self-paced codelab — regenerate with `cd docs && claat export codelab.md` |
+| `app/server.js` | Starter app attendees edit during the codelab (Model Armor code ships commented out) |
 | `app/knowledgebase.txt` | SecureBank fake sensitive data — loaded into system prompt for attack demos |
 | `app/.env` | GCP project, location, Model Armor template |
 
