@@ -389,7 +389,16 @@ Negative
 : **Every infoType you transform must also appear in the inspect template.** You cannot redact something you never looked for, and the pairing is rejected if they disagree. This is the most common configuration error.
 
 Positive
-: Google provides over 200 built-in infoTypes, including country-specific ones — `AUSTRALIA_TAX_FILE_NUMBER`, `AUSTRALIA_MEDICARE_NUMBER`, `AUSTRALIA_DRIVERS_LICENSE_NUMBER`, `AUSTRALIA_PASSPORT`. You can also define custom infoTypes from a regex or a word dictionary, which is how you catch your own internal identifiers such as `SB-00001`. Browse the full list with `gcloud dlp info-types list --location=us-central1`.
+: Google provides over 200 built-in infoTypes, including country-specific ones — `AUSTRALIA_TAX_FILE_NUMBER`, `AUSTRALIA_MEDICARE_NUMBER`, `AUSTRALIA_DRIVERS_LICENSE_NUMBER`, `AUSTRALIA_PASSPORT`. You can also define custom infoTypes from a regex or a word dictionary, which is how you catch your own internal identifiers such as `SB-00001`. There is no `gcloud` command for this, so list them over REST:
+
+```bash
+curl -s "https://dlp.googleapis.com/v2/locations/us-central1/infoTypes" \
+  -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  -H "x-goog-user-project: $PROJECT_ID" \
+  | python3 -c "import json,sys; [print(i['name']) for i in json.load(sys.stdin)['infoTypes']]"
+```
+
+That returns 251 infoTypes in `us-central1`.
 
 Positive
 : `replaceConfig` gives you a fixed literal like `[CREDIT_CARD_NUMBER]`. Two useful alternatives: `characterMaskConfig` masks all but the last few characters (`****-****-****-1111`), which is what you want if support staff need to confirm a card without seeing it; and `cryptoDeterministicConfig` produces a stable pseudonym, so the same customer maps to the same token every time and your analytics still work.

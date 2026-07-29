@@ -6,7 +6,8 @@
 # matters — the talk is presented from a Windows laptop.
 #
 set -e
-DIR="$(cd "$(dirname "$0")" && pwd)"
+DIR="$(cd "$(dirname "$0")" && pwd)"   # presentation/
+ROOT="$(cd "$DIR/.." && pwd)"          # repo root — app/ and setup-redaction.sh live here
 
 # Git Bash, MSYS and Cygwin all report a Windows-ish uname.
 case "$(uname -s)" in
@@ -34,13 +35,13 @@ kill_stale() {
 kill_stale
 
 # ── Load env vars from app/.env ────────────────────────────────────────────
-if [ ! -f "$DIR/app/.env" ]; then
+if [ ! -f "$ROOT/app/.env" ]; then
   echo "❌ app/.env not found. Copy the settings from CLAUDE.md into it."
   exit 1
 fi
 set -a
 # shellcheck source=/dev/null
-source "$DIR/app/.env"
+source "$ROOT/app/.env"
 set +a
 
 # ── Preflight: fail here with a clear message, not mid-demo ────────────────
@@ -83,7 +84,7 @@ fi
 # Warn if the redaction demo will fall back to scripted content.
 if curl -s http://localhost:3001/health | grep -q '"redactConfigured":false'; then
   echo "⚠️   MODEL_ARMOR_TEMPLATE_REDACT not set — slide 14 will use its scripted fallback."
-  echo "    Run ./setup-redaction.sh to enable the live redaction demo."
+  echo "    Run ../setup-redaction.sh to enable the live redaction demo."
 fi
 
 # ── Open the presentation ──────────────────────────────────────────────────

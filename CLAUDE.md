@@ -5,7 +5,7 @@ Interactive HTML talk presentation for a live workshop on securing AI apps with 
 ## Quick Start
 
 ```bash
-./start.sh
+./presentation/start.sh
 ```
 
 Loads `app/.env`, kills any stale proxy on port 3001, starts `proxy.js`, then opens `presentation.html` in the browser.
@@ -14,15 +14,15 @@ Runs preflight checks first (node on PATH, gcloud on PATH, valid access token) a
 
 ### Presenting from Windows
 
-`start.sh` works on macOS, Linux, and **Windows under Git Bash or WSL** — run it from a Git Bash shell, not PowerShell or cmd:
+`presentation/start.sh` works on macOS, Linux, and **Windows under Git Bash or WSL** — run it from a Git Bash shell, not PowerShell or cmd:
 
 ```bash
-./start.sh
+./presentation/start.sh
 ```
 
 Platform differences it handles: `lsof` → `netstat`/`taskkill`, `open` → `cmd //c start`.
 
-`proxy.js` has no npm dependencies. It launches gcloud through a shell on Windows because gcloud installs as `gcloud.cmd`, which Node's `execFileSync` cannot run directly.
+`presentation/proxy.js` has no npm dependencies. It launches gcloud through a shell on Windows because gcloud installs as `gcloud.cmd`, which Node's `execFileSync` cannot run directly.
 
 Prerequisites on the Windows machine: Node.js, the gcloud CLI on PATH, and `gcloud auth login` completed for the project.
 
@@ -30,9 +30,9 @@ Prerequisites on the Windows machine: Node.js, the gcloud CLI on PATH, and `gclo
 
 | File | Purpose |
 |------|---------|
-| `presentation.html` | Self-contained 19-slide talk — open directly in Chrome |
-| `proxy.js` | Local Node.js proxy (no npm deps) — relays chat to Vertex AI / Model Armor |
-| `start.sh` | One-command launcher: starts proxy + opens presentation |
+| `presentation/presentation.html` | Self-contained 19-slide talk — open directly in Chrome |
+| `presentation/proxy.js` | Local Node.js proxy (no npm deps) — relays chat to Vertex AI / Model Armor |
+| `presentation/start.sh` | One-command launcher: starts proxy + opens presentation |
 | `setup-redaction.sh` | One-time: creates DLP inspect + de-identify templates and an advanced-SDP Model Armor template for the slide 14 demo |
 | `docs/codelab.md` | claat source for the self-paced codelab — regenerate with `cd docs && claat export codelab.md` |
 | `app/server.js` | Starter app attendees edit during the codelab (Model Armor code ships commented out) |
@@ -48,7 +48,7 @@ MODEL_ARMOR_TEMPLATE=projects/gdg-secure-ai-workshop/locations/australia-southea
 MODEL_ARMOR_TEMPLATE_REDACT=...   # optional — advanced-SDP template for slide 14
 ```
 
-Note: `GOOGLE_CLOUD_LOCATION` is for Vertex AI. The Model Armor template is in `australia-southeast2` — `proxy.js` extracts the correct region from the template path automatically.
+Note: `GOOGLE_CLOUD_LOCATION` is for Vertex AI. The Model Armor template is in `australia-southeast2` — `presentation/proxy.js` extracts the correct region from the template path automatically.
 
 ## Presentation Controls
 
@@ -113,7 +113,7 @@ presentation.html  →  POST /chat             →  Vertex AI (Gemini 2.5 Flash)
                    →  POST /chat-protected   →  Model Armor → Vertex AI → Model Armor
 ```
 
-`proxy.js` loads `app/knowledgebase.txt` into the system prompt — this is what makes attacks dramatic (fake PII, API keys, passwords in the system context).
+`presentation/proxy.js` loads `app/knowledgebase.txt` into the system prompt — this is what makes attacks dramatic (fake PII, API keys, passwords in the system context).
 
 ## Codelab
 

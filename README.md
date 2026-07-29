@@ -29,8 +29,9 @@ presenter tooling — you can safely ignore it.
 
 ### Presenter-only files
 
-- `presentation.html`: The live talk. Self-contained, open it in Chrome.
-- `proxy.js` / `start.sh`: Local proxy and launcher used to run the live demos during the talk.
+- `/presentation`: Everything used to deliver the live talk.
+  - `presentation.html`: The talk itself. Self-contained, open it in Chrome.
+  - `proxy.js` / `start.sh`: Local proxy and launcher for the live demos.
 - `CLAUDE.md`: Notes for working on this repo.
 
 ## Presenter Notes

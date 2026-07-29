@@ -36,7 +36,8 @@ const ARMOR_REDACT_LOCATION = armorLocation(TEMPLATE_REDACT_PATH);
 const PORT = 3001;
 
 const _knowledgebase = (() => {
-  try { return fs.readFileSync(path.join(__dirname, 'app', 'knowledgebase.txt'), 'utf8'); }
+  // knowledgebase lives at the repo root, one level up from presentation/
+  try { return fs.readFileSync(path.join(__dirname, '..', 'app', 'knowledgebase.txt'), 'utf8'); }
   catch (_) { return ''; }
 })();
 
