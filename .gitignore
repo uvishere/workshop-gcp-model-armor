@@ -5,7 +5,7 @@ node_modules/
 .env
 
 # claat export output
-secure-ai-model-armor/
+secure-ai-with-armor/
 
 # OS files
 .DS_Store
