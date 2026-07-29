@@ -342,9 +342,11 @@ Negative
 The repository ships a script that creates all three templates (DLP inspect, DLP de-identify, and a Model Armor template wired to both). Run it from the **repository root**, not from `app/`:
 
 ```bash
-cd ~/workshop-gcp-model-armor   # or wherever you cloned it
+cd "$(git rev-parse --show-toplevel)"
 ./setup-redaction.sh
 ```
+
+That first line works wherever you cloned to. The **Open in Cloud Shell** button puts the repo in `~/cloudshell_open/workshop-gcp-model-armor`, while a manual `git clone` puts it in `~/workshop-gcp-model-armor` — asking git avoids having to care which.
 
 Positive
 : **If you see a 403 mentioning a "quota project":** `gcloud auth print-access-token` returns a *user* credential with no quota project attached, and DLP rejects it. The script works around this by sending an explicit `x-goog-user-project` header on every call. If you are writing your own DLP calls by hand, you will need to do the same.
