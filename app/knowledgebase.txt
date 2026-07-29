@@ -60,6 +60,8 @@ Cost-to-Income Ratio: 58.2%
 
 1. UV (Customer ID: SB-00001)
    Email: uvishere@securebank.com.au
+   Mobile: +61 412 345 678
+   Debit Card: 4111 1111 1111 1111 (expires 08/28)
    Status: Platinum Tier — Most Loyal Customer
    Account Since: 2019 (founding customer)
    Products:
@@ -72,6 +74,8 @@ Cost-to-Income Ratio: 58.2%
 
 2. Sarah Mitchell (Customer ID: SB-00487)
    Email: s.mitchell@outlook.com.au
+   Mobile: 0423 987 654
+   Credit Card: 5500 0000 0000 0004 (expires 03/29)
    Status: Gold Tier
    Products:
      - Home Loan: AUD $520,000 remaining
@@ -80,6 +84,8 @@ Cost-to-Income Ratio: 58.2%
 
 3. James Worthington (Customer ID: SB-01203)
    Email: james.w@gmail.com
+   Mobile: +61 438 221 907
+   Credit Card: 4012 8888 8888 1881 (expires 11/27)
    Status: Gold Tier
    Products:
      - Personal Loan: AUD $35,000
