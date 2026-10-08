@@ -87,6 +87,12 @@ if curl -s http://localhost:3001/health | grep -q '"redactConfigured":false'; th
   echo "    Run ../setup-redaction.sh to enable the live redaction demo."
 fi
 
+# Warn if slide 8a is reading local files instead of the real bucket.
+if curl -s http://localhost:3001/health | grep -q '"docsSource":"local'; then
+  echo "⚠️   Slide 8a is reading local app/docs/, not the GCS bucket."
+  echo "    Run ../setup-docs-bucket.sh (or check SECUREBANK_DOCS_BUCKET)."
+fi
+
 # ── Open the presentation ──────────────────────────────────────────────────
 open_presentation() {
   local file="$1"
