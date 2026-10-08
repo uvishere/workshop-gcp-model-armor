@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Overview architecture</title>
+<style>
+@font-face{font-family:'Archivo Black';src:url('../../../presentation/fonts/archivo-black-latin-400.woff2') format('woff2');font-weight:400;font-display:block}
+@font-face{font-family:'Inter';src:url('../../../presentation/fonts/inter-latin-var.woff2') format('woff2');font-weight:100 900;font-display:block}
+@font-face{font-family:'JetBrains Mono';src:url('../../../presentation/fonts/jetbrains-mono-latin-var.woff2') format('woff2');font-weight:100 800;font-display:block}
+:root{--bg:#0b0d10;--panel:#12161b;--ink:#f3f5f6;--dim:#c3cbd1;--faint:#8d979f;--rule:#2b333b;--red:#ff5a52;--red-bg:#2a1214;--green:#3ddc84;--green-bg:#0f2519;
+--sans:'Inter','Segoe UI',sans-serif;--mono:'JetBrains Mono',Consolas,'Segoe UI Emoji','Segoe UI Symbol',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg)}
+body{display:inline-block}
+.frame{width:1200px;padding:44px 52px 48px;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:20px;line-height:1.35}
+.kicker{font-family:var(--mono);font-size:18px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);padding-bottom:16px;border-bottom:1px solid var(--rule);margin-bottom:32px}
+.kicker b{color:var(--green);font-weight:600}
+.mono{font-family:var(--mono)}
+.box{border:1px solid var(--rule);background:var(--panel);border-radius:3px;padding:16px 20px}
+.box .t{font-family:var(--mono);font-size:18px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+.box .v{font-size:22px;font-weight:600}
+.box .s{font-size:18px;color:var(--dim);margin-top:4px}
+.red{color:var(--red)} .green{color:var(--green)} .dim{color:var(--dim)} .faint{color:var(--faint)}
+.box.bad{border-color:var(--red);background:var(--red-bg)}
+.box.good{border-color:var(--green);background:var(--green-bg)}
+.tag{display:inline-flex;gap:10px;align-items:baseline;border:1px solid var(--green);color:var(--green);background:var(--green-bg);border-radius:3px;padding:6px 12px;font-size:18px;line-height:1.3}
+.tag .n{font-family:var(--mono);font-weight:700}
+.tag .d{color:var(--ink)}
+.arrow{display:flex;align-items:center;justify-content:center;color:var(--dim)}
+.arrow svg{display:block}
+.foot{margin-top:28px;font-size:18px;color:var(--faint)}
+
+.flow{display:grid;grid-template-columns:1fr 64px 1fr 64px 1fr;align-items:stretch}
+.flow .app{border-color:var(--dim)}
+.tagrow{display:flex;gap:14px;justify-content:center;margin-top:18px}
+.ctx{margin-top:30px;border-top:1px dashed var(--rule);padding-top:22px}
+.ctxlabel{font-size:18px;color:var(--faint);letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
+.cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;align-items:start}
+.col{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.col .box{width:100%}
+.file{font-size:19px;padding:5px 0;border-top:1px solid var(--rule)}
+.box .t + .file{border-top:0}
+.pois{font-family:var(--sans);font-size:16px;border:1px solid var(--red);border-radius:3px;padding:1px 6px;margin-left:6px;letter-spacing:.04em}
+
+</style></head>
+<body><div class="frame">
+
+<div class="kicker">SecureBank support bot · <b>Everything the bot reads, it can repeat.</b></div>
+<div class="flow">
+  <div class="box"><div class="t">User</div><div class="v">Customer</div><div class="s">types a chat message</div></div>
+  <div class="arrow"><svg width="56" height="20" viewBox="0 0 56 20"><line x1="2" y1="10" x2="44" y2="10" stroke="#c3cbd1" stroke-width="2"/><path d="M42 3 L54 10 L42 17 Z" fill="#c3cbd1"/></svg></div>
+  <div class="box app"><div class="t">Cloud Run</div><div class="v">SecureBank app</div><div class="s mono">app/server.js</div></div>
+  <div class="arrow"><svg width="56" height="20" viewBox="0 0 56 20"><line x1="2" y1="10" x2="44" y2="10" stroke="#c3cbd1" stroke-width="2"/><path d="M42 3 L54 10 L42 17 Z" fill="#c3cbd1"/></svg></div>
+  <div class="box"><div class="t">Vertex AI</div><div class="v">Gemini 2.5 Flash</div><div class="s">answers from the context</div></div>
+</div>
+<div class="tagrow"><span class="tag"><span class="n">07</span><span class="d">Model Armor: prompt in, answer out</span></span><span class="tag"><span class="n">09</span><span class="d">Cloud Run: least-privilege identity</span></span></div>
+<div class="ctx">
+  <div class="ctxlabel mono">Context sent to Gemini with every request</div>
+  <div class="cols">
+    <div class="col">
+      <div class="box"><div class="t">System prompt</div><div class="v">Persona and rules</div><div class="s">passphrase <span class="mono red">BLUE_OCEAN_42</span></div></div>
+    </div>
+    <div class="col">
+      <div class="box bad"><div class="t">knowledgebase.txt</div><div class="v">Internal notes</div><div class="s">API keys, passwords, customer PII</div></div>
+      <span class="tag"><span class="n">05</span><span class="d">Secret Manager: keys out of the knowledgebase and code</span></span>
+    </div>
+    <div class="col">
+      <div class="box"><div class="t">Cloud Storage bucket</div>
+        <div class="file mono">loan-book-q1.txt</div>
+        <div class="file mono">branch-policy.txt</div>
+        <div class="file mono red">complaint-4471.txt <span class="pois">poisoned</span></div>
+      </div>
+      <span class="tag"><span class="n">06</span><span class="d">Sensitive Data Protection: masks the bucket</span></span>
+      <span class="tag"><span class="n">07</span><span class="d">Model Armor: screens every document</span></span>
+    </div>
+  </div>
+</div>
+
+</div></body></html>

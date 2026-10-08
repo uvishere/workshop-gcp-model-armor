@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>SDP pipeline</title>
+<style>
+@font-face{font-family:'Archivo Black';src:url('../../../presentation/fonts/archivo-black-latin-400.woff2') format('woff2');font-weight:400;font-display:block}
+@font-face{font-family:'Inter';src:url('../../../presentation/fonts/inter-latin-var.woff2') format('woff2');font-weight:100 900;font-display:block}
+@font-face{font-family:'JetBrains Mono';src:url('../../../presentation/fonts/jetbrains-mono-latin-var.woff2') format('woff2');font-weight:100 800;font-display:block}
+:root{--bg:#0b0d10;--panel:#12161b;--ink:#f3f5f6;--dim:#c3cbd1;--faint:#8d979f;--rule:#2b333b;--red:#ff5a52;--red-bg:#2a1214;--green:#3ddc84;--green-bg:#0f2519;
+--sans:'Inter','Segoe UI',sans-serif;--mono:'JetBrains Mono',Consolas,'Segoe UI Emoji','Segoe UI Symbol',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg)}
+body{display:inline-block}
+.frame{width:1200px;padding:44px 52px 48px;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:20px;line-height:1.35}
+.kicker{font-family:var(--mono);font-size:18px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);padding-bottom:16px;border-bottom:1px solid var(--rule);margin-bottom:32px}
+.kicker b{color:var(--green);font-weight:600}
+.mono{font-family:var(--mono)}
+.box{border:1px solid var(--rule);background:var(--panel);border-radius:3px;padding:16px 20px}
+.box .t{font-family:var(--mono);font-size:18px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+.box .v{font-size:22px;font-weight:600}
+.box .s{font-size:18px;color:var(--dim);margin-top:4px}
+.red{color:var(--red)} .green{color:var(--green)} .dim{color:var(--dim)} .faint{color:var(--faint)}
+.box.bad{border-color:var(--red);background:var(--red-bg)}
+.box.good{border-color:var(--green);background:var(--green-bg)}
+.tag{display:inline-flex;gap:10px;align-items:baseline;border:1px solid var(--green);color:var(--green);background:var(--green-bg);border-radius:3px;padding:6px 12px;font-size:18px;line-height:1.3}
+.tag .n{font-family:var(--mono);font-weight:700}
+.tag .d{color:var(--ink)}
+.arrow{display:flex;align-items:center;justify-content:center;color:var(--dim)}
+.arrow svg{display:block}
+.foot{margin-top:28px;font-size:18px;color:var(--faint)}
+
+.flow{display:grid;grid-template-columns:1fr 44px 1fr 44px 1fr;align-items:stretch}
+.v.b{font-size:18px;font-weight:600;white-space:nowrap}
+.rows{display:grid;grid-template-columns:96px 1fr;gap:12px 16px;align-items:center;margin-top:36px}
+.lab{font-size:18px;letter-spacing:.12em}
+.row{font-size:21px;white-space:pre;padding:12px 18px;border-radius:3px;border:1px solid var(--rule)}
+.row.bad{border-color:var(--red);background:var(--red-bg);color:#ffd9d6}
+.row.good{border-color:var(--green);background:var(--green-bg);color:#c9f7dc}
+
+</style></head>
+<body><div class="frame">
+
+<div class="kicker">Codelab 06 · <b>Clean the data before the bot reads it</b></div>
+<div class="flow">
+  <div class="box bad"><div class="t">Source bucket</div><div class="v mono b">gs://PROJECT-<br>securebank-docs</div><div class="s">names, emails, phones</div></div>
+  <div class="arrow"><svg width="56" height="20" viewBox="0 0 56 20"><line x1="2" y1="10" x2="44" y2="10" stroke="#c3cbd1" stroke-width="2"/><path d="M42 3 L54 10 L42 17 Z" fill="#c3cbd1"/></svg></div>
+  <div class="box good"><div class="t">SDP de-identify job</div><div class="v">setup-sdp.sh</div>
+    <div class="s mono">securebank-inspect<br>securebank-deidentify</div></div>
+  <div class="arrow"><svg width="56" height="20" viewBox="0 0 56 20"><line x1="2" y1="10" x2="44" y2="10" stroke="#3ddc84" stroke-width="2"/><path d="M42 3 L54 10 L42 17 Z" fill="#3ddc84"/></svg></div>
+  <div class="box"><div class="t">Clean bucket</div><div class="v mono b">gs://PROJECT-<br>securebank-docs-clean</div><div class="s">what the bot reads now</div></div>
+</div>
+<div class="rows">
+  <div class="lab red mono">BEFORE</div><div class="row bad mono">HL2201  Margaret Osei  margaret.osei@gmail.com  +61 412 668 190</div>
+  <div class="lab green mono">AFTER</div><div class="row good mono">HL2201  [PERSON_NAME]  [EMAIL_ADDRESS]  [PHONE_NUMBER]</div>
+</div>
+<div class="foot">Real run: 24 names, 10 emails, 8 phone numbers in about 35 seconds.</div>
+
+</div></body></html>
