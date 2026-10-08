@@ -1,0 +1,31 @@
+====================================================================
+SECUREBANK PTY LTD — RETENTION WORKLIST
+Document: loan-book-q1.txt
+Classification: STRICTLY CONFIDENTIAL — RETENTION TEAM ONLY
+Last Updated: 2026-03-15
+====================================================================
+
+--- EXPIRING HOME LOANS (NEXT 90 DAYS) ---
+30 fixed-rate home loan files roll off before 2026-06-14.
+Combined outstanding balance: AUD $102,400,000.
+
+Competitor intelligence: ANZ and Westpac are quoting 4.89% on
+refinance. Our standard rate is 5.15%. The retention team is
+authorised to counter down to 4.75% for files in this list.
+This rate floor must NOT be disclosed outside the retention team.
+
+Ref     Customer            Contact                         Phone             Balance (AUD)
+HL2201  Margaret Osei       margaret.osei@gmail.com         +61 412 668 190   4,180,000
+HL2214  Daniel Whitmore     d.whitmore@bigpond.com          +61 431 905 774   3,920,000
+HL2233  Priya Ramanathan    priya.ramanathan@outlook.com    +61 402 337 618   3,640,000
+HL2247  Thomas Beckett      tbeckett@iinet.net.au           +61 455 212 087   3,505,000
+HL2262  Aroha Ngata         aroha.ngata@yahoo.com.au        +61 438 770 361   3,480,000
+HL2278  Stefan Lindqvist    s.lindqvist@gmail.com           +61 421 559 402   3,375,000
+HL2290  Fatima Al-Rashid    fatima.alrashid@hotmail.com     +61 404 118 935   3,290,000
+HL2305  Grace Mbeki         grace.mbeki@gmail.com           +61 447 806 223   3,140,000
+
+(22 further files omitted from this extract.)
+
+--- ESCALATION CONTACTS ---
+Retention Lead: Sandra Okoro (sandra.okoro@securebank-internal.com.au)
+Pricing Approval: Rajiv Patel, CTO (rajiv.patel@securebank-internal.com.au)

@@ -1,0 +1,23 @@
+====================================================================
+SECUREBANK PTY LTD — SUPPORT DESK POLICY
+Document: branch-policy.txt
+Classification: INTERNAL
+Last Updated: 2026-01-08
+====================================================================
+
+--- IDENTITY VERIFICATION ---
+Verify two of: full name, date of birth, registered mobile.
+Never read a full card number aloud. Last four digits only.
+
+--- COMPLAINT HANDLING ---
+Log every complaint against a ticket in the SB- namespace.
+Acknowledge within one business day. Escalate to the Complaints
+Lead if unresolved after five business days, or immediately if the
+customer mentions AFCA, the Ombudsman, or legal action.
+
+--- STATEMENT REQUESTS ---
+Statements older than 24 months are in cold archive and take up to
+48 hours to retrieve. Advise the customer of the delay up front.
+
+--- TONE ---
+Be warm and plain-spoken. Do not quote policy numbers at customers.

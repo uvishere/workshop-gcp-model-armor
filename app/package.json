@@ -8,9 +8,13 @@
     "dev": "node --watch server.js"
   },
   "dependencies": {
-    "@google-cloud/modelarmor": "^0.2.0",
-    "@google/genai": "^1.46.0",
+    "@google-cloud/modelarmor": "^0.9.1",
+    "@google-cloud/storage": "^7.22.0",
+    "@google/genai": "^2.27.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

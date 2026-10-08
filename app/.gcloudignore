@@ -1,0 +1,10 @@
+# gcloud run deploy --source uploads this folder to Cloud Build. Without this
+# file it would also upload node_modules (the Dockerfile reinstalls them) and
+# a local .env, which must never leave the machine.
+.gcloudignore
+.git
+node_modules/
+.env
+
+# Same reason as .dockerignore: the unmasked local docs never leave the machine.
+docs/

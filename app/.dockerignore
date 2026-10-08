@@ -1,2 +1,5 @@
 node_modules
 .env
+# The local docs are the original, unmasked files. Production reads the
+# de-identified bucket; raw PII must not ship inside the image.
+docs/

@@ -1,9 +1,10 @@
-FROM node:20-alpine
+# Node 22: @google-cloud/modelarmor 0.8+ requires it.
+FROM node:22-alpine
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
-RUN npm install --omit=dev
+RUN npm ci --omit=dev
 
 COPY . .
 

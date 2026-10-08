@@ -1,17 +1,24 @@
-require('dotenv').config();
-const express = require('express');
-const crypto = require('crypto');
+// SOLUTION: every workshop step completed. See solution/README.md.
 const fs = require('fs');
 const path = require('path');
-const { GoogleGenAI } = require('@google/genai');
-const { Storage } = require('@google-cloud/storage');
-// TODO (Workshop Step 07): Import Model Armor client
-// const { ModelArmorClient } = require('@google-cloud/modelarmor');
+const crypto = require('crypto');
+const { createRequire } = require('module');
+
+// Runs in two places: copied into app/ (the catch-up path), or in place from
+// solution/. In place, public/, docs/, .env and node_modules all live in app/.
+const APP_DIR = fs.existsSync(path.join(__dirname, 'public')) ? __dirname : path.join(__dirname, '..', 'app');
+const appRequire = createRequire(path.join(APP_DIR, 'package.json'));
+
+appRequire('dotenv').config({ path: path.join(APP_DIR, '.env') });
+const express = appRequire('express');
+const { GoogleGenAI } = appRequire('@google/genai');
+const { Storage } = appRequire('@google-cloud/storage');
+const { ModelArmorClient } = appRequire('@google-cloud/modelarmor');
 
 const app = express();
 const port = process.env.PORT || 8080;
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(APP_DIR, 'public')));
 app.use(express.json());
 
 // Google Cloud configuration
@@ -35,16 +42,11 @@ const storage = new Storage();
 // =====================================================================
 // WORKSHOP STEP 05: SECRET MANAGER (Admin key)
 // =====================================================================
-// This key guards /api/admin/reload-docs. Hardcoded, it ships in every copy
-// of the source and every container image, and someone also pasted it into
-// knowledgebase.txt, which means the bot can recite it.
-const ADMIN_API_KEY = 'sk-sb-prod-4f8a2c9e7b1d3f6a';
-//
-// Replace the line above with this one. The key now lives in Secret Manager.
+// The key guarding /api/admin/reload-docs lives in Secret Manager.
 // There is no Secret Manager SDK call here on purpose: Cloud Run injects the
 // secret as an environment variable (--set-secrets), so the app never holds a
 // credential that can read the secret store. Locally you export it yourself.
-// const ADMIN_API_KEY = process.env.ADMIN_API_KEY;
+const ADMIN_API_KEY = process.env.ADMIN_API_KEY;
 
 // =====================================================================
 // WORKSHOP STEP 07: GUARD IT (Initialize Model Armor)
@@ -54,12 +56,12 @@ const ADMIN_API_KEY = 'sk-sb-prod-4f8a2c9e7b1d3f6a';
 // you own the project: an error that looks like IAM but is not.
 // The region comes from the template path, not GOOGLE_CLOUD_LOCATION, because
 // your Gemini region and your template region do not have to match.
-// const templateName = process.env.MODEL_ARMOR_TEMPLATE;
-// if (!templateName) throw new Error('MODEL_ARMOR_TEMPLATE is not set in .env');
-// const armorLocation = templateName.match(/\/locations\/([^/]+)\//)?.[1] || location;
-// const modelArmorClient = new ModelArmorClient({
-//     apiEndpoint: `modelarmor.${armorLocation}.rep.googleapis.com`,
-// });
+const templateName = process.env.MODEL_ARMOR_TEMPLATE;
+if (!templateName) throw new Error('MODEL_ARMOR_TEMPLATE is not set in .env');
+const armorLocation = templateName.match(/\/locations\/([^/]+)\//)?.[1] || location;
+const modelArmorClient = new ModelArmorClient({
+    apiEndpoint: `modelarmor.${armorLocation}.rep.googleapis.com`,
+});
 
 // filterMatchState comes back as the string 'MATCH_FOUND' or the enum
 // number 2 depending on the transport, so check both.
@@ -101,7 +103,7 @@ async function readBucketDocuments(bucketName) {
 }
 
 function readLocalDocuments() {
-    const docsDir = path.join(__dirname, 'docs');
+    const docsDir = path.join(APP_DIR, 'docs');
     return fs.readdirSync(docsDir)
         .filter((name) => name.endsWith('.txt'))
         .map((name) => ({ name, text: fs.readFileSync(path.join(docsDir, name), 'utf8') }));
@@ -135,24 +137,24 @@ async function loadDocuments(bucketName = docsBucket) {
     // Real retrieval pipelines chunk documents anyway; screen the chunks.
     // Only pi_and_jailbreak decides here: a document full of customer PII is
     // still a legitimate document and should not be dropped for it.
-    // for (const doc of loaded) {
-    //     const paragraphs = doc.text.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
-    //     try {
-    //         const verdicts = await Promise.all(paragraphs.map(async (paragraph) => {
-    //             const [screening] = await modelArmorClient.sanitizeUserPrompt({
-    //                 name: templateName,
-    //                 userPromptData: { text: paragraph }
-    //             });
-    //             return matchedFilters(screening.sanitizationResult).includes('pi_and_jailbreak');
-    //         }));
-    //         doc.injection = verdicts.some(Boolean);
-    //     } catch (error) {
-    //         // Fail closed: a document we could not screen is treated as hostile.
-    //         console.error(`Could not screen ${doc.name}: ${error.message}`);
-    //         doc.injection = true;
-    //     }
-    //     if (doc.injection) console.warn(`Model Armor flagged ${doc.name} as prompt injection. It will be withheld while Security is ON.`);
-    // }
+    for (const doc of loaded) {
+        const paragraphs = doc.text.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+        try {
+            const verdicts = await Promise.all(paragraphs.map(async (paragraph) => {
+                const [screening] = await modelArmorClient.sanitizeUserPrompt({
+                    name: templateName,
+                    userPromptData: { text: paragraph }
+                });
+                return matchedFilters(screening.sanitizationResult).includes('pi_and_jailbreak');
+            }));
+            doc.injection = verdicts.some(Boolean);
+        } catch (error) {
+            // Fail closed: a document we could not screen is treated as hostile.
+            console.error(`Could not screen ${doc.name}: ${error.message}`);
+            doc.injection = true;
+        }
+        if (doc.injection) console.warn(`Model Armor flagged ${doc.name} as prompt injection. It will be withheld while Security is ON.`);
+    }
 
     documents = loaded;
     documentsSource = source;
@@ -209,23 +211,23 @@ app.post('/api/chat', async (req, res) => {
         // =====================================================================
         // SDP is ignored on the way IN: a customer quoting their own email or
         // card number is not a leak. It matters on the way OUT (checkpoint 3).
-        // if (useModelArmor) {
-        //     console.log("Evaluating prompt with Model Armor...");
-        //
-        //     const [armorResponse] = await modelArmorClient.sanitizeUserPrompt({
-        //         name: templateName,
-        //         userPromptData: { text: userMessage }
-        //     });
-        //
-        //     const fired = matchedFilters(armorResponse.sanitizationResult).filter((name) => name !== 'sdp');
-        //     if (fired.length > 0) {
-        //         console.warn(`Model Armor BLOCKED the prompt: ${fired.join(', ')}`);
-        //         return res.json({
-        //             response: "🚨 This message was blocked by our security policy.",
-        //             blocked: true
-        //         });
-        //     }
-        // }
+        if (useModelArmor) {
+            console.log("Evaluating prompt with Model Armor...");
+
+            const [armorResponse] = await modelArmorClient.sanitizeUserPrompt({
+                name: templateName,
+                userPromptData: { text: userMessage }
+            });
+
+            const fired = matchedFilters(armorResponse.sanitizationResult).filter((name) => name !== 'sdp');
+            if (fired.length > 0) {
+                console.warn(`Model Armor BLOCKED the prompt: ${fired.join(', ')}`);
+                return res.json({
+                    response: "🚨 This message was blocked by our security policy.",
+                    blocked: true
+                });
+            }
+        }
 
         // Documents flagged at checkpoint 2 are withheld only while Security is
         // ON, so you can flip the toggle and compare both behaviours.
@@ -249,48 +251,48 @@ app.post('/api/chat', async (req, res) => {
         // =====================================================================
         // WORKSHOP STEP 07: GUARD IT (Checkpoint 3 of 3: the model's answer)
         // =====================================================================
-        // if (useModelArmor) {
-        //     console.log("Evaluating model response with Model Armor...");
-        //
-        //     const [armorResponse] = await modelArmorClient.sanitizeModelResponse({
-        //         name: templateName,
-        //         modelResponseData: { text: responseText }
-        //     });
-        //     const result = armorResponse.sanitizationResult;
-        //     const fired = matchedFilters(result);
-        //
-        //     // =================================================================
-        //     // WORKSHOP STEP 08: REDACT (Extra: "Redact, Don't Block")
-        //     // =================================================================
-        //     // Deliberately placed BEFORE the block check below. Blocking and
-        //     // redacting are competing policies for the same event: if SDP
-        //     // matches and the block check runs first, it returns a block and
-        //     // this code never runs. Redact only when SDP is the ONLY filter
-        //     // that fired; anything else (harassment, injection) still blocks.
-        //     //
-        //     // The masked text is NOT at the top level of the response: it is
-        //     // nested under the SDP filter result. There is no `sanitizedText`.
-        //     // const deidentify = result.filterResults?.sdp?.sdpFilterResult?.deidentifyResult;
-        //     // const deidentified = deidentify?.data?.text;
-        //     // if (deidentified && fired.every((name) => name === 'sdp')) {
-        //     //     // infoTypes is a flat array of STRINGS, not objects. Log what
-        //     //     // was found without logging the values themselves.
-        //     //     console.log(`Redacted: ${(deidentify.infoTypes || []).join(', ')}`);
-        //     //     return res.json({ response: deidentified, redacted: true });
-        //     // }
-        //     //
-        //     // No masked text? The template is using BASIC SDP, which only
-        //     // detects. Redaction needs ADVANCED SDP pointed at a DLP
-        //     // de-identify template (the ones you created in Step 06).
-        //
-        //     if (isMatch(result.filterMatchState)) {
-        //         console.warn(`Model Armor BLOCKED the model response: ${fired.join(', ')}`);
-        //         return res.json({
-        //             response: "🚨 The model's response was blocked because it contained sensitive information.",
-        //             blocked: true
-        //         });
-        //     }
-        // }
+        if (useModelArmor) {
+            console.log("Evaluating model response with Model Armor...");
+
+            const [armorResponse] = await modelArmorClient.sanitizeModelResponse({
+                name: templateName,
+                modelResponseData: { text: responseText }
+            });
+            const result = armorResponse.sanitizationResult;
+            const fired = matchedFilters(result);
+
+            // =================================================================
+            // WORKSHOP STEP 08: REDACT (Extra: "Redact, Don't Block")
+            // =================================================================
+            // Deliberately placed BEFORE the block check below. Blocking and
+            // redacting are competing policies for the same event: if SDP
+            // matches and the block check runs first, it returns a block and
+            // this code never runs. Redact only when SDP is the ONLY filter
+            // that fired; anything else (harassment, injection) still blocks.
+            //
+            // The masked text is NOT at the top level of the response: it is
+            // nested under the SDP filter result. There is no `sanitizedText`.
+            const deidentify = result.filterResults?.sdp?.sdpFilterResult?.deidentifyResult;
+            const deidentified = deidentify?.data?.text;
+            if (deidentified && fired.every((name) => name === 'sdp')) {
+                // infoTypes is a flat array of STRINGS, not objects. Log what
+                // was found without logging the values themselves.
+                console.log(`Redacted: ${(deidentify.infoTypes || []).join(', ')}`);
+                return res.json({ response: deidentified, redacted: true });
+            }
+
+            // No masked text? The template is using BASIC SDP, which only
+            // detects. Redaction needs ADVANCED SDP pointed at a DLP
+            // de-identify template (the ones you created in Step 06).
+
+            if (isMatch(result.filterMatchState)) {
+                console.warn(`Model Armor BLOCKED the model response: ${fired.join(', ')}`);
+                return res.json({
+                    response: "🚨 The model's response was blocked because it contained sensitive information.",
+                    blocked: true
+                });
+            }
+        }
 
         res.json({ response: responseText });
 
