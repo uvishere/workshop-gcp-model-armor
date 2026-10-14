@@ -287,6 +287,36 @@ The documents are full of customer names, emails and phone numbers. The bot does
 
 **Sensitive Data Protection** (SDP) finds personal data and hides it. The commands use its old name, `dlp`.
 
+### How SDP works
+
+A script does the work in this step, but it only builds three things. Here they are.
+
+**1. An inspect template: what to look for.** SDP has over 150 built-in detectors, called **infoTypes**. You pick the ones you care about and how sure SDP must be before it counts a match:
+
+```json
+"infoTypes": [
+  {"name": "PERSON_NAME"},
+  {"name": "EMAIL_ADDRESS"},
+  {"name": "PHONE_NUMBER"},
+  {"name": "CREDIT_CARD_NUMBER"}
+],
+"minLikelihood": "POSSIBLE"
+```
+
+**2. A de-identify template: how to hide it.** For each infoType you choose what to put in its place. Here, every match is swapped for its label, so a customer's name becomes `[PERSON_NAME]`:
+
+```json
+"replaceConfig": {"newValue": {"stringValue": "[PERSON_NAME]"}}
+```
+
+SDP can also mask with `***` or swap in a token you can reverse later.
+
+**3. A job: do it to the whole bucket.** The job reads every file in the documents bucket, applies both templates, and writes a masked copy of each file to a new `-clean` bucket. It runs on Google's side; your laptop only starts it. The original bucket is not changed.
+
+![setup-sdp.sh: the bucket, the SDP job and the clean copy, with one row before and after](images/sdp-pipeline.png)
+
+Model Armor reuses the same two templates in the next section.
+
 ### 1. Scan the documents
 
 From the top folder of the repo (in your second tab):
@@ -296,13 +326,7 @@ cd "$(git rev-parse --show-toplevel)"
 ./setup-sdp.sh
 ```
 
-The script:
-
-1. Tells SDP **what to look for**: names, emails, phone numbers and card numbers.
-2. Tells SDP **how to hide it**: swap each one for a label like `[PERSON_NAME]`.
-3. Scans the documents bucket and saves a masked copy to a new `-clean` bucket.
-
-![setup-sdp.sh: the bucket, the SDP job and the clean copy, with one row before and after](images/sdp-pipeline.png)
+Open `setup-sdp.sh` to see each part: the templates are steps ② and ③, the job is step ⑤.
 
 It takes under a minute and ends like this:
 
@@ -360,6 +384,24 @@ Duration: 0:18:00
 3. **The AI's answer**, before it reaches you.
 
 ![One template, three checkpoints: the prompt, each document paragraph, and the answer](images/armor-checkpoints.png)
+
+### How Model Armor works
+
+Every check is one API call. Your code sends the text and the template name, and Model Armor sends back a verdict:
+
+```js
+const [armorResponse] = await modelArmorClient.sanitizeUserPrompt({
+  name: templateName,                   // your template
+  userPromptData: { text: userMessage } // the text to check
+});
+```
+
+- Text going **in** (the question, the documents) uses `sanitizeUserPrompt`. The AI's answer uses `sanitizeModelResponse`.
+- Model Armor runs every filter in your template on the text.
+- The verdict says `MATCH_FOUND` if any filter fired, and which one, for example `pi_and_jailbreak` at `HIGH`.
+- Model Armor never blocks anything itself. **Your code** reads the verdict and decides: refuse the question, drop the document, or let it through.
+
+You set up the template in steps 1 to 3 below, then turn on the three calls in step 4.
 
 ### 1. The filters
 
@@ -462,7 +504,7 @@ Turn Security OFF and ask again: the leak comes back.
 
 <aside class="positive">
 
-Model Armor only gives a verdict. Your code decides whether to block. The verdict says which filter fired (for example `pi_and_jailbreak`, `HIGH`). Log it, so you know which attack someone tried.
+Log which filter fired in each verdict, so you know which attack someone tried.
 
 </aside>
 

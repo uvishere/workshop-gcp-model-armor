@@ -15,7 +15,7 @@ const _tmpl    = argMap.template || process.env.MODEL_ARMOR_TEMPLATE || '';
 // Redaction demo needs a template configured with advanced SDP (a DLP
 // de-identify template). The workshop's single template already is one, so
 // setting this to the same path as MODEL_ARMOR_TEMPLATE is fine. Falls back to
-// the main template if unset, but then slide 15 assumes basic SDP and scripts it.
+// the main template if unset, but then slide 17 assumes basic SDP and scripts it.
 const _tmplRedact = argMap['template-redact'] || process.env.MODEL_ARMOR_TEMPLATE_REDACT || '';
 // Indirect-injection demo reads SecureBank's "internal documents" from a GCS
 // bucket. Created by ./setup-docs-bucket.sh. Unset falls back to app/docs/.
@@ -122,7 +122,7 @@ function httpsGet(hostname, path, token) {
    bucket on every keystroke of a live demo is a way to lose the room.
    Falls back to the local copies in app/docs/ if the bucket is missing,
    the token is stale, or the venue wifi dies — same defensive move as
-   REDACT_FALLBACK on slide 15.                                       */
+   REDACT_FALLBACK on slide 17.                                       */
 const DOCS_DIR = path.join(__dirname, '..', 'app', 'docs');
 let DOCS = [];
 let DOCS_SOURCE = 'none';
@@ -428,7 +428,7 @@ initDocs().then(() => server.listen(PORT, () => {
   console.log(
     _tmplRedact
       ? `    Redact  : ${TEMPLATE_REDACT_PATH}`
-      : `    Redact  : ⚠️  MODEL_ARMOR_TEMPLATE_REDACT not set — slide 15 will use its scripted fallback`
+      : `    Redact  : ⚠️  MODEL_ARMOR_TEMPLATE_REDACT not set — slide 17 will use its scripted fallback`
   );
   console.log(`    Docs    : ${DOCS.length} from ${DOCS_SOURCE}\n`);
 }));
