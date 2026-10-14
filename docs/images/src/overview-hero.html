@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Overview hero</title>
+<style>
+@font-face{font-family:'Archivo Black';src:url('../../../presentation/fonts/archivo-black-latin-400.woff2') format('woff2');font-weight:400;font-display:block}
+@font-face{font-family:'Inter';src:url('../../../presentation/fonts/inter-latin-var.woff2') format('woff2');font-weight:100 900;font-display:block}
+@font-face{font-family:'JetBrains Mono';src:url('../../../presentation/fonts/jetbrains-mono-latin-var.woff2') format('woff2');font-weight:100 800;font-display:block}
+:root{--bg:#0b0d10;--panel:#12161b;--ink:#f3f5f6;--dim:#c3cbd1;--faint:#8d979f;--rule:#2b333b;--red:#ff5a52;--red-bg:#2a1214;--green:#3ddc84;--green-bg:#0f2519;
+--sans:'Inter','Segoe UI',sans-serif;--mono:'JetBrains Mono',Consolas,'Segoe UI Emoji','Segoe UI Symbol',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg)}
+body{display:inline-block}
+.frame{width:1200px;padding:56px 64px 60px;background:var(--bg);color:var(--ink);font-family:var(--sans);text-align:center}
+h1{font-family:'Archivo Black',var(--sans);font-size:52px;font-weight:400;letter-spacing:-.01em}
+.sub{font-family:var(--mono);font-size:20px;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-top:14px}
+.row{display:grid;grid-template-columns:1fr 200px 1fr;align-items:center;margin-top:52px}
+.bot{display:flex;flex-direction:column;align-items:center;gap:20px}
+.bot svg{display:block}
+.label{font-family:var(--mono);font-size:22px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+</style></head>
+<body><div class="frame">
+
+<h1>Build it. Guard it. Ship it.</h1>
+<div class="sub">Building AI apps, securely</div>
+
+<div class="row">
+  <div class="bot">
+    <svg width="240" height="240" viewBox="0 0 240 240" fill="none" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="120" y1="38" x2="120" y2="62" stroke="#ff5a52"/><circle cx="120" cy="30" r="9" fill="#ff5a52" stroke="none"/>
+      <rect x="40" y="62" width="160" height="120" rx="26" stroke="#ff5a52" fill="#2a1214"/>
+      <path d="M78 104 l18 18 M96 104 l-18 18 M144 104 l18 18 M162 104 l-18 18" stroke="#ff5a52"/>
+      <path d="M90 154 q30 -14 60 0" stroke="#ff5a52"/>
+      <path d="M200 140 l22 10 l-10 14 l20 12" stroke="#ff5a52" stroke-width="4"/>
+      <circle cx="226" cy="190" r="5" fill="#ff5a52" stroke="none"/><circle cx="210" cy="212" r="4" fill="#ff5a52" stroke="none"/>
+    </svg>
+    <div class="label" style="color:#ff5a52">Unsecure bot</div>
+  </div>
+  <svg width="200" height="40" viewBox="0 0 200 40"><line x1="10" y1="20" x2="168" y2="20" stroke="#c3cbd1" stroke-width="5"/><path d="M164 6 L192 20 L164 34 Z" fill="#c3cbd1"/></svg>
+  <div class="bot">
+    <svg width="240" height="240" viewBox="0 0 240 240" fill="none" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="120" y1="38" x2="120" y2="62" stroke="#3ddc84"/><circle cx="120" cy="30" r="9" fill="#3ddc84" stroke="none"/>
+      <rect x="40" y="62" width="160" height="120" rx="26" stroke="#3ddc84" fill="#0f2519"/>
+      <circle cx="87" cy="112" r="10" fill="#3ddc84" stroke="none"/><circle cx="153" cy="112" r="10" fill="#3ddc84" stroke="none"/>
+      <path d="M90 146 q30 18 60 0" stroke="#3ddc84"/>
+      <path d="M186 150 l34 -12 l34 12 v26 c0 22 -16 36 -34 44 c-18 -8 -34 -22 -34 -44 z" transform="translate(-16 -6) scale(0.95)" fill="#0b0d10" stroke="#3ddc84"/>
+      <path d="M182 172 l10 10 l18 -20" stroke="#3ddc84"/>
+    </svg>
+    <div class="label" style="color:#3ddc84">Secure bot</div>
+  </div>
+</div>
+
+</div></body></html>
