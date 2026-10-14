@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 addMessage(data.response, 'system', data.blocked);
             } else {
-                addMessage('Error: Cannot connect to the server.', 'system', true);
+                addMessage(`Error ${response.status}: ${data.details || data.error}`, 'system', true);
             }
 
         } catch (error) {

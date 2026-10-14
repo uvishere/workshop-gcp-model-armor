@@ -9,7 +9,7 @@ const { createRequire } = require('module');
 const APP_DIR = fs.existsSync(path.join(__dirname, 'public')) ? __dirname : path.join(__dirname, '..', 'app');
 const appRequire = createRequire(path.join(APP_DIR, 'package.json'));
 
-appRequire('dotenv').config({ path: path.join(APP_DIR, '.env') });
+appRequire('dotenv').config({ path: path.join(APP_DIR, '.env'), override: true });
 const express = appRequire('express');
 const { GoogleGenAI } = appRequire('@google/genai');
 const { Storage } = appRequire('@google-cloud/storage');
