@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # One-time setup: creates the GCS bucket of SecureBank's "internal documents"
-# (codelab step 03, and slide 7 of the talk).
+# (codelab step 03, and slide 8 of the talk).
 #
 # Uploads the copies from app/docs/. One of them, complaint-4471.txt, has
 # attacker instructions written into the complaint body: that is the indirect

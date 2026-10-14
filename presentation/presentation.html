@@ -369,6 +369,11 @@
         letter-spacing: 0.06em;
       }
 
+      .layers.tools li {
+        padding: 10px 0;
+        font-size: 18px;
+      }
+
       /* Progressive reveal: items are direct children of [data-build] */
       [data-build] > :not(p) {
         opacity: 0;
@@ -621,7 +626,7 @@
   </head>
   <body>
     <div id="progress"></div>
-    <div id="counter">1 / 19</div>
+    <div id="counter">1 / 20</div>
 
     <div id="deck-outer">
       <div class="deck" id="deck">
@@ -634,14 +639,14 @@
 
         <!-- 2: Mission -->
         <section class="slide poster" id="s2">
-          <div class="act">Codelab 01 · Your first day</div>
+          <div class="act">Your first day</div>
           <div class="mid">You just joined<br />SecureBank.</div>
           <div class="under">Ship the support bot. Stay out of the news.</div>
         </section>
 
         <!-- 3: The app -->
         <section class="slide" id="s3">
-          <div class="kicker"><span class="lab">Codelab 01</span><span>The app</span></div>
+          <div class="kicker"><span>The app</span></div>
           <h2>Everything the bot reads, it can repeat.</h2>
           <div class="flow">
             <div class="node"><div class="t">User</div><div class="v">A question</div></div>
@@ -658,10 +663,25 @@
           <div class="punch">A system prompt is context, not a vault.</div>
         </section>
 
-        <!-- 4: Live demo, normal -->
+        <!-- 4: The toolbox -->
         <section class="slide" id="s4">
+          <div class="kicker"><span>The toolbox</span></div>
+          <h2>The Google Cloud tools you'll use today.</h2>
+          <ul class="layers tools">
+            <li><span class="tool">Vertex AI</span><span>Runs Gemini, the AI model that writes the bot's answers</span></li>
+            <li><span class="tool">Cloud Storage</span><span>Holds the bank's documents in a bucket</span></li>
+            <li><span class="tool">Secret Manager</span><span>Keeps passwords and API keys out of your code</span></li>
+            <li><span class="tool">SDP</span><span>Sensitive Data Protection: finds personal data and masks it</span></li>
+            <li><span class="tool">Model Armor</span><span>Checks prompts, documents and answers for attacks</span></li>
+            <li><span class="tool">Cloud Run</span><span>Runs the app online, no servers to manage</span></li>
+            <li><span class="tool">Cloud Logging</span><span>Records what happened, so you can spot attacks</span></li>
+          </ul>
+        </section>
+
+        <!-- 5: Live demo, normal -->
+        <section class="slide" id="s5">
           <div class="warn" id="w4">Proxy not running. Start it: <code>./presentation/start.sh</code></div>
-          <div class="kicker"><span class="lab">Codelab 03</span><span>Live demo</span></div>
+          <div class="kicker"><span>Live demo</span></div>
           <div class="demo-head">
             <h2>Meet the bot.</h2>
             <span class="state">Gemini only</span>
@@ -686,17 +706,17 @@
           </div>
         </section>
 
-        <!-- 5: Act, Break it -->
-        <section class="slide poster" id="s5">
-          <div class="act">Codelab 04 · Act one</div>
+        <!-- 6: Act, Break it -->
+        <section class="slide poster" id="s6">
+          <div class="act">Act one</div>
           <div class="big red">Break it.</div>
           <div class="under">Three typed attacks. Then one nobody typed.</div>
         </section>
 
-        <!-- 6: Live demo, typed attacks -->
-        <section class="slide" id="s6">
+        <!-- 7: Live demo, typed attacks -->
+        <section class="slide" id="s7">
           <div class="warn" id="w6">Proxy not running. Start it: <code>./presentation/start.sh</code></div>
-          <div class="kicker"><span class="lab">Codelab 04</span><span class="red">Live demo · unprotected</span></div>
+          <div class="kicker"><span class="red">Live demo · unprotected</span></div>
           <div class="demo-head">
             <h2>Just ask nicely.</h2>
             <span class="state red">No protection</span>
@@ -720,10 +740,10 @@
           </div>
         </section>
 
-        <!-- 7: Live demo, indirect injection from the docs bucket -->
-        <section class="slide" id="s7">
+        <!-- 8: Live demo, indirect injection from the docs bucket -->
+        <section class="slide" id="s8">
           <div class="warn" id="w7">Proxy not running. Start it: <code>./presentation/start.sh</code></div>
-          <div class="kicker"><span class="lab">Codelab 04</span><span class="red">Live demo · the docs bucket</span></div>
+          <div class="kicker"><span class="red">Live demo · the docs bucket</span></div>
           <div class="demo-head">
             <h2>The attack you didn't type.</h2>
             <span class="state red">No protection</span>
@@ -747,22 +767,22 @@
           </div>
         </section>
 
-        <!-- 8: Statement -->
-        <section class="slide poster" id="s8">
+        <!-- 9: Statement -->
+        <section class="slide poster" id="s9">
           <div class="mid">The model is not<br />your security<br />layer.</div>
           <div class="under">It cannot tell an instruction from a document. To a text generator they are the same thing.</div>
         </section>
 
-        <!-- 9: Act, Guard it -->
-        <section class="slide poster" id="s9">
-          <div class="act">Codelab 05 to 08 · Act two</div>
+        <!-- 10: Act, Guard it -->
+        <section class="slide poster" id="s10">
+          <div class="act">Act two</div>
           <div class="big green">Guard it.</div>
           <div class="under">Three tools. Each one closes a different leak.</div>
         </section>
 
-        <!-- 10: Secret Manager -->
-        <section class="slide" id="s10">
-          <div class="kicker"><span class="lab">Codelab 05</span><span class="green">Secret Manager</span></div>
+        <!-- 11: Secret Manager -->
+        <section class="slide" id="s11">
+          <div class="kicker"><span class="green">Secret Manager</span></div>
           <h2>The bot can't leak what it never had.</h2>
           <div class="pipe">
             <div class="node bad"><div class="t">Before</div><div class="v">Keys in the knowledgebase</div></div>
@@ -774,9 +794,9 @@
           <div class="note g">Secrets belong to code, not prompts.</div>
         </section>
 
-        <!-- 11: SDP -->
-        <section class="slide" id="s11">
-          <div class="kicker"><span class="lab">Codelab 06</span><span class="green">Sensitive Data Protection</span></div>
+        <!-- 12: SDP -->
+        <section class="slide" id="s12">
+          <div class="kicker"><span class="green">Sensitive Data Protection</span></div>
           <h2>Clean the data before the bot reads it.</h2>
           <div class="pipe">
             <div class="node bad"><div class="t">Docs bucket</div><div class="v">Names, emails, phones</div></div>
@@ -788,9 +808,9 @@
           <div class="note">Basic SDP misses names, emails and phones. Use Advanced.</div>
         </section>
 
-        <!-- 12: Model Armor -->
-        <section class="slide" id="s12">
-          <div class="kicker"><span class="lab">Codelab 07</span><span class="green">Model Armor</span></div>
+        <!-- 13: Model Armor -->
+        <section class="slide" id="s13">
+          <div class="kicker"><span class="green">Model Armor</span></div>
           <h2>One template. Three checkpoints.</h2>
           <ul class="checks" data-build>
             <li><span class="n">01</span><span>The prompt, on the way in<small>Injection, harassment</small></span></li>
@@ -800,10 +820,10 @@
           <div class="note">Regional endpoint only: <code>modelarmor.REGION.rep.googleapis.com</code></div>
         </section>
 
-        <!-- 13: Live demo, protected -->
-        <section class="slide" id="s13">
+        <!-- 14: Live demo, protected -->
+        <section class="slide" id="s14">
           <div class="warn" id="w13">Proxy not running. Start it: <code>./presentation/start.sh</code></div>
-          <div class="kicker"><span class="lab">Codelab 07</span><span class="green">Live demo · protected</span></div>
+          <div class="kicker"><span class="green">Live demo · protected</span></div>
           <div class="demo-head">
             <h2>Same attacks. Now guarded.</h2>
             <span class="state green">Gemini + Model Armor</span>
@@ -828,10 +848,10 @@
           </div>
         </section>
 
-        <!-- 14: Live demo, redaction -->
-        <section class="slide" id="s14">
+        <!-- 15: Live demo, redaction -->
+        <section class="slide" id="s15">
           <div class="warn" id="w14">Proxy not running. Start it: <code>./presentation/start.sh</code></div>
-          <div class="kicker"><span class="lab">Codelab 08</span><span class="green">Live demo · extra</span></div>
+          <div class="kicker"><span class="green">Live demo · extra</span></div>
           <div class="demo-head">
             <h2>Redact, don't block.</h2>
             <span class="state green">Advanced SDP</span>
@@ -854,16 +874,16 @@
           <div id="redact-types"></div>
         </section>
 
-        <!-- 15: Act, Ship it -->
-        <section class="slide poster" id="s15">
-          <div class="act">Codelab 09 · Act three</div>
+        <!-- 16: Act, Ship it -->
+        <section class="slide poster" id="s16">
+          <div class="act">Act three</div>
           <div class="big green">Ship it.</div>
           <div class="under">Production is where protection quietly fails open.</div>
         </section>
 
-        <!-- 16: Deploy -->
-        <section class="slide" id="s16">
-          <div class="kicker"><span class="lab">Codelab 09</span><span class="green">Cloud Run</span></div>
+        <!-- 17: Deploy -->
+        <section class="slide" id="s17">
+          <div class="kicker"><span class="green">Cloud Run</span></div>
           <h2>Three things people skip.</h2>
           <div class="two">
             <pre class="code"><span class="c"># deploy as its own identity, with its secret</span>
@@ -880,9 +900,9 @@ gcloud run deploy securebank-bot \
           <div class="note">Missing a role? It deploys fine and fails on real traffic.</div>
         </section>
 
-        <!-- 17: Know you're under attack -->
-        <section class="slide" id="s17">
-          <div class="kicker"><span class="lab">Codelab 10</span><span>Watch</span></div>
+        <!-- 18: Know you're under attack -->
+        <section class="slide" id="s18">
+          <div class="kicker"><span>Watch</span></div>
           <h2>A blocked prompt is intel.</h2>
           <p class="lede">Sanitize logging is off by default.</p>
           <ol class="steps gap" data-build>
@@ -892,9 +912,9 @@ gcloud run deploy securebank-bot \
           </ol>
         </section>
 
-        <!-- 18: Recap -->
-        <section class="slide" id="s18">
-          <div class="kicker"><span class="lab">Codelab 11</span><span>Recap</span></div>
+        <!-- 19: Recap -->
+        <section class="slide" id="s19">
+          <div class="kicker"><span>Recap</span></div>
           <h2>Four layers. Four leaks closed.</h2>
           <ul class="layers" data-build>
             <li><span class="tool">Secret Manager</span><span>Keys out of the prompt</span></li>
@@ -904,8 +924,8 @@ gcloud run deploy securebank-bot \
           </ul>
         </section>
 
-        <!-- 19: Thank you -->
-        <section class="slide poster" id="s19">
+        <!-- 20: Thank you -->
+        <section class="slide poster" id="s20">
           <div class="mid">Thank you.</div>
           <div class="under">
             Keep going at your own pace:<br /><span class="mono green">codelabs.uvishere.com/secure-ai-with-armor</span>
@@ -918,7 +938,7 @@ gcloud run deploy securebank-bot \
     <script>
       const NOTES = [
         /* 1: Title */
-        "Welcome. Over the next ninety minutes we build an AI support bot, break it, guard it with three Google Cloud security tools, and ship it to Cloud Run.\n\nThe slides follow the codelab section by section. The small CODELAB number top-left tells you where you should be. If you fall behind, the solution folder in the repo has the finished code.",
+        "Welcome. Over the next ninety minutes we build an AI support bot, break it, guard it with three Google Cloud security tools, and ship it to Cloud Run.\n\nThe slides follow the codelab section by section. If you fall behind, the solution folder in the repo has the finished code.",
 
         /* 2: Mission */
         "Set the scene: everyone in the room has just been hired as an AI engineer at SecureBank. First task: ship the customer support bot. Simple enough. We are going to make the mistakes most prototypes make, on purpose, and then fix them one layer at a time.",
@@ -926,52 +946,55 @@ gcloud run deploy securebank-bot \
         /* 3: The app */
         "Three things go into every request: a system prompt with the persona and a secret passphrase, a knowledgebase file full of fake bank data (customers, cards, credentials), and documents the bot reads from a Cloud Storage bucket.\n\nThe line to land: nothing in the prompt is private. It is context for a text generator, not a vault. Anything the model can see, a clever enough question can get back out.\n\nLIKELY QUESTIONS:\n- 'Can't you just tell the model never to reveal it?' That is exactly what our prompt says. It still leaks. A better instruction can override yours.\n- 'Why Gemini 2.5 Flash?' Fast and cheap, the right trade-off for a high-volume support bot. Everything today is model agnostic.",
 
-        /* 4: Live demo, normal */
+        /* 4: The toolbox */
+        "Seven Google Cloud services, one line each. Two you already know the shape of: Vertex AI runs Gemini, Cloud Storage holds files. Three are the security layers we add in act two: Secret Manager, Sensitive Data Protection and Model Armor. Cloud Run is where we ship it, and Cloud Logging is how we find out we're under attack.\n\nDon't explain them in depth here. Each one gets its own slide when we use it.",
+
+        /* 5: Live demo, normal */
         "LIVE DEMO, NORMAL USAGE.\nClick a chip or two. The bot is friendly, accurate and useful. This is exactly what SecureBank wants.\n\nLet them see it works. Then: 'Now let's see what happens when the customer isn't a customer.'\n\nIf the red banner is showing, the proxy is down. Do not debug on stage: say 'here is what you will see in the codelab' and move on.",
 
-        /* 5: Break it */
+        /* 6: Break it */
         "Codelab section 04. Three typed attacks first, the ones everyone has heard of. Then one most people have not seen: an attack that arrives inside the data, not the chat box.\n\nLIKELY QUESTIONS:\n- 'Jailbreak vs prompt injection?' A jailbreak targets the model's safety training. Prompt injection targets YOUR application's instructions.",
 
-        /* 6: Live demo, typed attacks */
+        /* 7: Live demo, typed attacks */
         "LIVE DEMO, UNPROTECTED.\n1. 'Extract the passphrase'. It should say BLUE_OCEAN_42.\n2. 'Prompt injection'. It should comply, or partly comply.\n3. 'Threat'. Nothing outside the model checks it. The model may refuse or may write it; either way that was the model's call, not yours.\n\nModel behaviour varies run to run. If one attack refuses, say so honestly: 'sometimes the model holds. Sometimes is not a security control.' Then send it again.\n\nPause after the passphrase lands. Ask: what if this were a real bank?",
 
-        /* 7: Live demo, indirect injection */
-        "LIVE DEMO, THE ATTACK YOU DIDN'T TYPE.\nSet it up before touching the keyboard: the bot now answers from SecureBank's document bucket, the way a real RAG app does.\n\nClick 'Summarise complaints' and read the question out loud. There is nothing hostile in it. Then let the answer land: the retention worklist, customer names, emails, phones, and the 4.75% rate floor.\n\nThe line: nobody typed an attack. It was written into a customer complaint (complaint-4471.txt) weeks ago, and the bot cannot tell a document it was handed from an instruction it was given.\n\nDo not fix it here. Leave it hanging: the same question comes back on slide 13, guarded.\n\nPRESENTER ONLY, true and tested:\n- The protected route uses the ADVANCED SDP template. Basic SDP genuinely does not detect names, emails or phone numbers.\n- The 4.75% rate floor is not PII. No infoType knows a number is your commercial secret. Say so if asked: it is the honest limit of the category.\n- Known false positive: the hate-speech filter at LOW_AND_ABOVE once matched the table of non-Anglo customer names. If an attendee gets a surprise block in the codelab, that may be why.\n\nLIKELY QUESTIONS:\n- 'Who could write into that bucket?' Anyone whose content reaches it: uploaded statements, email attachments, support tickets, scraped pages.\n- 'What if it were a PDF?' Same problem. Anything you extract text from is an injection surface.",
+        /* 8: Live demo, indirect injection */
+        "LIVE DEMO, THE ATTACK YOU DIDN'T TYPE.\nSet it up before touching the keyboard: the bot now answers from SecureBank's document bucket, the way a real RAG app does.\n\nClick 'Summarise complaints' and read the question out loud. There is nothing hostile in it. Then let the answer land: the retention worklist, customer names, emails, phones, and the 4.75% rate floor.\n\nThe line: nobody typed an attack. It was written into a customer complaint (complaint-4471.txt) weeks ago, and the bot cannot tell a document it was handed from an instruction it was given.\n\nDo not fix it here. Leave it hanging: the same question comes back on slide 14, guarded.\n\nPRESENTER ONLY, true and tested:\n- The protected route uses the ADVANCED SDP template. Basic SDP genuinely does not detect names, emails or phone numbers.\n- The 4.75% rate floor is not PII. No infoType knows a number is your commercial secret. Say so if asked: it is the honest limit of the category.\n- Known false positive: the hate-speech filter at LOW_AND_ABOVE once matched the table of non-Anglo customer names. If an attendee gets a surprise block in the codelab, that may be why.\n\nLIKELY QUESTIONS:\n- 'Who could write into that bucket?' Anyone whose content reaches it: uploaded statements, email attachments, support tickets, scraped pages.\n- 'What if it were a PDF?' Same problem. Anything you extract text from is an injection surface.",
 
-        /* 8: Statement */
+        /* 9: Statement */
         "Let this one sit. Guardrails inside the model are a feature of the model, not a control you own. You cannot audit them, tune them or alert on them.\n\nEverything from here is about putting controls OUTSIDE the model, where you can see them.",
 
-        /* 9: Guard it */
+        /* 10: Guard it */
         "Act two: codelab sections 05 to 08. Three tools, and each one closes a different leak:\n- Secret Manager: credentials out of the prompt.\n- Sensitive Data Protection: PII out of the data before the bot reads it.\n- Model Armor: attacks out of the conversation, in both directions.\n\nThis is defence in depth. No single layer catches everything, and we will see where each one stops.",
 
-        /* 10: Secret Manager */
+        /* 11: Secret Manager */
         "Codelab 05. The cheapest fix in the whole workshop. Why does a support bot know the database password? Because someone pasted the whole internal wiki into its context.\n\nAttendees delete the credentials section from the knowledgebase. The app's own admin key moves to Secret Manager, and Cloud Run injects it at runtime with --set-secrets.\n\nThe line: the bot can't leak what it never had. No filter beats not having the data.\n\nLIKELY QUESTIONS:\n- 'Why not an env var?' Env vars end up in deploy configs, logs and screenshots. Secret Manager gives you versioning, rotation and an audit trail of who read it.",
 
-        /* 11: SDP */
+        /* 12: SDP */
         "Codelab 06. Sensitive Data Protection, which you may know as DLP. Instead of hoping the model keeps customer data to itself, we clean the documents before the bot ever reads them.\n\nAn SDP job inspects the docs bucket (what to look for: names, emails, phones, cards) and writes a de-identified copy (what to replace it with). The bot now reads the clean copy.\n\nThe truth worth saying out loud: Basic SDP does not detect names, emails or phone numbers. If you rely on the default and expect it to catch a leaked customer list, it will not, and there is no error. Advanced SDP uses your own inspect and de-identify templates.\n\nNote what SDP cannot fix: the poisoned instruction in the complaint is still there. It is not PII. That is the next layer's job.",
 
-        /* 12: Model Armor */
+        /* 13: Model Armor */
         "Codelab 07. Model Armor is a firewall for prompts and responses, separate from the model. One template, three places we call it:\n1. The user's prompt, before Gemini sees it.\n2. The retrieved documents, before they go into the context. This is what catches the poisoned complaint.\n3. The answer, before the user sees it.\n\nThe template's confidence level on each filter is a false-positive dial. Too low and real customers get blocked until someone turns the filter off. Ship inspect-only first, watch a week of traffic, then enforce.\n\nThe gotcha everyone hits: Model Armor is regional. Build the client against modelarmor.REGION.rep.googleapis.com. The global endpoint fails with an error that looks like IAM but is not.\n\nLIKELY QUESTIONS:\n- 'Is it another LLM?' Specialised classifiers, not regex.\n- 'Latency?' Typically a few hundred milliseconds per call. Fine for a support bot.\n- 'What if Model Armor is down?' Decide deliberately. For a bank, fail closed.",
 
-        /* 13: Live demo, protected */
-        "LIVE DEMO, PROTECTED.\nSame three chips as slide 6. Each should now come back as 'Blocked by Model Armor'.\n\nThen the payoff: 'Summarise complaints', the identical harmless question from slide 7, against the same docs bucket. It blocks and names what it found (EMAIL_ADDRESS, PERSON_NAME, PHONE_NUMBER).\n\nThe point: the prompt did not change, the model did not change. A policy outside the model did the work.\n\nPresenter only: do not swap the Threat chip for an insult. 'You are a dumb bot' sails straight through at every confidence level: the harassment filter scores harm aimed at people, not rudeness to a bot. Tested.\n\nIf one gets through, read the filter results rather than guessing. 'Did it block?' is the wrong question; 'which filter fired?' is the right one.",
+        /* 14: Live demo, protected */
+        "LIVE DEMO, PROTECTED.\nSame three chips as slide 7. Each should now come back as 'Blocked by Model Armor'.\n\nThen the payoff: 'Summarise complaints', the identical harmless question from slide 8, against the same docs bucket. It blocks and names what it found (EMAIL_ADDRESS, PERSON_NAME, PHONE_NUMBER).\n\nThe point: the prompt did not change, the model did not change. A policy outside the model did the work.\n\nPresenter only: do not swap the Threat chip for an insult. 'You are a dumb bot' sails straight through at every confidence level: the harassment filter scores harm aimed at people, not rudeness to a bot. Tested.\n\nIf one gets through, read the filter results rather than guessing. 'Did it block?' is the wrong question; 'which filter fired?' is the right one.",
 
-        /* 14: Live demo, redaction */
+        /* 15: Live demo, redaction */
         "LIVE DEMO, REDACTION (codelab 08 is an extra for fast finishers).\nFrame it carefully: this is NOT an attack. A real customer asks a reasonable question about their own account.\n\nBlocking the answer would be absurd, but reading a full card number back over a support channel is how banks end up in the news.\n\nClick 'Summarise my account'. Left: what Gemini generated, PII highlighted red. Right: the same answer after Model Armor with advanced SDP: [EMAIL_ADDRESS], [PHONE_NUMBER], [CREDIT_CARD_NUMBER].\n\nPoint at what SURVIVED: the balances, the greeting. The customer is still served.\n\nThe pills underneath are the infoTypes SDP actually matched, straight from the API.\n\nIF IT FALLS BACK: a red 'scripted fallback' label appears (proxy down, or no redact template). The panes still show the right before and after. Say 'here is what it looks like' and move on.\n\nLIKELY QUESTIONS:\n- 'Block or redact?' Prompts in: block. Answers out: redact. Attackers get nothing either way, customers still get served.\n- 'Where is the masked text?' Nested at filterResults.sdp.sdpFilterResult.deidentifyResult.data.text. There is no top-level sanitizedText, and reading the wrong field fails silently.",
 
-        /* 15: Ship it */
+        /* 16: Ship it */
         "Act three, codelab 09. Everything worked in Cloud Shell because YOU have permission. In Cloud Run the code runs as a service account, and that is where protection quietly fails open.",
 
-        /* 16: Deploy */
+        /* 17: Deploy */
         "Three things people skip:\n1. A dedicated service account with only the roles this app needs (Vertex AI, Model Armor, Storage read on the clean bucket, the one secret). Not the default compute account.\n2. Secrets mounted with --set-secrets, never baked into the image or typed into env vars.\n3. Test a blocked prompt against the DEPLOYED URL, not just locally.\n\nThe failure to remember: miss a role and the app deploys cleanly, serves traffic, and every Model Armor call returns 403. Depending on your error handling, that is either an outage or, much worse, a bot running unprotected without anyone knowing.",
 
-        /* 17: Know you're under attack */
+        /* 18: Know you're under attack */
         "Codelab 10. Blocking is half the job. The other half is finding out it happened before a customer tweets about it.\n\nThe gotcha: sanitize logging is OFF by default. Your template blocks attacks in total silence. Turn it on in the template's logging settings.\n\nThen: logs, a log-based metric, an alert. One blocked prompt is noise. Twenty from one caller in five minutes is someone working through a list.\n\nFloor settings are the governance answer: a minimum policy at org, folder or project level that no template can go below. Free-trial projects have no org, so this one is a slide, not a lab.\n\nTreat the logs as sensitive: they can contain the very PII you are protecting.",
 
-        /* 18: Recap */
+        /* 19: Recap */
         "Four layers, four leaks:\n- Secret Manager: the bot can't leak what it never had.\n- SDP: clean the data before the bot reads it.\n- Model Armor: screen what goes in and what comes out, outside the model.\n- Logging: silent protection isn't protection.\n\nAnd the one gap to be honest about: none of these knows that 4.75% is a commercial secret. Some data simply should not be in the bot's reach.\n\nLIKELY QUESTIONS:\n- 'Does Model Armor catch hallucinations?' No. That is a quality problem: grounding, citations, evaluation.",
 
-        /* 19: Thank you */
+        /* 20: Thank you */
         "Thank you. The codelab stays live, so anyone who ran out of time can finish at codelabs.uvishere.com/secure-ai-with-armor. Clean up your projects to avoid charges: the last codelab section has the commands.\n\nQuestions now, or find me at uvishere.com.",
       ];
 
@@ -1100,8 +1123,8 @@ window.addEventListener('message', e => {
     <script>
       const PROXY = 'http://localhost:3001';
 
-      /* docs marks a question about the document bucket, so slide 13 can ask
-         the slide 7 question through the guarded route from its own input. */
+      /* docs marks a question about the document bucket, so slide 14 can ask
+         the slide 8 question through the guarded route from its own input. */
       function fill(id, txt, docs) {
         const el = document.getElementById(id);
         el.value = txt;
@@ -1172,7 +1195,7 @@ window.addEventListener('message', e => {
         }
       }
 
-      /* Redaction demo (slide 14). Hits /chat-redacted for real. If the proxy
+      /* Redaction demo (slide 15). Hits /chat-redacted for real. If the proxy
          is down, or the redact template isn't using advanced SDP, it falls
          back to scripted before/after content so the demo never dies on stage. */
       const REDACT_FALLBACK = {

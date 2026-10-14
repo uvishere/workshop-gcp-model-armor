@@ -16,5 +16,9 @@
   },
   "engines": {
     "node": ">=22"
+  },
+  "allowScripts": {
+    "@google/genai": false,
+    "protobufjs": false
   }
 }

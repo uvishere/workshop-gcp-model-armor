@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# One-time setup for the slide 14 redaction demo.
+# One-time setup for the slide 15 redaction demo.
 #
 # Model Armor can only hand back masked text when its template uses ADVANCED
 # Sensitive Data Protection — that means pointing it at a DLP inspect template
@@ -105,7 +105,7 @@ post "$DLP/inspectTemplates" '{
 # ---------------------------------------------------------------------------
 # ③ De-identify template — replace each match with a literal token.
 #    Explicit replaceConfig (rather than replaceWithInfoTypeConfig) so the
-#    output is exactly [EMAIL_ADDRESS] etc. — the format slide 14 renders.
+#    output is exactly [EMAIL_ADDRESS] etc. — the format slide 15 renders.
 # ---------------------------------------------------------------------------
 echo "③ Creating DLP de-identify template…"
 post "$DLP/deidentifyTemplates" '{
