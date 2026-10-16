@@ -83,13 +83,13 @@ fi
 
 # Warn if the redaction demo will fall back to scripted content.
 if curl -s http://localhost:3001/health | grep -q '"redactConfigured":false'; then
-  echo "⚠️   MODEL_ARMOR_TEMPLATE_REDACT not set — slide 17 will use its scripted fallback."
+  echo "⚠️   MODEL_ARMOR_TEMPLATE_REDACT not set — slide 18 will use its scripted fallback."
   echo "    Run ../setup-redaction.sh to enable the live redaction demo."
 fi
 
-# Warn if slide 10 is reading local files instead of the real bucket.
+# Warn if slide 11 is reading local files instead of the real bucket.
 if curl -s http://localhost:3001/health | grep -q '"docsSource":"local'; then
-  echo "⚠️   Slide 10 is reading local app/docs/, not the GCS bucket."
+  echo "⚠️   Slide 11 is reading local app/docs/, not the GCS bucket."
   echo "    Run ../setup-docs-bucket.sh (or check SECUREBANK_DOCS_BUCKET)."
 fi
 

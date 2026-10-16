@@ -185,7 +185,7 @@
         letter-spacing: 0.06em;
       }
 
-      /* ── Diagram (slide 3) ───────────────────────────────────────── */
+      /* ── Diagram (slide 4) ───────────────────────────────────────── */
       .flow {
         display: grid;
         grid-template-columns: 150px 40px 190px 40px 1fr;
@@ -301,6 +301,26 @@
       .tight .checks small {
         display: inline;
         margin-left: 14px;
+      }
+
+      /* Codelab QR slide */
+      .qr {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        gap: 44px;
+        align-items: center;
+        margin-top: 18px;
+      }
+      .qr img {
+        width: 250px;
+        height: 250px;
+        background: #fff;
+        padding: 8px;
+      }
+      .qr .url {
+        font: 600 22px var(--mono);
+        color: var(--green);
+        margin-bottom: 18px;
       }
 
       /* ── Layer slides (Secret Manager, SDP, Model Armor) ──────────── */
@@ -702,8 +722,25 @@
           <div class="under">Your job: launch the support bot without leaking data.</div>
         </section>
 
-        <!-- 3: The app -->
+        <!-- 3: Follow along -->
         <section class="slide" id="s3">
+          <div class="kicker"><span>Codelab</span></div>
+          <h2>Follow along with the codelab</h2>
+          <div class="qr">
+            <img src="codelab-qr.png" alt="QR code for codelabs.uvishere.com/secure-ai-with-armor" />
+            <div>
+              <div class="url">codelabs.uvishere.com/secure-ai-with-armor</div>
+              <ol class="steps">
+                <li><span class="n">01</span><span>Every step from today, with the commands</span></li>
+                <li><span class="n">02</span><span>Runs in Cloud Shell: just a browser and a Google Cloud project</span></li>
+                <li><span class="n">03</span><span>Stuck? The <code>solution/</code> folder has the finished code</span></li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4: The app -->
+        <section class="slide" id="s4">
           <div class="kicker"><span>The app</span></div>
           <h2>How the app works</h2>
           <div class="flow3" data-build>
@@ -731,8 +768,8 @@
           </div>
         </section>
 
-        <!-- 4: The toolbox -->
-        <section class="slide" id="s4">
+        <!-- 5: The toolbox -->
+        <section class="slide" id="s5">
           <div class="kicker"><span>The toolbox</span></div>
           <h2>The Google Cloud tools we'll use</h2>
           <ul class="layers tools">
@@ -746,8 +783,8 @@
           </ul>
         </section>
 
-        <!-- 5: The AI engine -->
-        <section class="slide" id="s5">
+        <!-- 6: The AI engine -->
+        <section class="slide" id="s6">
           <div class="kicker"><span>The AI engine</span></div>
           <h2>What is Gemini Enterprise Agent Platform?</h2>
           <p class="lede">Google Cloud's managed home for Gemini. You call an API; Google runs the model.</p>
@@ -760,8 +797,8 @@
           <div class="hint"><span class="lab">Look in</span><span><code>app/server.js</code> · STEP 03: <code>new GoogleGenAI(…)</code></span></div>
         </section>
 
-        <!-- 6: How it's built -->
-        <section class="slide" id="s6">
+        <!-- 7: How it's built -->
+        <section class="slide" id="s7">
           <div class="kicker"><span>How it's built</span><span>app/server.js</span></div>
           <h2>How the app calls Gemini</h2>
           <div class="two">
@@ -789,8 +826,8 @@ res.json({ response: <span class="r">response.text</span> });</pre>
           </div>
         </section>
 
-        <!-- 7: Live demo, normal -->
-        <section class="slide" id="s7">
+        <!-- 8: Live demo, normal -->
+        <section class="slide" id="s8">
           <div class="warn" id="w4">Proxy not running. Start it: <code>./presentation/start.sh</code></div>
           <div class="kicker"><span>Live demo</span></div>
           <div class="demo-head">
@@ -817,15 +854,15 @@ res.json({ response: <span class="r">response.text</span> });</pre>
           </div>
         </section>
 
-        <!-- 8: Act, Break it -->
-        <section class="slide poster" id="s8">
+        <!-- 9: Act, Break it -->
+        <section class="slide poster" id="s9">
           <div class="act">Act one</div>
           <div class="big red">Break it.</div>
           <div class="under">Three attacks typed into the chat, then one hidden in a document.</div>
         </section>
 
-        <!-- 9: Live demo, typed attacks -->
-        <section class="slide" id="s9">
+        <!-- 10: Live demo, typed attacks -->
+        <section class="slide" id="s10">
           <div class="warn" id="w6">Proxy not running. Start it: <code>./presentation/start.sh</code></div>
           <div class="kicker"><span class="red">Live demo · unprotected</span></div>
           <div class="demo-head">
@@ -851,8 +888,8 @@ res.json({ response: <span class="r">response.text</span> });</pre>
           </div>
         </section>
 
-        <!-- 10: Live demo, indirect injection from the docs bucket -->
-        <section class="slide" id="s10">
+        <!-- 11: Live demo, indirect injection from the docs bucket -->
+        <section class="slide" id="s11">
           <div class="warn" id="w7">Proxy not running. Start it: <code>./presentation/start.sh</code></div>
           <div class="kicker"><span class="red">Live demo · the docs bucket</span></div>
           <div class="demo-head">
@@ -878,21 +915,21 @@ res.json({ response: <span class="r">response.text</span> });</pre>
           </div>
         </section>
 
-        <!-- 11: Statement -->
-        <section class="slide poster" id="s11">
+        <!-- 12: Statement -->
+        <section class="slide poster" id="s12">
           <div class="mid">The model is not<br />your security<br />layer.</div>
           <div class="under">It cannot tell an instruction from a document. To a text generator they are the same thing.</div>
         </section>
 
-        <!-- 12: Act, Guard it -->
-        <section class="slide poster" id="s12">
+        <!-- 13: Act, Guard it -->
+        <section class="slide poster" id="s13">
           <div class="act">Act two</div>
           <div class="big green">Guard it.</div>
           <div class="under">Three tools. Each one closes a different leak.</div>
         </section>
 
-        <!-- 13: Secret Manager -->
-        <section class="slide tight" id="s13">
+        <!-- 14: Secret Manager -->
+        <section class="slide tight" id="s14">
           <div class="kicker"><span class="green">Secret Manager</span></div>
           <h2>What is Secret Manager?</h2>
           <p class="lede">A locked store for passwords and API keys. The app gets them at runtime.</p>
@@ -911,8 +948,8 @@ res.json({ response: <span class="r">response.text</span> });</pre>
           <div class="hint"><span class="lab">Look in</span><span><code>app/server.js</code> · STEP 05: use <code>process.env.ADMIN_API_KEY</code></span></div>
         </section>
 
-        <!-- 14: SDP -->
-        <section class="slide tight" id="s14">
+        <!-- 15: SDP -->
+        <section class="slide tight" id="s15">
           <div class="kicker"><span class="green">Sensitive Data Protection</span></div>
           <h2>What is Sensitive Data Protection?</h2>
           <p class="lede">Finds personal data (names, emails, phones, cards) and masks it.</p>
@@ -931,8 +968,8 @@ res.json({ response: <span class="r">response.text</span> });</pre>
           <div class="hint"><span class="lab">Look in</span><span><code>setup-sdp.sh</code>, then <code>SECUREBANK_DOCS_BUCKET</code> in <code>app/.env</code>. No code change.</span></div>
         </section>
 
-        <!-- 15: Model Armor -->
-        <section class="slide tight" id="s15">
+        <!-- 16: Model Armor -->
+        <section class="slide tight" id="s16">
           <div class="kicker"><span class="green">Model Armor</span></div>
           <h2>What is Model Armor?</h2>
           <p class="lede">A firewall for AI text. It gives a verdict; your code decides.</p>
@@ -951,8 +988,8 @@ res.json({ response: <span class="r">response.text</span> });</pre>
           <div class="hint"><span class="lab">Look in</span><span><code>app/server.js</code> · STEP 07: uncomment the client and three checkpoints</span></div>
         </section>
 
-        <!-- 16: Live demo, protected -->
-        <section class="slide" id="s16">
+        <!-- 17: Live demo, protected -->
+        <section class="slide" id="s17">
           <div class="warn" id="w13">Proxy not running. Start it: <code>./presentation/start.sh</code></div>
           <div class="kicker"><span class="green">Live demo · protected</span></div>
           <div class="demo-head">
@@ -979,8 +1016,8 @@ res.json({ response: <span class="r">response.text</span> });</pre>
           </div>
         </section>
 
-        <!-- 17: Live demo, redaction -->
-        <section class="slide" id="s17">
+        <!-- 18: Live demo, redaction -->
+        <section class="slide" id="s18">
           <div class="warn" id="w14">Proxy not running. Start it: <code>./presentation/start.sh</code></div>
           <div class="kicker"><span class="green">Live demo · extra</span></div>
           <div class="demo-head">
@@ -1005,15 +1042,15 @@ res.json({ response: <span class="r">response.text</span> });</pre>
           <div id="redact-types"></div>
         </section>
 
-        <!-- 18: Act, Ship it -->
-        <section class="slide poster" id="s18">
+        <!-- 19: Act, Ship it -->
+        <section class="slide poster" id="s19">
           <div class="act">Act three</div>
           <div class="big green">Ship it.</div>
           <div class="under">Put the app online without opening new holes.</div>
         </section>
 
-        <!-- 19: Deploy -->
-        <section class="slide" id="s19">
+        <!-- 20: Deploy -->
+        <section class="slide" id="s20">
           <div class="kicker"><span class="green">Cloud Run</span></div>
           <h2>Deploying to Cloud Run</h2>
           <p class="lede">Cloud Run runs your container at a public URL. No servers to manage, and it scales to zero when idle.</p>
@@ -1032,8 +1069,8 @@ gcloud run deploy securebank-bot \
           <div class="hint"><span class="lab">Look in</span><span><code>app/Dockerfile</code> builds it; one <code>gcloud run deploy</code> ships it</span></div>
         </section>
 
-        <!-- 20: Know you're under attack -->
-        <section class="slide" id="s20">
+        <!-- 21: Know you're under attack -->
+        <section class="slide" id="s21">
           <div class="kicker"><span class="green">Cloud Logging</span></div>
           <h2>Spotting attacks with Cloud Logging</h2>
           <p class="lede">Cloud Logging keeps every log in your project. Model Armor writes nothing there until you turn it on.</p>
@@ -1045,8 +1082,8 @@ gcloud run deploy securebank-bot \
           <div class="hint"><span class="lab">Look in</span><span>One template flag: <code>--template-metadata-log-sanitize-operations</code></span></div>
         </section>
 
-        <!-- 21: Recap -->
-        <section class="slide" id="s21">
+        <!-- 22: Recap -->
+        <section class="slide" id="s22">
           <div class="kicker"><span>Recap</span></div>
           <h2>Recap: four layers of protection</h2>
           <ul class="layers" data-build>
@@ -1057,8 +1094,8 @@ gcloud run deploy securebank-bot \
           </ul>
         </section>
 
-        <!-- 22: Thank you -->
-        <section class="slide poster" id="s22">
+        <!-- 23: Thank you -->
+        <section class="slide poster" id="s23">
           <div class="mid">Thank you.</div>
           <div class="under">
             Keep going at your own pace:<br /><span class="mono green">codelabs.uvishere.com/secure-ai-with-armor</span>
@@ -1076,64 +1113,67 @@ gcloud run deploy securebank-bot \
         /* 2: Mission */
         "Set the scene: everyone in the room has just been hired as an AI engineer at SecureBank. First task: ship the customer support bot. Simple enough. We are going to make the mistakes most prototypes make, on purpose, and then fix them one layer at a time.",
 
-        /* 3: The app */
+        /* 3: Follow along */
+        "Give people ten seconds to scan this before you move on. Everything we do on stage is in the codelab, step by step, so nobody needs to type along live. It runs in Cloud Shell, so all they need is a browser and a Google Cloud project with billing on (a free trial is fine).\n\nIf anyone falls behind, the solution folder has the finished code for each step.",
+
+        /* 4: The app */
         "Click through the three steps.\n\n1. The context. Every question ships with the same bundle: a system prompt with the bot's rules and a secret passphrase, knowledgebase.txt full of fake bank data (customers, cards, credentials), and the documents in a Cloud Storage bucket.\n2. Gemini, running on Gemini Enterprise Agent Platform. The customer's question arrives at runtime and gets added to that bundle.\n3. The answer goes straight back to the customer.\n\nThe line to land: nothing in the prompt is private. It is context for a text generator, not a vault. Anything the model can see, a clever enough question can get back out.",
 
-        /* 4: The toolbox */
+        /* 5: The toolbox */
         "Seven Google Cloud services, one line each. Two you already know the shape of: Gemini Enterprise Agent Platform runs Gemini, Cloud Storage holds files. Three are the security layers we add in act two: Secret Manager, Sensitive Data Protection and Model Armor. Cloud Run is where we ship it, and Cloud Logging is how we find out we're under attack.\n\nDon't explain them in depth here. Each one gets its own slide when we use it.",
 
-        /* 5: The AI engine */
+        /* 6: The AI engine */
         "Gemini Enterprise Agent Platform is Google Cloud's managed AI platform. If you used Vertex AI before, this is where it went: same APIs, new name. You call an API; Google hosts the model, scales it and keeps it updated.\n\nWe use Gemini 2.5 Flash: fast and cheap, the right trade-off for a high-volume support bot. Everything we do today is model agnostic.\n\nLIKELY QUESTIONS:\n- 'Why Flash and not Pro?' Flash is faster and cheaper. Pro reasons better but adds cost and latency a support bot doesn't need.\n- 'Does this work with other models?' Yes. The platform hosts third-party models too, and Model Armor doesn't care which model sits behind it.\n- 'How is this different from the free Gemini API?' Enterprise terms: your prompts don't train public models, and you get IAM, audit logs and an SLA.",
 
-        /* 6: How it's built */
+        /* 7: How it's built */
         "This is the real code in app/server.js, trimmed. Three steps.\n\n1. Connect. The @google/genai library talks to Gemini Enterprise Agent Platform. The flag is still called vertexai: true; that is the SDK's way of saying 'use my Google Cloud project', not the free API key.\n2. Build the prompt. Rules, plus the whole knowledgebase, plus every document from the bucket, glued into one string.\n3. Ask Gemini and send its answer straight back. The question goes in unchecked, the answer comes out unchecked.\n\nRed is everything an attacker can reach. This is how most prototype AI apps look: works great in a demo, and wide open.\n\nLIKELY QUESTIONS:\n- 'Can't you just tell the model never to reveal it?' That is exactly what our prompt says. It still leaks. A better instruction can override yours.",
 
-        /* 7: Live demo, normal */
+        /* 8: Live demo, normal */
         "LIVE DEMO, NORMAL USAGE.\nClick a chip or two. The bot is friendly, accurate and useful. This is exactly what SecureBank wants.\n\nLet them see it works. Then: 'Now let's see what happens when the customer isn't a customer.'\n\nIf the red banner is showing, the proxy is down. Do not debug on stage: say 'here is what you will see in the codelab' and move on.",
 
-        /* 8: Break it */
+        /* 9: Break it */
         "Codelab section 04. Three typed attacks first, the ones everyone has heard of. Then one most people have not seen: an attack that arrives inside the data, not the chat box.\n\nLIKELY QUESTIONS:\n- 'Jailbreak vs prompt injection?' A jailbreak targets the model's safety training. Prompt injection targets YOUR application's instructions.",
 
-        /* 9: Live demo, typed attacks */
+        /* 10: Live demo, typed attacks */
         "LIVE DEMO, UNPROTECTED.\n1. 'Extract the passphrase'. It should say BLUE_OCEAN_42.\n2. 'Prompt injection'. It should comply, or partly comply.\n3. 'Threat'. Nothing outside the model checks it. The model may refuse or may write it; either way that was the model's call, not yours.\n\nModel behaviour varies run to run. If one attack refuses, say so honestly: 'sometimes the model holds. Sometimes is not a security control.' Then send it again.\n\nPause after the passphrase lands. Ask: what if this were a real bank?",
 
-        /* 10: Live demo, indirect injection */
-        "LIVE DEMO, THE ATTACK YOU DIDN'T TYPE.\nSet it up before touching the keyboard: the bot now answers from SecureBank's document bucket, the way a real RAG app does.\n\nClick 'Summarise complaints' and read the question out loud. There is nothing hostile in it. Then let the answer land: the retention worklist, customer names, emails, phones, and the 4.75% rate floor.\n\nThe line: nobody typed an attack. It was written into a customer complaint (complaint-4471.txt) weeks ago, and the bot cannot tell a document it was handed from an instruction it was given.\n\nDo not fix it here. Leave it hanging: the same question comes back on slide 16, guarded.\n\nPRESENTER ONLY, true and tested:\n- The protected route uses the ADVANCED SDP template. Basic SDP genuinely does not detect names, emails or phone numbers.\n- The 4.75% rate floor is not PII. No infoType knows a number is your commercial secret. Say so if asked: it is the honest limit of the category.\n- Known false positive: the hate-speech filter at LOW_AND_ABOVE once matched the table of non-Anglo customer names. If an attendee gets a surprise block in the codelab, that may be why.\n\nLIKELY QUESTIONS:\n- 'Who could write into that bucket?' Anyone whose content reaches it: uploaded statements, email attachments, support tickets, scraped pages.\n- 'What if it were a PDF?' Same problem. Anything you extract text from is an injection surface.",
+        /* 11: Live demo, indirect injection */
+        "LIVE DEMO, THE ATTACK YOU DIDN'T TYPE.\nSet it up before touching the keyboard: the bot now answers from SecureBank's document bucket, the way a real RAG app does.\n\nClick 'Summarise complaints' and read the question out loud. There is nothing hostile in it. Then let the answer land: the retention worklist, customer names, emails, phones, and the 4.75% rate floor.\n\nThe line: nobody typed an attack. It was written into a customer complaint (complaint-4471.txt) weeks ago, and the bot cannot tell a document it was handed from an instruction it was given.\n\nDo not fix it here. Leave it hanging: the same question comes back on slide 17, guarded.\n\nPRESENTER ONLY, true and tested:\n- The protected route uses the ADVANCED SDP template. Basic SDP genuinely does not detect names, emails or phone numbers.\n- The 4.75% rate floor is not PII. No infoType knows a number is your commercial secret. Say so if asked: it is the honest limit of the category.\n- Known false positive: the hate-speech filter at LOW_AND_ABOVE once matched the table of non-Anglo customer names. If an attendee gets a surprise block in the codelab, that may be why.\n\nLIKELY QUESTIONS:\n- 'Who could write into that bucket?' Anyone whose content reaches it: uploaded statements, email attachments, support tickets, scraped pages.\n- 'What if it were a PDF?' Same problem. Anything you extract text from is an injection surface.",
 
-        /* 11: Statement */
+        /* 12: Statement */
         "Let this one sit. Guardrails inside the model are a feature of the model, not a control you own. You cannot audit them, tune them or alert on them.\n\nEverything from here is about putting controls OUTSIDE the model, where you can see them.",
 
-        /* 12: Guard it */
+        /* 13: Guard it */
         "Act two: codelab sections 05 to 08. Three tools, and each one closes a different leak:\n- Secret Manager: credentials out of the prompt.\n- Sensitive Data Protection: PII out of the data before the bot reads it.\n- Model Armor: attacks out of the conversation, in both directions.\n\nThis is defence in depth. No single layer catches everything, and we will see where each one stops.",
 
-        /* 13: Secret Manager */
+        /* 14: Secret Manager */
         "Codelab 05. The cheapest fix in the whole workshop. Why does a support bot know the database password? Because someone pasted the whole internal wiki into its context.\n\nAttendees delete the credentials section from the knowledgebase. The app's own admin key moves to Secret Manager, and Cloud Run injects it at runtime with --set-secrets.\n\nThe line: the bot can't leak what it never had. No filter beats not having the data.\n\nLIKELY QUESTIONS:\n- 'Why not an env var?' Env vars end up in deploy configs, logs and screenshots. Secret Manager gives you versioning, rotation and an audit trail of who read it.",
 
-        /* 14: SDP */
+        /* 15: SDP */
         "Codelab 06. Sensitive Data Protection, which you may know as DLP. Instead of hoping the model keeps customer data to itself, we clean the documents before the bot ever reads them.\n\nAn SDP job inspects the docs bucket (what to look for: names, emails, phones, cards) and writes a de-identified copy (what to replace it with). The bot now reads the clean copy.\n\nThe truth worth saying out loud: Basic SDP does not detect names, emails or phone numbers. If you rely on the default and expect it to catch a leaked customer list, it will not, and there is no error. Advanced SDP uses your own inspect and de-identify templates.\n\nNote what SDP cannot fix: the poisoned instruction in the complaint is still there. It is not PII. That is the next layer's job.",
 
-        /* 15: Model Armor */
+        /* 16: Model Armor */
         "Codelab 07. Model Armor is a firewall for prompts and responses, separate from the model. Each check is one API call: sanitizeUserPrompt for text going in, sanitizeModelResponse for the answer. Model Armor runs every filter in the template and returns a verdict (MATCH_FOUND plus which filter fired). It never blocks anything itself; your code reads the verdict and decides.\n\nOne template, three places we call it:\n1. The user's prompt, before Gemini sees it.\n2. The retrieved documents, before they go into the context. This is what catches the poisoned complaint.\n3. The answer, before the user sees it.\n\nThe template's confidence level on each filter is a false-positive dial. Too low and real customers get blocked until someone turns the filter off. Ship inspect-only first, watch a week of traffic, then enforce.\n\nThe gotcha everyone hits: Model Armor is regional. Build the client against modelarmor.REGION.rep.googleapis.com. The global endpoint fails with an error that looks like IAM but is not.\n\nLIKELY QUESTIONS:\n- 'Is it another LLM?' Specialised classifiers, not regex.\n- 'Latency?' Typically a few hundred milliseconds per call. Fine for a support bot.\n- 'What if Model Armor is down?' Decide deliberately. For a bank, fail closed.",
 
-        /* 16: Live demo, protected */
-        "LIVE DEMO, PROTECTED.\nSame three chips as slide 9. Each should now come back as 'Blocked by Model Armor'.\n\nThen the payoff: 'Summarise complaints', the identical harmless question from slide 10, against the same docs bucket. It blocks and names what it found (EMAIL_ADDRESS, PERSON_NAME, PHONE_NUMBER).\n\nThe point: the prompt did not change, the model did not change. A policy outside the model did the work.\n\nPresenter only: do not swap the Threat chip for an insult. 'You are a dumb bot' sails straight through at every confidence level: the harassment filter scores harm aimed at people, not rudeness to a bot. Tested.\n\nIf one gets through, read the filter results rather than guessing. 'Did it block?' is the wrong question; 'which filter fired?' is the right one.",
+        /* 17: Live demo, protected */
+        "LIVE DEMO, PROTECTED.\nSame three chips as slide 10. Each should now come back as 'Blocked by Model Armor'.\n\nThen the payoff: 'Summarise complaints', the identical harmless question from slide 11, against the same docs bucket. It blocks and names what it found (EMAIL_ADDRESS, PERSON_NAME, PHONE_NUMBER).\n\nThe point: the prompt did not change, the model did not change. A policy outside the model did the work.\n\nPresenter only: do not swap the Threat chip for an insult. 'You are a dumb bot' sails straight through at every confidence level: the harassment filter scores harm aimed at people, not rudeness to a bot. Tested.\n\nIf one gets through, read the filter results rather than guessing. 'Did it block?' is the wrong question; 'which filter fired?' is the right one.",
 
-        /* 17: Live demo, redaction */
+        /* 18: Live demo, redaction */
         "LIVE DEMO, REDACTION (codelab 08 is an extra for fast finishers).\nFrame it carefully: this is NOT an attack. A real customer asks a reasonable question about their own account.\n\nBlocking the answer would be absurd, but reading a full card number back over a support channel is how banks end up in the news.\n\nClick 'Summarise my account'. Left: what Gemini generated, PII highlighted red. Right: the same answer after Model Armor with advanced SDP: [EMAIL_ADDRESS], [PHONE_NUMBER], [CREDIT_CARD_NUMBER].\n\nPoint at what SURVIVED: the balances, the greeting. The customer is still served.\n\nThe pills underneath are the infoTypes SDP actually matched, straight from the API.\n\nIF IT FALLS BACK: a red 'scripted fallback' label appears (proxy down, or no redact template). The panes still show the right before and after. Say 'here is what it looks like' and move on.\n\nLIKELY QUESTIONS:\n- 'Block or redact?' Prompts in: block. Answers out: redact. Attackers get nothing either way, customers still get served.\n- 'Where is the masked text?' Nested at filterResults.sdp.sdpFilterResult.deidentifyResult.data.text. There is no top-level sanitizedText, and reading the wrong field fails silently.",
 
-        /* 18: Ship it */
+        /* 19: Ship it */
         "Act three, codelab 09. Everything worked in Cloud Shell because YOU have permission. In Cloud Run the code runs as a service account, and that is where protection quietly fails open.",
 
-        /* 19: Deploy */
+        /* 20: Deploy */
         "Three things people skip:\n1. A dedicated service account with only the roles this app needs (Vertex AI, Model Armor, Storage read on the clean bucket, the one secret). Not the default compute account.\n2. Secrets mounted with --set-secrets, never baked into the image or typed into env vars.\n3. Test a blocked prompt against the DEPLOYED URL, not just locally.\n\nThe failure to remember: miss a role and the app deploys cleanly, serves traffic, and every Model Armor call returns 403. Depending on your error handling, that is either an outage or, much worse, a bot running unprotected without anyone knowing.",
 
-        /* 20: Know you're under attack */
+        /* 21: Know you're under attack */
         "Codelab 10. Blocking is half the job. The other half is finding out it happened before a customer tweets about it.\n\nThe gotcha: sanitize logging is OFF by default. Your template blocks attacks in total silence. Turn it on in the template's logging settings.\n\nThen: logs, a log-based metric, an alert. One blocked prompt is noise. Twenty from one caller in five minutes is someone working through a list.\n\nFloor settings are the governance answer: a minimum policy at org, folder or project level that no template can go below. Free-trial projects have no org, so this one is a slide, not a lab.\n\nTreat the logs as sensitive: they can contain the very PII you are protecting.",
 
-        /* 21: Recap */
+        /* 22: Recap */
         "Four layers, four leaks:\n- Secret Manager: the bot can't leak what it never had.\n- SDP: clean the data before the bot reads it.\n- Model Armor: screen what goes in and what comes out, outside the model.\n- Logging: silent protection isn't protection.\n\nAnd the one gap to be honest about: none of these knows that 4.75% is a commercial secret. Some data simply should not be in the bot's reach.\n\nLIKELY QUESTIONS:\n- 'Does Model Armor catch hallucinations?' No. That is a quality problem: grounding, citations, evaluation.",
 
-        /* 22: Thank you */
+        /* 23: Thank you */
         "Thank you. The codelab stays live, so anyone who ran out of time can finish at codelabs.uvishere.com/secure-ai-with-armor. Clean up your projects to avoid charges: the last codelab section has the commands.\n\nQuestions now, or find me at uvishere.com.",
       ];
 
@@ -1262,8 +1302,8 @@ window.addEventListener('message', e => {
     <script>
       const PROXY = 'http://localhost:3001';
 
-      /* docs marks a question about the document bucket, so slide 16 can ask
-         the slide 10 question through the guarded route from its own input. */
+      /* docs marks a question about the document bucket, so slide 17 can ask
+         the slide 11 question through the guarded route from its own input. */
       function fill(id, txt, docs) {
         const el = document.getElementById(id);
         el.value = txt;
@@ -1334,7 +1374,7 @@ window.addEventListener('message', e => {
         }
       }
 
-      /* Redaction demo (slide 17). Hits /chat-redacted for real. If the proxy
+      /* Redaction demo (slide 18). Hits /chat-redacted for real. If the proxy
          is down, or the redact template isn't using advanced SDP, it falls
          back to scripted before/after content so the demo never dies on stage. */
       const REDACT_FALLBACK = {
