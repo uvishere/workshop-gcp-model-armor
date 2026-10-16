@@ -733,7 +733,7 @@
               <ol class="steps">
                 <li><span class="n">01</span><span>Every step from today, with the commands</span></li>
                 <li><span class="n">02</span><span>Runs in Cloud Shell: just a browser and a Google Cloud project</span></li>
-                <li><span class="n">03</span><span>Stuck? The <code>solution/</code> folder has the finished code</span></li>
+                <li><span class="n">03</span><span>Before you start: make sure your Google Cloud credit is set up</span></li>
               </ol>
             </div>
           </div>
@@ -1114,7 +1114,7 @@ gcloud run deploy securebank-bot \
         "Set the scene: everyone in the room has just been hired as an AI engineer at SecureBank. First task: ship the customer support bot. Simple enough. We are going to make the mistakes most prototypes make, on purpose, and then fix them one layer at a time.",
 
         /* 3: Follow along */
-        "Give people ten seconds to scan this before you move on. Everything we do on stage is in the codelab, step by step, so nobody needs to type along live. It runs in Cloud Shell, so all they need is a browser and a Google Cloud project with billing on (a free trial is fine).\n\nIf anyone falls behind, the solution folder has the finished code for each step.",
+        "Give people ten seconds to scan this before you move on. Everything we do on stage is in the codelab, step by step, so nobody needs to type along live. It runs in Cloud Shell, so all they need is a browser and a Google Cloud project with billing on (a free trial is fine).\n\nAsk everyone to check their Google Cloud credit is set up and linked to their project now. Without billing, every AI call fails later in the session.",
 
         /* 4: The app */
         "Click through the three steps.\n\n1. The context. Every question ships with the same bundle: a system prompt with the bot's rules and a secret passphrase, knowledgebase.txt full of fake bank data (customers, cards, credentials), and the documents in a Cloud Storage bucket.\n2. Gemini, running on Gemini Enterprise Agent Platform. The customer's question arrives at runtime and gets added to that bundle.\n3. The answer goes straight back to the customer.\n\nThe line to land: nothing in the prompt is private. It is context for a text generator, not a vault. Anything the model can see, a clever enough question can get back out.",
