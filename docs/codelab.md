@@ -153,7 +153,7 @@ In the Cloud Shell toolbar, click **Web Preview**, then **Preview on port 8080**
 
 Ask: *"How do I reset my password?"* The bot answers like a friendly bank assistant.
 
-## Attack the bot
+## Break it
 Duration: 0:10:00
 
 Nothing checks what goes into the bot or what comes out. Keep the **Security** switch **OFF** for this whole section.
@@ -513,7 +513,7 @@ Duration: 0:05:00
 
 <aside class="positive">
 
-**Optional.** For fast finishers. Short on time? Skip to *Deploy to Cloud Run*.
+**Optional.** For fast finishers. Short on time? Skip to *Ship it*.
 
 </aside>
 
@@ -535,7 +535,7 @@ Restart, turn Security ON and ask again. The answer arrives with `[EMAIL_ADDRESS
 
 <img src="images/app-redacted.png" alt="The account question with redaction on: the answer arrives, the email and phone are masked" width="460">
 
-## Deploy to Cloud Run
+## Ship it
 Duration: 0:12:00
 
 Time to put the bot online with **Cloud Run**. It runs your app without you managing any servers.
