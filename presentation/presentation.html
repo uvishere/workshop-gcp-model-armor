@@ -316,24 +316,24 @@
         margin-left: 14px;
       }
 
-      /* Codelab QR slide */
+      /* Codelab and credits QR slide */
       .qr {
         display: grid;
-        grid-template-columns: 250px 1fr;
-        gap: 44px;
-        align-items: center;
-        margin-top: 18px;
+        grid-template-columns: 1fr 1fr;
+        justify-items: center;
+        margin-top: 6px;
+      }
+      .qr > div {
+        text-align: center;
+      }
+      .qr h2 {
+        margin-bottom: 18px;
       }
       .qr img {
-        width: 250px;
-        height: 250px;
+        width: 300px;
+        height: 300px;
         background: #fff;
         padding: 8px;
-      }
-      .qr .url {
-        font: 600 22px var(--mono);
-        color: var(--green);
-        margin-bottom: 18px;
       }
 
       /* ── Layer slides (Secret Manager, SDP, Model Armor) ──────────── */
@@ -1507,16 +1507,15 @@ pi_and_jailbreak: { matchState: <span class="r">MATCH_FOUND</span>, confidenceLe
 
         <!-- 35: Follow along -->
         <section class="slide" id="s35">
-          <h2>Follow along with the codelab</h2>
+          <div class="kicker"><span>Follow along</span></div>
           <div class="qr">
-            <img src="codelab-qr.png" alt="QR code for codelabs.uvishere.com/secure-ai-with-armor" />
             <div>
-              <div class="url">codelabs.uvishere.com/secure-ai-with-armor</div>
-              <ol class="steps">
-                <li><span class="n">01</span><span>Every step from today, with the commands</span></li>
-                <li><span class="n">02</span><span>Runs in Cloud Shell: just a browser and a Google Cloud project</span></li>
-                <li><span class="n">03</span><span>When you're done, the last section cleans up so you aren't charged</span></li>
-              </ol>
+              <h2>Scan for CodeLab</h2>
+              <img src="codelab-qr.png" alt="QR code for codelabs.uvishere.com/secure-ai-with-armor" />
+            </div>
+            <div>
+              <h2>Scan for Cloud Credits</h2>
+              <img src="credits-qr.png" alt="QR code for Google Cloud credits on developers.google.com" />
             </div>
           </div>
         </section>
@@ -1638,7 +1637,7 @@ pi_and_jailbreak: { matchState: <span class="r">MATCH_FOUND</span>, confidenceLe
         "Click through three rows.\n1. The request path: customer, Cloud Run with its own identity, Model Armor on the way in and out, Gemini on Agent Platform.\n2. What supports it: Secret Manager hands the key over at runtime, SDP masks answers and cleaned the docs bucket, Cloud Storage holds the clean copy.\n3. Underneath it all: Cloud Logging and alerts.\n\nThe line: the model is one box in the middle. Everything that makes it safe is around it.",
 
         /* 35: Follow along */
-        "Leave this up for a moment. Everything we did today is in the codelab, step by step, with the commands. It runs in Cloud Shell, so all anyone needs is a browser and a Google Cloud project with billing on (a free trial is fine).\n\nRemind people to clean up their projects afterwards: the last codelab section has the commands.",
+        "Leave this up for a moment. The left code opens the codelab, the right one claims Google Cloud credits; ask everyone to link the credit to their project before they start, or every AI call fails. Everything we did today is in the codelab, step by step, with the commands. It runs in Cloud Shell, so all anyone needs is a browser and a Google Cloud project with billing on (a free trial is fine).\n\nRemind people to clean up their projects afterwards: the last codelab section has the commands.",
 
         /* 36: Thank you */
         "Thank you. Take questions here.\n\nPoint at the two links: uvishere.com and LinkedIn. Happy to connect.",
