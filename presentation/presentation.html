@@ -327,11 +327,18 @@
         text-align: center;
       }
       .qr h2 {
-        margin-bottom: 18px;
+        margin-bottom: 16px;
+      }
+      .qr .link {
+        margin: 14px auto 0;
+        max-width: 380px;
+        font: 600 14px/1.45 var(--mono);
+        color: var(--green);
+        overflow-wrap: anywhere;
       }
       .qr img {
-        width: 300px;
-        height: 300px;
+        width: 270px;
+        height: 270px;
         background: #fff;
         padding: 8px;
       }
@@ -1512,10 +1519,12 @@ pi_and_jailbreak: { matchState: <span class="r">MATCH_FOUND</span>, confidenceLe
             <div>
               <h2>Scan for CodeLab</h2>
               <img src="codelab-qr.png" alt="QR code for codelabs.uvishere.com/secure-ai-with-armor" />
+              <div class="link">codelabs.uvishere.com/secure-ai-with-armor</div>
             </div>
             <div>
               <h2>Scan for Cloud Credits</h2>
               <img src="credits-qr.png" alt="QR code for Google Cloud credits on developers.google.com" />
+              <div class="link">me.developers.google.com/benefits/claim/<br />gdg-brisbane-devfest-hands-on-1</div>
             </div>
           </div>
         </section>
