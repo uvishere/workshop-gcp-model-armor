@@ -34,6 +34,12 @@ presenter tooling — you can safely ignore it.
   - `proxy.js` / `start.sh`: Local proxy and launcher for the live demos.
 - `CLAUDE.md`: Notes for working on this repo.
 
+## Next talk
+
+**[Trace It, Tame It, Trust It!](https://github.com/uvishere/otel-ai-agents-talk)** is the
+sequel: the same SecureBank bot becomes an agent with tools, and you trace it with
+OpenTelemetry. It lives in its own repo.
+
 ## Presenter Notes
 
 Generate the Google Codelab from `docs/codelab.md` using the `claat` tool:
