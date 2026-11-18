@@ -33,7 +33,8 @@ if ! $G iam service-accounts describe "$SA" >/dev/null 2>&1; then
   echo "▶ Creating service account $SA"
   $G iam service-accounts create "$SA_NAME" --display-name "SecureBank talk (deck + live demos)"
 fi
-# Only what the demos call: Gemini, and Model Armor (which runs SDP for us).
+# Only what the demos call: Gemini, Model Armor (which runs SDP for us),
+# and read on the docs bucket below.
 for role in roles/aiplatform.user roles/modelarmor.user; do
   $G projects add-iam-policy-binding "$PROJECT" --member "serviceAccount:$SA" \
     --role "$role" --condition None >/dev/null
@@ -43,6 +44,11 @@ if ! $G secrets describe "$SECRET" >/dev/null 2>&1; then
   echo "▶ Creating the deck password in Secret Manager ($SECRET)"
   openssl rand -base64 18 | tr -d '/+=\n' | $G secrets create "$SECRET" --data-file=- --replication-policy automatic
 fi
+# Read-only on the docs bucket, so slide 9 reads the real gs:// copy.
+DOCS_BUCKET="${SECUREBANK_DOCS_BUCKET:-$PROJECT-securebank-docs}"
+gcloud storage buckets add-iam-policy-binding "gs://$DOCS_BUCKET" --project "$PROJECT" \
+  --member "serviceAccount:$SA" --role roles/storage.objectViewer >/dev/null
+
 $G secrets add-iam-policy-binding "$SECRET" --member "serviceAccount:$SA" \
   --role roles/secretmanager.secretAccessor >/dev/null
 
@@ -64,7 +70,7 @@ $G run deploy "$SERVICE" \
   --region "$REGION" \
   --service-account "$SA" \
   --allow-unauthenticated \
-  --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT,GOOGLE_CLOUD_LOCATION=${GOOGLE_CLOUD_LOCATION:-us-central1},MODEL_ARMOR_TEMPLATE=${MODEL_ARMOR_TEMPLATE},MODEL_ARMOR_TEMPLATE_REDACT=${MODEL_ARMOR_TEMPLATE_REDACT:-$MODEL_ARMOR_TEMPLATE}" \
+  --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT,GOOGLE_CLOUD_LOCATION=${GOOGLE_CLOUD_LOCATION:-us-central1},MODEL_ARMOR_TEMPLATE=${MODEL_ARMOR_TEMPLATE},MODEL_ARMOR_TEMPLATE_REDACT=${MODEL_ARMOR_TEMPLATE_REDACT:-$MODEL_ARMOR_TEMPLATE},SECUREBANK_DOCS_BUCKET=$DOCS_BUCKET" \
   --set-secrets "DECK_PASSWORD=$SECRET:latest" \
   --min-instances 0 --max-instances 2 \
   --memory 512Mi --timeout 120
