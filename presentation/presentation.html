@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Build It, Guard It, Ship It</title>
     <style>
       /* Self-hosted so venue wifi cannot drop the Poster slides to Arial. */
@@ -57,6 +58,18 @@
         color: var(--ink);
         font-family: var(--sans);
         overflow: hidden;
+        /* No double-tap zoom or pull-to-refresh: taps drive the deck. */
+        touch-action: manipulation;
+        overscroll-behavior: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      /* Clicker blank-screen button (B or .), tap to bring it back. */
+      body.blank::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background: #000;
+        z-index: 1000;
       }
 
       #progress {
@@ -1704,39 +1717,94 @@ window.addEventListener('message', e => {
         sendNotes();
       }
 
+      function next() {
+        const builds = getBuilds();
+        const shown = builds.filter((el) => el.classList.contains('shown')).length;
+        if (shown < builds.length) builds[shown].classList.add('shown');
+        else goTo(cur + 1);
+      }
+
+      function prev() {
+        const shownItems = getBuilds().filter((el) =>
+          el.classList.contains('shown'),
+        );
+        if (shownItems.length > 0)
+          shownItems[shownItems.length - 1].classList.remove('shown');
+        else goTo(cur - 1);
+      }
+
+      function toggleFullscreen() {
+        if (document.fullscreenElement) document.exitFullscreen();
+        else document.documentElement.requestFullscreen().catch(() => {});
+      }
+
       document.addEventListener('keydown', (e) => {
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')
+        const typing =
+          e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA';
+        // Clickers send PageDown / PageUp. Those always move the deck, even
+        // straight after typing into a demo chat box, so the clicker never
+        // gets stuck in an input.
+        if (e.key === 'PageDown' || e.key === 'PageUp') {
+          e.preventDefault();
+          if (typing) e.target.blur();
+          e.key === 'PageDown' ? next() : prev();
           return;
+        }
+        if (typing) return;
         if (['ArrowRight', 'ArrowDown', ' '].includes(e.key)) {
           e.preventDefault();
-          const builds = getBuilds();
-          const shown = builds.filter((el) =>
-            el.classList.contains('shown'),
-          ).length;
-          if (shown < builds.length) {
-            builds[shown].classList.add('shown');
-          } else {
-            goTo(cur + 1);
-          }
+          // A chip clicked a moment ago keeps focus; without this, Space
+          // would press it again instead of advancing.
+          if (document.activeElement && document.activeElement !== document.body)
+            document.activeElement.blur();
+          next();
         } else if (['ArrowLeft', 'ArrowUp'].includes(e.key)) {
           e.preventDefault();
-          const builds = getBuilds();
-          const shownItems = builds.filter((el) =>
-            el.classList.contains('shown'),
-          );
-          if (shownItems.length > 0) {
-            shownItems[shownItems.length - 1].classList.remove('shown');
-          } else {
-            goTo(cur - 1);
-          }
+          prev();
+        } else if (e.key === 'F5') {
+          // A clicker's "start slideshow" button sends F5 (then Esc). Reloading
+          // would lose the slide and every demo answer, so go fullscreen instead.
+          e.preventDefault();
+          if (!document.fullscreenElement) toggleFullscreen();
         } else if (e.key === 'f' || e.key === 'F') {
-          document.fullscreenElement
-            ? document.exitFullscreen()
-            : document.documentElement.requestFullscreen();
+          toggleFullscreen();
+        } else if (['b', 'B', '.'].includes(e.key)) {
+          // The clicker's blank-screen button.
+          document.body.classList.toggle('blank');
         } else if (e.key === 's' || e.key === 'S') {
           openNotesWindow();
         }
       });
+
+      /* Touch: tap the right two thirds to go forward, the left third to go
+         back, or swipe. Taps on chips, inputs, buttons and the chat history
+         are left alone so the live demos still work on a phone or tablet.
+         Mouse clicks never navigate. */
+      const NO_NAV = 'a, button, input, textarea, select, label, .chat-wrap, .wcard';
+      let touchStart = null;
+      document.addEventListener('pointerdown', (e) => {
+        if (e.pointerType === 'mouse') return;
+        touchStart = e.target.closest(NO_NAV)
+          ? null
+          : { x: e.clientX, y: e.clientY, t: Date.now() };
+      });
+      document.addEventListener('pointerup', (e) => {
+        if (!touchStart || e.pointerType === 'mouse') return;
+        const dx = e.clientX - touchStart.x;
+        const dy = e.clientY - touchStart.y;
+        const quick = Date.now() - touchStart.t < 600;
+        touchStart = null;
+        if (document.body.classList.contains('blank')) {
+          document.body.classList.remove('blank');
+          return;
+        }
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+          dx < 0 ? next() : prev();
+        } else if (quick && Math.abs(dx) < 12 && Math.abs(dy) < 12) {
+          e.clientX < window.innerWidth / 3 ? prev() : next();
+        }
+      });
+      document.addEventListener('pointercancel', () => (touchStart = null));
 
       goTo(0);
 

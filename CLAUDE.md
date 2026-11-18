@@ -74,8 +74,10 @@ Redeploy after editing the deck: `./presentation/deploy.sh`. It runs as the `sec
 
 | Key | Action |
 |-----|--------|
-| `→` / `Space` | Next slide |
-| `←` | Previous slide |
+| `→` / `Space` / `PageDown` | Next slide |
+| `←` / `PageUp` | Previous slide |
+| Clicker | Works as-is: it sends PageDown / PageUp, which advance even from inside a demo chat box. Its start button (F5) goes fullscreen instead of reloading; its blank button (`B` / `.`) blacks the screen |
+| Touch | Tap the right two thirds to go forward, left third to go back, or swipe. Taps on chips, inputs and chat history don't navigate; mouse clicks never do |
 | `F` | Toggle fullscreen |
 | `S` | Open speaker notes in a **separate popup window** (safe for screen sharing) |
 
