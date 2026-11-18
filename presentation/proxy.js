@@ -15,7 +15,7 @@ const _tmpl    = argMap.template || process.env.MODEL_ARMOR_TEMPLATE || '';
 // Redaction demo needs a template configured with advanced SDP (a DLP
 // de-identify template). The workshop's single template already is one, so
 // setting this to the same path as MODEL_ARMOR_TEMPLATE is fine. Falls back to
-// the main template if unset, but then slide 15 assumes basic SDP and scripts it.
+// the main template if unset, but then slide 21 assumes basic SDP and scripts it.
 const _tmplRedact = argMap['template-redact'] || process.env.MODEL_ARMOR_TEMPLATE_REDACT || '';
 // Indirect-injection demo reads SecureBank's "internal documents" from a GCS
 // bucket. Created by ./setup-docs-bucket.sh. Unset falls back to app/docs/.
@@ -89,6 +89,24 @@ function metadataToken() {
   });
 }
 
+// Plain-text metadata lookups for the Cloud Run demo (/whereami).
+function metadataText(p) {
+  return new Promise(resolve => {
+    const req = http.get({
+      host: 'metadata.google.internal',
+      path: '/computeMetadata/v1/' + p,
+      headers: { 'Metadata-Flavor': 'Google' },
+      timeout: 1500,
+    }, res => {
+      let raw = '';
+      res.on('data', c => { raw += c; });
+      res.on('end', () => resolve(res.statusCode === 200 ? raw.trim() : ''));
+    });
+    req.on('timeout', () => req.destroy());
+    req.on('error', () => resolve(''));
+  });
+}
+
 async function getToken() {
   if (ON_CLOUD_RUN) {
     return _cached.token && Date.now() < _cached.expires ? _cached.token : metadataToken();
@@ -154,7 +172,7 @@ function httpsGet(hostname, path, token) {
    bucket on every keystroke of a live demo is a way to lose the room.
    Falls back to the local copies in app/docs/ if the bucket is missing,
    the token is stale, or the venue wifi dies — same defensive move as
-   REDACT_FALLBACK on slide 15.                                       */
+   REDACT_FALLBACK on slide 21.                                       */
 const DOCS_DIR = path.join(__dirname, '..', 'app', 'docs');
 let DOCS = [];
 let DOCS_SOURCE = 'none';
@@ -336,6 +354,25 @@ const server = http.createServer(async (req, res) => {
 
   if (req.method === 'OPTIONS') { res.writeHead(204); return res.end(); }
 
+  // Cloud Run demo: which service, revision, region and identity served this.
+  if (req.method === 'GET' && req.url === '/whereami') {
+    if (!ON_CLOUD_RUN) {
+      return res.end(JSON.stringify({ cloudRun: false, host: require('os').hostname() }));
+    }
+    const [region, account] = await Promise.all([
+      metadataText('instance/region'),
+      metadataText('instance/service-accounts/default/email'),
+    ]);
+    return res.end(JSON.stringify({
+      cloudRun: true,
+      service: process.env.K_SERVICE,
+      revision: process.env.K_REVISION,
+      region: region.split('/').pop(),
+      serviceAccount: account,
+      uptimeSeconds: Math.round(process.uptime()),
+    }));
+  }
+
   if (req.method === 'GET' && req.url === '/health') {
     return res.end(JSON.stringify({
       ok: true,
@@ -491,7 +528,7 @@ initDocs().then(() => server.listen(PORT, () => {
   console.log(
     _tmplRedact
       ? `    Redact  : ${TEMPLATE_REDACT_PATH}`
-      : `    Redact  : ⚠️  MODEL_ARMOR_TEMPLATE_REDACT not set — slide 15 will use its scripted fallback`
+      : `    Redact  : ⚠️  MODEL_ARMOR_TEMPLATE_REDACT not set — slide 21 will use its scripted fallback`
   );
   console.log(`    Docs    : ${DOCS.length} from ${DOCS_SOURCE}\n`);
 }));
