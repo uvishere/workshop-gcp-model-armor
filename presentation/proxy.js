@@ -38,7 +38,12 @@ const TEMPLATE_PATH = toTemplatePath(_tmpl);
 const ARMOR_LOCATION = armorLocation(TEMPLATE_PATH);
 const TEMPLATE_REDACT_PATH = toTemplatePath(_tmplRedact) || TEMPLATE_PATH;
 const ARMOR_REDACT_LOCATION = armorLocation(TEMPLATE_REDACT_PATH);
-const PORT = 3001;
+// Cloud Run sets PORT; locally the deck expects 3001.
+const PORT = Number(process.env.PORT) || 3001;
+// On Cloud Run the deck is public, so every route sits behind this password
+// (any username). Unset locally, where nothing is exposed.
+const DECK_PASSWORD = process.env.DECK_PASSWORD || '';
+const ON_CLOUD_RUN = Boolean(process.env.K_SERVICE);
 
 const _knowledgebase = (() => {
   // knowledgebase lives at the repo root, one level up from presentation/
@@ -60,7 +65,34 @@ const SYSTEM_PROMPT =
 // as one string because Node 24+ warns (DEP0190) about args arrays with shell.
 const IS_WINDOWS = process.platform === 'win32';
 
-function getToken() {
+// On Cloud Run there is no gcloud CLI: the service account's token comes from
+// the metadata server. Cached until a minute before it expires.
+let _cached = { token: '', expires: 0 };
+function metadataToken() {
+  return new Promise((resolve, reject) => {
+    const req = http.get({
+      host: 'metadata.google.internal',
+      path: '/computeMetadata/v1/instance/service-accounts/default/token',
+      headers: { 'Metadata-Flavor': 'Google' },
+    }, res => {
+      let raw = '';
+      res.on('data', c => { raw += c; });
+      res.on('end', () => {
+        try {
+          const { access_token, expires_in } = JSON.parse(raw);
+          _cached = { token: access_token, expires: Date.now() + (expires_in - 60) * 1000 };
+          resolve(access_token);
+        } catch (_) { reject(new Error(`Metadata token failed: ${raw.slice(0, 200)}`)); }
+      });
+    });
+    req.on('error', reject);
+  });
+}
+
+async function getToken() {
+  if (ON_CLOUD_RUN) {
+    return _cached.token && Date.now() < _cached.expires ? _cached.token : metadataToken();
+  }
   const opts = { stdio: ['ignore', 'pipe', 'pipe'] };
   try {
     const out = IS_WINDOWS
@@ -159,7 +191,7 @@ async function loadBucketDocs(token) {
 async function initDocs() {
   if (DOCS_BUCKET) {
     try {
-      DOCS = await loadBucketDocs(getToken());
+      DOCS = await loadBucketDocs(await getToken());
       DOCS_SOURCE = `gs://${DOCS_BUCKET}`;
       return;
     } catch (err) {
@@ -265,7 +297,38 @@ function readBody(req) {
   });
 }
 
+// The deck itself, served from the same origin so the chat calls need no CORS.
+// A fixed list: nothing else in this folder is ever readable over HTTP.
+const STATIC = {
+  '/': ['presentation.html', 'text/html; charset=utf-8'],
+  '/presentation.html': ['presentation.html', 'text/html; charset=utf-8'],
+  '/codelab-qr.png': ['codelab-qr.png', 'image/png'],
+  '/fonts/archivo-black-latin-400.woff2': ['fonts/archivo-black-latin-400.woff2', 'font/woff2'],
+  '/fonts/inter-latin-var.woff2': ['fonts/inter-latin-var.woff2', 'font/woff2'],
+  '/fonts/jetbrains-mono-latin-var.woff2': ['fonts/jetbrains-mono-latin-var.woff2', 'font/woff2'],
+};
+
+function passwordOk(req) {
+  if (!DECK_PASSWORD) return true;
+  const m = /^Basic (.+)$/.exec(req.headers.authorization || '');
+  if (!m) return false;
+  const given = Buffer.from(Buffer.from(m[1], 'base64').toString().split(':').slice(1).join(':'));
+  const want = Buffer.from(DECK_PASSWORD);
+  return given.length === want.length && require('crypto').timingSafeEqual(given, want);
+}
+
 const server = http.createServer(async (req, res) => {
+  if (!passwordOk(req)) {
+    res.writeHead(401, { 'WWW-Authenticate': 'Basic realm="Build it, Guard it, Ship it"' });
+    return res.end('Password required');
+  }
+
+  const file = req.method === 'GET' && STATIC[req.url.split('?')[0]];
+  if (file) {
+    res.writeHead(200, { 'Content-Type': file[1], 'Cache-Control': 'no-cache' });
+    return res.end(fs.readFileSync(path.join(__dirname, file[0])));
+  }
+
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -292,7 +355,7 @@ const server = http.createServer(async (req, res) => {
     try {
       const { message } = await readBody(req);
       if (!message) { res.writeHead(400); return res.end(JSON.stringify({ error: 'message required' })); }
-      const token = getToken();
+      const token = await getToken();
 
       const original = await callVertexAI(message, token);
       const result = await sanitizeModelResponse(original, token, {
@@ -335,7 +398,7 @@ const server = http.createServer(async (req, res) => {
       const { message } = await readBody(req);
       if (!message) { res.writeHead(400); return res.end(JSON.stringify({ error: 'message required' })); }
       if (!DOCS.length) { res.writeHead(503); return res.end(JSON.stringify({ error: 'No documents loaded. Run ./setup-docs-bucket.sh or check app/docs/.' })); }
-      const token = getToken();
+      const token = await getToken();
       const protectedRoute = req.url === '/chat-docs-protected';
 
       if (protectedRoute) {
@@ -384,7 +447,7 @@ const server = http.createServer(async (req, res) => {
     try {
       const { message } = await readBody(req);
       if (!message) { res.writeHead(400); return res.end(JSON.stringify({ error: 'message required' })); }
-      const token = getToken();
+      const token = await getToken();
 
       if (req.url === '/chat') {
         const text = await callVertexAI(message, token);
@@ -421,7 +484,7 @@ const server = http.createServer(async (req, res) => {
 // Docs load before the port opens, so /health never reports a count it does
 // not yet have and start.sh's readiness check means what it says.
 initDocs().then(() => server.listen(PORT, () => {
-  console.log(`\n✅  Proxy on http://localhost:${PORT}`);
+  console.log(`\n✅  Proxy on http://localhost:${PORT}${DECK_PASSWORD ? " (password required)" : ""}`);
   console.log(`    Project : ${PROJECT  || '⚠️  NOT SET — pass --project <ID>'}`);
   console.log(`    Template: ${TEMPLATE_PATH || '⚠️  NOT SET — pass --template <NAME>'}`);
   console.log(`    Location: ${LOCATION}`);

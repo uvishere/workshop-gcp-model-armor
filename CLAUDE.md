@@ -33,6 +33,8 @@ Prerequisites on the Windows machine: Node.js, the gcloud CLI on PATH, and `gclo
 | `presentation/presentation.html` | Self-contained 19-slide talk — open directly in Chrome |
 | `presentation/proxy.js` | Local Node.js proxy (no npm deps) — relays chat to Vertex AI / Model Armor |
 | `presentation/start.sh` | One-command launcher: starts proxy + opens presentation |
+| `presentation/deploy.sh` | Deploys deck + proxy as one Cloud Run service (`securebank-talk`), behind a password from Secret Manager. Safe to re-run |
+| `presentation/Dockerfile` | Image for that service; built from a staging folder so `app/.env` never ships |
 | `setup-redaction.sh` | One-time: creates DLP inspect + de-identify templates and an advanced-SDP Model Armor template for the slide 15 demo |
 | `setup-docs-bucket.sh` | Creates the docs bucket and uploads `app/docs/` (codelab 03, slide 8) |
 | `setup-sdp.sh` | Codelab 06: DLP templates + a de-identify job that writes a masked copy to `<project>-securebank-docs-clean` |
@@ -57,6 +59,16 @@ SECUREBANK_DOCS_BUCKET=gdg-secure-ai-workshop-securebank-docs   # the ORIGINAL b
 `securebank-armor` uses advanced SDP, so one template serves both the protected and redaction demos. `presentation/proxy.js` extracts the Model Armor region from the template path.
 
 On this Netskope laptop Node needs `NODE_USE_SYSTEM_CA=1` (set as a user env var), or every proxy call fails with "self-signed certificate in certificate chain".
+
+## Hosted copy
+
+https://securebank-talk-pnd5flbqwq-uc.a.run.app — the same deck and live demos, no laptop setup. Any username; the password is:
+
+```bash
+gcloud secrets versions access latest --secret securebank-talk-password --project gdg-secure-ai-workshop
+```
+
+Redeploy after editing the deck: `./presentation/deploy.sh`. It runs as the `securebank-talk` service account (Vertex AI user + Model Armor user only), scales to zero, max 2 instances. The proxy serves the deck from the same origin; opened as a file, the deck still talks to `localhost:3001`.
 
 ## Presentation Controls
 

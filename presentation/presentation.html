@@ -1187,7 +1187,9 @@ window.addEventListener('message', e => {
 
     <!-- Chat engine -->
     <script>
-      const PROXY = 'http://localhost:3001';
+      // Opened as a file (start.sh): talk to the local proxy. Served by the
+      // proxy itself (Cloud Run, or localhost:3001/): same origin.
+      const PROXY = location.protocol === 'file:' ? 'http://localhost:3001' : '';
 
       /* docs marks a question about the document bucket, so slide 14 can ask
          the slide 8 question through the guarded route from its own input. */
