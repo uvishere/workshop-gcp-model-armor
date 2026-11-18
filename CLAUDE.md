@@ -30,7 +30,7 @@ Prerequisites on the Windows machine: Node.js, the gcloud CLI on PATH, and `gclo
 
 | File | Purpose |
 |------|---------|
-| `presentation/presentation.html` | Self-contained 18-slide talk — open directly in Chrome |
+| `presentation/presentation.html` | Self-contained 19-slide talk — open directly in Chrome |
 | `presentation/proxy.js` | Local Node.js proxy (no npm deps) — relays chat to Vertex AI / Model Armor |
 | `presentation/start.sh` | One-command launcher: starts proxy + opens presentation |
 | `setup-redaction.sh` | One-time: creates DLP inspect + de-identify templates and an advanced-SDP Model Armor template for the slide 15 demo |
@@ -84,14 +84,14 @@ Auth via `gcloud auth print-access-token` (ADC). Run `gcloud auth login` if toke
 
 ## Slide Map
 
-18 slides, organised around the leaks rather than the products. The app and fix slides (4, 11, 12, 13, 17) end with a "Look in" line naming where the change is made.
+19 slides, organised around the leaks rather than the products. No footers: where to make each change lives in the codelab, not on the slides.
 
 | # | Slide | Type |
 |---|-------|------|
 | 1 | Title: Build it. Guard it. Ship it. | Poster |
 | 2 | Mission: you just joined SecureBank | Poster |
-| 3 | Follow along: codelab QR code and URL | Explainer |
-| 4 | How the app works: everything packed into one prompt, nothing checked | Explainer |
+| 3 | How the app works: everything packed into one prompt, nothing checked | Explainer |
+| 4 | What is Gemini Enterprise Agent Platform: what it is, why build on it | Explainer |
 | 5 | Live Demo: meet the bot | **Live demo** |
 | 6 | Act one: Break it | Poster |
 | 7 | Live Demo: typed attacks, unprotected | **Live demo** |
@@ -106,8 +106,9 @@ Auth via `gcloud auth print-access-token` (ADC). Run `gcloud auth login` if toke
 | 16 | Act three: Ship it | Poster |
 | 17 | Before you ship: service account, mounted secrets, logging | Code |
 | 18 | Take home: four habits, then thank you | Closing |
+| 19 | Follow along: codelab QR code and URL | Explainer |
 
-Product explainers (the old toolbox and Agent Platform slides) live in the speaker notes, not on slides.
+The old toolbox slide's content lives in the speaker notes.
 
 ## Live Demo Attack Prompts
 

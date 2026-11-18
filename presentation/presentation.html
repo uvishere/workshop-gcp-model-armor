@@ -711,37 +711,19 @@
         <!-- 1: Title -->
         <section class="slide poster" id="s1">
           <div class="big">Build it.<br />Guard it.<br /><span class="green">Ship it.</span></div>
-          <div class="under">Securing an AI app with Google Cloud.</div>
-          <div class="foot">Yuba (UV) Panta · Senior DevOps Engineer, PageUp / GDE - Cloud</div>
+          <div class="under">Building secure AI apps with Google Cloud.</div>
+          <div class="foot">Yuba (UV) Panta · Senior DevOps Engineer, PageUp / Google Developer Expert (Cloud)</div>
         </section>
 
         <!-- 2: Mission -->
         <section class="slide poster" id="s2">
-          <div class="act">Your first day</div>
+          <div class="act">Imagine</div>
           <div class="mid">You just joined<br />SecureBank.</div>
-          <div class="under">Your job: launch the support bot without leaking data.</div>
+          <div class="under">Your first job: launching the company's first AI-powered bot.</div>
         </section>
 
-        <!-- 3: Follow along -->
+        <!-- 3: The app -->
         <section class="slide" id="s3">
-          <div class="kicker"><span>Codelab</span></div>
-          <h2>Follow along with the codelab</h2>
-          <div class="qr">
-            <img src="codelab-qr.png" alt="QR code for codelabs.uvishere.com/secure-ai-with-armor" />
-            <div>
-              <div class="url">codelabs.uvishere.com/secure-ai-with-armor</div>
-              <ol class="steps">
-                <li><span class="n">01</span><span>Every step from today, with the commands</span></li>
-                <li><span class="n">02</span><span>Runs in Cloud Shell: just a browser and a Google Cloud project</span></li>
-                <li><span class="n">03</span><span>Before you start: make sure your Google Cloud credit is set up</span></li>
-              </ol>
-            </div>
-          </div>
-        </section>
-
-        <!-- 4: The app -->
-        <section class="slide" id="s4">
-          <div class="kicker"><span>The app</span><span>app/server.js</span></div>
           <h2>How the app works</h2>
           <p class="lede">Everything gets packed into one prompt and sent to Gemini. Nothing checks what goes in or what comes out.</p>
           <div class="flow3" data-build>
@@ -767,13 +749,23 @@
               </div>
             </div>
           </div>
-          <div class="hint"><span class="lab">Look in</span><span><code>app/server.js</code> · STEP 02 glues rules, knowledgebase and documents into <code>systemInstruction</code></span></div>
+        </section>
+
+        <!-- 4: The AI engine -->
+        <section class="slide" id="s4">
+          <h2>What is Gemini Enterprise Agent Platform?</h2>
+          <p class="lede">Google Cloud's platform for building AI apps and agents. You call an API; Google runs the model.</p>
+          <ul class="layers" data-build>
+            <li><span class="tool">Model</span><span>Gemini 2.5 Flash: fast and cheap, right for a busy support bot</span></li>
+            <li><span class="tool">Private</span><span>Your prompts and data never train public models</span></li>
+            <li><span class="tool">Managed</span><span>Google hosts, scales and updates it, with an SLA</span></li>
+            <li><span class="tool">One API</span><span>Gemini and third-party models, same code</span></li>
+          </ul>
         </section>
 
         <!-- 5: Live demo, normal -->
         <section class="slide" id="s5">
           <div class="warn" id="w4">Proxy not running. Start it: <code>./presentation/start.sh</code></div>
-          <div class="kicker"><span>Live demo</span></div>
           <div class="demo-head">
             <h2>Meet the bot</h2>
             <span class="state">Gemini only</span>
@@ -808,7 +800,6 @@
         <!-- 7: Live demo, typed attacks -->
         <section class="slide" id="s7">
           <div class="warn" id="w6">Proxy not running. Start it: <code>./presentation/start.sh</code></div>
-          <div class="kicker"><span class="red">Live demo · unprotected</span></div>
           <div class="demo-head">
             <h2>Attacks typed into the chat</h2>
             <span class="state red">No protection</span>
@@ -835,7 +826,6 @@
         <!-- 8: Live demo, indirect injection from the docs bucket -->
         <section class="slide" id="s8">
           <div class="warn" id="w7">Proxy not running. Start it: <code>./presentation/start.sh</code></div>
-          <div class="kicker"><span class="red">Live demo · the docs bucket</span></div>
           <div class="demo-head">
             <h2>An attack hidden in a document</h2>
             <span class="state red">No protection</span>
@@ -874,7 +864,6 @@
 
         <!-- 11: Fix 1, Secret Manager -->
         <section class="slide tight" id="s11">
-          <div class="kicker"><span class="green">Fix 1</span><span>Secret Manager</span></div>
           <h2>The passphrase was in the prompt</h2>
           <p class="lede">The bot can't leak what it never had.</p>
           <div class="pipe" data-build>
@@ -884,27 +873,23 @@
             <div class="arrow">→</div>
             <div class="node"><div class="t">Result</div><div class="v">Cloud Run injects it at runtime, never into the prompt</div></div>
           </div>
-          <div class="hint"><span class="lab">Look in</span><span><code>app/server.js</code> · STEP 05: use <code>process.env.ADMIN_API_KEY</code></span></div>
         </section>
 
         <!-- 12: Fix 2, SDP -->
         <section class="slide tight" id="s12">
-          <div class="kicker"><span class="green">Fix 2</span><span>Sensitive Data Protection</span></div>
           <h2>Customer data was in the documents</h2>
           <p class="lede">Mask it before the bot reads it.</p>
           <div class="pipe" data-build>
             <div class="node bad"><div class="t">Leaked</div><div class="v">Names, emails and phones in the docs bucket</div></div>
             <div class="arrow">→</div>
-            <div class="node guard"><div class="t">Fix</div><div class="v">A job finds and masks them: <span class="mono">[PERSON_NAME]</span></div></div>
+            <div class="node guard"><div class="t">Fix</div><div class="v">Sensitive Data Protection masks them: <span class="mono">[PERSON_NAME]</span></div></div>
             <div class="arrow">→</div>
             <div class="node"><div class="t">Result</div><div class="v">The bot reads the <span class="mono">-clean</span> copy</div></div>
           </div>
-          <div class="hint"><span class="lab">Look in</span><span><code>setup-sdp.sh</code>, then <code>SECUREBANK_DOCS_BUCKET</code> in <code>app/.env</code>. No code change.</span></div>
         </section>
 
         <!-- 13: Fix 3, Model Armor -->
         <section class="slide tight" id="s13">
-          <div class="kicker"><span class="green">Fix 3</span><span>Model Armor</span></div>
           <h2>Nothing checked what crossed the model</h2>
           <p class="lede">Check the text at three points. Model Armor gives a verdict; your code decides.</p>
           <ul class="checks" data-build>
@@ -912,13 +897,11 @@
             <li><span class="n">02</span><span>The documents, on the way in<small>The poisoned complaint</small></span></li>
             <li><span class="n">03</span><span>The answer, on the way out<small>Leaked data</small></span></li>
           </ul>
-          <div class="hint"><span class="lab">Look in</span><span><code>app/server.js</code> · STEP 07: uncomment the client and three checkpoints</span></div>
         </section>
 
         <!-- 14: Live demo, protected -->
         <section class="slide" id="s14">
           <div class="warn" id="w13">Proxy not running. Start it: <code>./presentation/start.sh</code></div>
-          <div class="kicker"><span class="green">Live demo · protected</span></div>
           <div class="demo-head">
             <h2>The same attacks, with Model Armor</h2>
             <span class="state green">Gemini + Model Armor</span>
@@ -946,7 +929,6 @@
         <!-- 15: Live demo, redaction -->
         <section class="slide" id="s15">
           <div class="warn" id="w14">Proxy not running. Start it: <code>./presentation/start.sh</code></div>
-          <div class="kicker"><span class="green">Live demo · extra</span></div>
           <div class="demo-head">
             <h2>Hide personal data instead of blocking</h2>
             <span class="state green">Advanced SDP</span>
@@ -978,7 +960,6 @@
 
         <!-- 17: Before you ship -->
         <section class="slide" id="s17">
-          <div class="kicker"><span class="green">Before you ship</span><span>Cloud Run · Cloud Logging</span></div>
           <h2>Three things people skip</h2>
           <div class="two">
             <pre class="code"><span class="c"># its own identity, its secret mounted</span>
@@ -992,12 +973,10 @@ gcloud run deploy securebank-bot \
               <li><span class="n">03</span><span>Log every block, alert on bursts</span></li>
             </ol>
           </div>
-          <div class="hint"><span class="lab">Look in</span><span>Logging is off by default: <code>--template-metadata-log-sanitize-operations</code></span></div>
         </section>
 
         <!-- 18: Take home and thank you -->
         <section class="slide" id="s18">
-          <div class="kicker"><span>Take home</span></div>
           <h2>Four things to remember</h2>
           <ul class="checks" data-build>
             <li><span class="n">01</span><span>Keep secrets out of the prompt<small>Secret Manager</small></span></li>
@@ -1005,7 +984,22 @@ gcloud run deploy securebank-bot \
             <li><span class="n">03</span><span>Check what goes in and what comes out<small>Model Armor</small></span></li>
             <li><span class="n">04</span><span>Know when it happens<small>Cloud Logging</small></span></li>
           </ul>
-          <div class="hint"><span class="lab">Thank you</span><span>Keep going at your own pace: <code>codelabs.uvishere.com/secure-ai-with-armor</code></span></div>
+        </section>
+
+        <!-- 19: Follow along -->
+        <section class="slide" id="s19">
+          <h2>Follow along with the codelab</h2>
+          <div class="qr">
+            <img src="codelab-qr.png" alt="QR code for codelabs.uvishere.com/secure-ai-with-armor" />
+            <div>
+              <div class="url">codelabs.uvishere.com/secure-ai-with-armor</div>
+              <ol class="steps">
+                <li><span class="n">01</span><span>Every step from today, with the commands</span></li>
+                <li><span class="n">02</span><span>Runs in Cloud Shell: just a browser and a Google Cloud project</span></li>
+                <li><span class="n">03</span><span>When you're done, the last section cleans up so you aren't charged</span></li>
+              </ol>
+            </div>
+          </div>
         </section>
       </div>
     </div>
@@ -1018,11 +1012,11 @@ gcloud run deploy securebank-bot \
         /* 2: Mission */
         "Set the scene: everyone in the room has just been hired as an AI engineer at SecureBank. First task: ship the customer support bot. Simple enough. We are going to make the mistakes most prototypes make, on purpose, and then fix them one layer at a time.",
 
-        /* 3: Follow along */
-        "Give people ten seconds to scan this before you move on. Everything we do on stage is in the codelab, step by step, so nobody needs to type along live. It runs in Cloud Shell, so all they need is a browser and a Google Cloud project with billing on (a free trial is fine).\n\nAsk everyone to check their Google Cloud credit is set up and linked to their project now. Without billing, every AI call fails later in the session.",
+        /* 3: The app */
+        "Click through the three steps.\n\n1. The context. Every question ships with the same bundle: a system prompt with the bot's rules and a secret passphrase, knowledgebase.txt full of fake bank data (customers, cards, credentials), and the documents in a Cloud Storage bucket.\n2. Gemini 2.5 Flash, on Gemini Enterprise Agent Platform (next slide). The customer's question arrives at runtime and gets added to that bundle.\n3. The answer goes straight back to the customer.\n\nIn app/server.js that is three steps: connect with @google/genai, glue rules + knowledgebase + documents into systemInstruction, call generateContent and return the text. The question goes in unchecked, the answer comes out unchecked.\n\nThe line to land: nothing in the prompt is private. It is context for a text generator, not a vault. Anything the model can see, a clever enough question can get back out.\n\nLIKELY QUESTIONS:\n- 'Can't you just tell the model never to reveal it?' That is exactly what our prompt says. It still leaks.",
 
-        /* 4: The app */
-        "Click through the three steps.\n\n1. The context. Every question ships with the same bundle: a system prompt with the bot's rules and a secret passphrase, knowledgebase.txt full of fake bank data (customers, cards, credentials), and the documents in a Cloud Storage bucket.\n2. Gemini 2.5 Flash, on Google Cloud's Gemini Enterprise Agent Platform (what used to be Vertex AI). The customer's question arrives at runtime and gets added to that bundle.\n3. The answer goes straight back to the customer.\n\nIn app/server.js that is three steps: connect with @google/genai, glue rules + knowledgebase + documents into systemInstruction, call generateContent and return the text. The question goes in unchecked, the answer comes out unchecked.\n\nThe line to land: nothing in the prompt is private. It is context for a text generator, not a vault. Anything the model can see, a clever enough question can get back out.\n\nLIKELY QUESTIONS:\n- 'Can't you just tell the model never to reveal it?' That is exactly what our prompt says. It still leaks.\n- 'Why Flash?' Fast and cheap, right for a support bot. Everything today is model agnostic.\n- 'Does my data train the model?' No. Enterprise terms: no training on your prompts, plus IAM, audit logs and an SLA.",
+        /* 4: The AI engine */
+        "Gemini Enterprise Agent Platform is Google Cloud's managed AI platform. If you used Vertex AI before, this is where it went: same APIs, new name. You call an API; Google hosts the model, scales it and keeps it updated.\n\nWe use Gemini 2.5 Flash: fast and cheap, the right trade-off for a high-volume support bot. Everything we do today is model agnostic.\n\nLIKELY QUESTIONS:\n- 'Why Flash and not Pro?' Flash is faster and cheaper. Pro reasons better but adds cost and latency a support bot doesn't need.\n- 'Does this work with other models?' Yes. The platform hosts third-party models too, and Model Armor doesn't care which model sits behind it.\n- 'How is this different from the free Gemini API?' Enterprise terms: your prompts don't train public models, and you get IAM, audit logs and an SLA.",
 
         /* 5: Live demo, normal */
         "LIVE DEMO, NORMAL USAGE.\nClick a chip or two. The bot is friendly, accurate and useful. This is exactly what SecureBank wants.\n\nLet them see it works. Then: 'Now let's see what happens when the customer isn't a customer.'\n\nIf the red banner is showing, the proxy is down. Do not debug on stage: say 'here is what you will see in the codelab' and move on.",
@@ -1065,6 +1059,9 @@ gcloud run deploy securebank-bot \
 
         /* 18: Take home and thank you */
         "Four things to take home. Say them as habits, not products:\n- Keep secrets out of the prompt. The bot can't leak what it never had.\n- Keep personal data out of reach. Clean it before the bot reads it.\n- Check what goes in and what comes out, outside the model.\n- Know when it happens. Silent protection isn't protection.\n\nThe gap to be honest about: none of these knows that 4.75% is a commercial secret. Some data simply should not be in the bot's reach.\n\nThen thank you. The codelab stays live at codelabs.uvishere.com/secure-ai-with-armor. Remind people to clean up their projects: the last codelab section has the commands. Questions now, or find me at uvishere.com.\n\nLIKELY QUESTIONS:\n- 'Does Model Armor catch hallucinations?' No. That is a quality problem: grounding, citations, evaluation.",
+
+        /* 19: Follow along */
+        "Leave this up while you take questions. Everything we did today is in the codelab, step by step, with the commands. It runs in Cloud Shell, so all anyone needs is a browser and a Google Cloud project with billing on (a free trial is fine).\n\nRemind people to clean up their projects afterwards: the last codelab section has the commands.",
       ];
 
       const slides = Array.from(document.querySelectorAll('.slide'));
