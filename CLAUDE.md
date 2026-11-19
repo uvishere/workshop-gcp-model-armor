@@ -137,7 +137,7 @@ Auth via `gcloud auth print-access-token` (ADC). Run `gcloud auth login` if toke
 | 32 | Live Demo: this talk runs on Cloud Run (`/whereami`) | **Live demo** |
 | 33 | Take these home: five habits | Closing |
 | 34 | The big picture: architecture | Diagram |
-| 35 | Follow along: QR codes for the codelab and Cloud credits | Explainer |
+| 35 | Follow along: codelab QR code and URL | Explainer |
 | 36 | Thank you: uvishere.com, linkedin.com/in/yuba-raj-panta | Closing |
 
 ## Live Demo Attack Prompts
