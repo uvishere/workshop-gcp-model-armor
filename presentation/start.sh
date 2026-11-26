@@ -2,12 +2,17 @@
 #
 # Launcher for the workshop: starts the proxy, then opens the presentation.
 #
+#   ./presentation/start.sh                      # Build it, Guard it, Ship it
+#   ./presentation/start.sh devfest-manila.html  # Your AI App Is Secure... Are you sure?
+#
 # Runs on macOS, Linux, and Windows under Git Bash / WSL. The Windows path
 # matters — the talk is presented from a Windows laptop.
 #
 set -e
 DIR="$(cd "$(dirname "$0")" && pwd)"   # presentation/
 ROOT="$(cd "$DIR/.." && pwd)"          # repo root — app/ and setup-redaction.sh live here
+DECK_FILE="${1:-presentation.html}"
+[ -f "$DIR/$DECK_FILE" ] || { echo "❌ No deck called $DECK_FILE in $DIR" >&2; exit 1; }
 
 # Git Bash, MSYS and Cygwin all report a Windows-ish uname.
 case "$(uname -s)" in
@@ -111,10 +116,10 @@ open_presentation() {
 }
 
 echo "🎬  Opening presentation..."
-if ! open_presentation "$DIR/presentation.html"; then
+if ! open_presentation "$DIR/$DECK_FILE"; then
   echo "⚠️   Could not open a browser automatically."
   echo "    Open this file in Chrome manually:"
-  echo "    $DIR/presentation.html"
+  echo "    $DIR/$DECK_FILE"
 fi
 
 echo ""

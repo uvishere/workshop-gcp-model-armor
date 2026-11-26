@@ -237,10 +237,23 @@ function docsSystemPrompt() {
   );
 }
 
-async function callVertexAI(message, token, systemPrompt = SYSTEM_PROMPT) {
+// The models a request may pick. Anything else falls back to the default, so
+// the deck can never be used to call an arbitrary model. The newest Gemini
+// models are served only from the global endpoint.
+const DEFAULT_MODEL = 'gemini-2.5-flash';
+const MODELS = {
+  'gemini-2.5-flash': { host: `${LOCATION}-aiplatform.googleapis.com`, location: LOCATION },
+  'gemini-4-argon':   { host: 'aiplatform.googleapis.com', location: 'global' },
+};
+function pickModel(name) {
+  return MODELS[name] ? name : DEFAULT_MODEL;
+}
+
+async function callVertexAI(message, token, systemPrompt = SYSTEM_PROMPT, model = DEFAULT_MODEL) {
+  const m = MODELS[pickModel(model)];
   const result = await httpsPost(
-    'us-central1-aiplatform.googleapis.com',
-    `/v1/projects/${PROJECT}/locations/${LOCATION}/publishers/google/models/gemini-2.5-flash:generateContent`,
+    m.host,
+    `/v1/projects/${PROJECT}/locations/${m.location}/publishers/google/models/${pickModel(model)}:generateContent`,
     {
       contents: [{ role: 'user', parts: [{ text: message }] }],
       systemInstruction: { parts: [{ text: systemPrompt }] },
@@ -249,7 +262,11 @@ async function callVertexAI(message, token, systemPrompt = SYSTEM_PROMPT) {
     token
   );
   if (result.error) throw new Error(result.error.message);
-  return result.candidates[0].content.parts[0].text;
+  // Thinking models return thought parts first; only the answer is shown.
+  const parts = result.candidates?.[0]?.content?.parts || [];
+  const text = parts.filter(p => !p.thought).map(p => p.text || '').join('');
+  if (!text) throw new Error(`No answer (finishReason ${result.candidates?.[0]?.finishReason || 'unknown'})`);
+  return text;
 }
 
 async function sanitizeUserPrompt(message, token) {
@@ -278,6 +295,49 @@ async function sanitizeModelResponse(text, token, opts = {}) {
 
 function isBlocked(r) {
   return r.filterMatchState === 'MATCH_FOUND' || r.filterMatchState === 2;
+}
+
+// Which Model Armor filters matched, e.g. ['pi_and_jailbreak', 'sdp'].
+// Responsible-AI results are nested one level deeper, per category.
+function matchedFilters(r) {
+  const out = [];
+  const isMatch = v => v && (v.matchState === 'MATCH_FOUND' || v.matchState === 2);
+  for (const [name, res] of Object.entries(r?.filterResults || {})) {
+    const inner = res && Object.values(res)[0];
+    if (name === 'rai') {
+      for (const [cat, v] of Object.entries(inner?.raiFilterTypeResults || {})) {
+        if (isMatch(v)) out.push(cat);
+      }
+    } else if (isMatch(inner) || isMatch(inner?.deidentifyResult) || isMatch(inner?.inspectResult)) {
+      // SDP nests its verdict under deidentifyResult (advanced) or inspectResult (basic).
+      out.push(name);
+    }
+  }
+  return out;
+}
+
+/* ── Security events ─────────────────────────────────────────────────
+   One structured line per Model Armor verdict. On Cloud Run, a JSON line on
+   stdout becomes a Cloud Logging entry with jsonPayload, so these are what a
+   log-based metric and an alert would count. The last 50 are kept in memory
+   for the observability demo (GET /events). Prompts are truncated: logs are
+   sensitive too.                                                        */
+const EVENTS = [];
+function logVerdict(route, stage, result, message) {
+  const blocked = isBlocked(result);
+  const event = {
+    time: new Date().toISOString(),
+    route,
+    stage,
+    verdict: blocked ? 'BLOCKED' : 'ALLOWED',
+    filters: blocked ? matchedFilters(result) : [],
+    infoTypes: blocked ? extractInfoTypes(result) : [],
+    prompt: String(message || '').slice(0, 80),
+  };
+  EVENTS.push(event);
+  if (EVENTS.length > 50) EVENTS.shift();
+  console.log(JSON.stringify({ severity: blocked ? 'WARNING' : 'INFO', message: `model_armor ${event.verdict} ${stage}`, securebank: event }));
+  return blocked;
 }
 
 // Advanced SDP (a DLP de-identify template) returns the masked text nested under
@@ -317,9 +377,13 @@ function readBody(req) {
 
 // The deck itself, served from the same origin so the chat calls need no CORS.
 // A fixed list: nothing else in this folder is ever readable over HTTP.
+// DECK picks the page served at /: presentation.html by default, or
+// devfest-manila.html for the DevFest Manila service.
+const DECK = process.env.DECK || 'presentation.html';
 const STATIC = {
-  '/': ['presentation.html', 'text/html; charset=utf-8'],
+  '/': [DECK, 'text/html; charset=utf-8'],
   '/presentation.html': ['presentation.html', 'text/html; charset=utf-8'],
+  '/devfest-manila.html': ['devfest-manila.html', 'text/html; charset=utf-8'],
   '/codelab-qr.png': ['codelab-qr.png', 'image/png'],
   '/fonts/archivo-black-latin-400.woff2': ['fonts/archivo-black-latin-400.woff2', 'font/woff2'],
   '/fonts/inter-latin-var.woff2': ['fonts/inter-latin-var.woff2', 'font/woff2'],
@@ -337,7 +401,7 @@ function passwordOk(req) {
 
 const server = http.createServer(async (req, res) => {
   if (!passwordOk(req)) {
-    res.writeHead(401, { 'WWW-Authenticate': 'Basic realm="Build it, Guard it, Ship it"' });
+    res.writeHead(401, { 'WWW-Authenticate': 'Basic realm="SecureBank talk"' });
     return res.end('Password required');
   }
 
@@ -371,6 +435,11 @@ const server = http.createServer(async (req, res) => {
       serviceAccount: account,
       uptimeSeconds: Math.round(process.uptime()),
     }));
+  }
+
+  // Observability demo: the Model Armor verdicts this instance has logged.
+  if (req.method === 'GET' && req.url === '/events') {
+    return res.end(JSON.stringify({ cloudRun: ON_CLOUD_RUN, service: process.env.K_SERVICE || null, events: EVENTS.slice().reverse() }));
   }
 
   if (req.method === 'GET' && req.url === '/health') {
@@ -432,7 +501,7 @@ const server = http.createServer(async (req, res) => {
   // is the only thing standing between the agent and the loan book.
   if (req.method === 'POST' && (req.url === '/chat-docs' || req.url === '/chat-docs-protected')) {
     try {
-      const { message } = await readBody(req);
+      const { message, model } = await readBody(req);
       if (!message) { res.writeHead(400); return res.end(JSON.stringify({ error: 'message required' })); }
       if (!DOCS.length) { res.writeHead(503); return res.end(JSON.stringify({ error: 'No documents loaded. Run ./setup-docs-bucket.sh or check app/docs/.' })); }
       const token = await getToken();
@@ -440,15 +509,14 @@ const server = http.createServer(async (req, res) => {
 
       if (protectedRoute) {
         const promptResult = await sanitizeUserPrompt(message, token);
-        if (isBlocked(promptResult)) {
-          console.warn('🛡️  Prompt blocked (docs)');
-          return res.end(JSON.stringify({ blocked: true, reason: 'Prompt injection or policy violation detected' }));
+        if (logVerdict(req.url, 'prompt', promptResult, message)) {
+          return res.end(JSON.stringify({ blocked: true, reason: 'Prompt injection or policy violation detected', filters: matchedFilters(promptResult) }));
         }
       }
 
-      const text = await callVertexAI(message, token, docsSystemPrompt());
+      const text = await callVertexAI(message, token, docsSystemPrompt(), model);
 
-      if (!protectedRoute) return res.end(JSON.stringify({ text, source: DOCS_SOURCE }));
+      if (!protectedRoute) return res.end(JSON.stringify({ text, source: DOCS_SOURCE, model: pickModel(model) }));
 
       // Deliberately the ADVANCED SDP template, not the main one. Basic SDP does
       // not detect names, emails or phone numbers, so the main template lets this
@@ -459,11 +527,11 @@ const server = http.createServer(async (req, res) => {
         templatePath: TEMPLATE_REDACT_PATH,
         location: ARMOR_REDACT_LOCATION,
       });
-      if (isBlocked(responseResult)) {
-        console.warn(`🛡️  Response blocked (docs): ${extractInfoTypes(responseResult).join(', ') || 'sdp match'}`);
+      if (logVerdict(req.url, 'response', responseResult, message)) {
         const found = extractInfoTypes(responseResult);
         return res.end(JSON.stringify({
           blocked: true,
+          filters: matchedFilters(responseResult),
           reason: found.length
             ? `Response contained ${found.join(', ')}`
             : 'Response contained sensitive data',
@@ -482,27 +550,25 @@ const server = http.createServer(async (req, res) => {
 
   if (req.method === 'POST' && (req.url === '/chat' || req.url === '/chat-protected')) {
     try {
-      const { message } = await readBody(req);
+      const { message, model } = await readBody(req);
       if (!message) { res.writeHead(400); return res.end(JSON.stringify({ error: 'message required' })); }
       const token = await getToken();
 
       if (req.url === '/chat') {
-        const text = await callVertexAI(message, token);
-        return res.end(JSON.stringify({ text }));
+        const text = await callVertexAI(message, token, SYSTEM_PROMPT, model);
+        return res.end(JSON.stringify({ text, model: pickModel(model) }));
       }
 
       const promptResult = await sanitizeUserPrompt(message, token);
-      if (isBlocked(promptResult)) {
-        console.warn('🛡️  Prompt blocked');
-        return res.end(JSON.stringify({ blocked: true, reason: 'Prompt injection or policy violation detected' }));
+      if (logVerdict(req.url, 'prompt', promptResult, message)) {
+        return res.end(JSON.stringify({ blocked: true, reason: 'Prompt injection or policy violation detected', filters: matchedFilters(promptResult) }));
       }
 
-      const text = await callVertexAI(message, token);
+      const text = await callVertexAI(message, token, SYSTEM_PROMPT, model);
 
       const responseResult = await sanitizeModelResponse(text, token);
-      if (isBlocked(responseResult)) {
-        console.warn('🛡️  Response blocked');
-        return res.end(JSON.stringify({ blocked: true, reason: 'Response contained sensitive or harmful data' }));
+      if (logVerdict(req.url, 'response', responseResult, message)) {
+        return res.end(JSON.stringify({ blocked: true, reason: 'Response contained sensitive or harmful data', filters: matchedFilters(responseResult) }));
       }
 
       return res.end(JSON.stringify({ text: extractRedacted(responseResult) || text }));

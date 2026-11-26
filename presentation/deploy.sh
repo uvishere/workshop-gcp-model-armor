@@ -24,9 +24,12 @@ SERVICE="${DECK_SERVICE:-securebank-talk}"
 SA_NAME="${DECK_SA:-securebank-talk}"
 SA="$SA_NAME@$PROJECT.iam.gserviceaccount.com"
 SECRET="${DECK_SECRET:-securebank-talk-password}"
+# Which deck the service serves at /, and how many instances it may run.
+DECK="${DECK:-presentation.html}"
+MAX_INSTANCES="${DECK_MAX_INSTANCES:-2}"
 G="gcloud --project $PROJECT --quiet"
 
-echo "▶ Project $PROJECT · service $SERVICE · region $REGION"
+echo "▶ Project $PROJECT · service $SERVICE · deck $DECK · region $REGION"
 
 # ── One-time setup ───────────────────────────────────────────────────────────
 if ! $G iam service-accounts describe "$SA" >/dev/null 2>&1; then
@@ -58,7 +61,7 @@ trap 'rm -rf "$BUILD"' EXIT
 mkdir -p "$BUILD/app/docs" "$BUILD/presentation/fonts"
 cp "$ROOT/app/knowledgebase.txt" "$BUILD/app/"
 cp "$ROOT"/app/docs/*.txt "$BUILD/app/docs/"
-cp "$ROOT"/presentation/{proxy.js,presentation.html,codelab-qr.png} "$BUILD/presentation/"
+cp "$ROOT"/presentation/{proxy.js,presentation.html,devfest-manila.html,codelab-qr.png} "$BUILD/presentation/"
 cp "$ROOT"/presentation/fonts/*.woff2 "$BUILD/presentation/fonts/"
 cp "$ROOT/presentation/Dockerfile" "$BUILD/"
 
@@ -70,9 +73,9 @@ $G run deploy "$SERVICE" \
   --region "$REGION" \
   --service-account "$SA" \
   --allow-unauthenticated \
-  --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT,GOOGLE_CLOUD_LOCATION=${GOOGLE_CLOUD_LOCATION:-us-central1},MODEL_ARMOR_TEMPLATE=${MODEL_ARMOR_TEMPLATE},MODEL_ARMOR_TEMPLATE_REDACT=${MODEL_ARMOR_TEMPLATE_REDACT:-$MODEL_ARMOR_TEMPLATE},SECUREBANK_DOCS_BUCKET=$DOCS_BUCKET" \
+  --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT,GOOGLE_CLOUD_LOCATION=${GOOGLE_CLOUD_LOCATION:-us-central1},MODEL_ARMOR_TEMPLATE=${MODEL_ARMOR_TEMPLATE},MODEL_ARMOR_TEMPLATE_REDACT=${MODEL_ARMOR_TEMPLATE_REDACT:-$MODEL_ARMOR_TEMPLATE},SECUREBANK_DOCS_BUCKET=$DOCS_BUCKET,DECK=$DECK" \
   --set-secrets "DECK_PASSWORD=$SECRET:latest" \
-  --min-instances 0 --max-instances 2 \
+  --min-instances 0 --max-instances "$MAX_INSTANCES" \
   --memory 512Mi --timeout 120
 
 URL="$($G run services describe "$SERVICE" --region "$REGION" --format 'value(status.url)')"
