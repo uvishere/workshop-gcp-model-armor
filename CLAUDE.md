@@ -167,7 +167,7 @@ Auth via `gcloud auth print-access-token` (ADC). Run `gcloud auth login` if toke
 | 20-23 | Fix 2 SDP: principle, product, how, redaction demo | |
 | 24-27 | Fix 3 newest model: principle, Gemini 4 on Agent Platform, how an upgrade works, demo on `gemini-4-hydrogen` with no Model Armor | |
 | 28-31 | Fix 4 observability: principle, Cloud Logging, how, demo of `/events` | |
-| 32-35 | Take these home (4), big picture, codelab QR, Thank you / Salamat po | |
+| 32-35 | Take these home (4), big picture (an SVG diagram drawn in the style of Google's codelab architecture figures), codelab QR, Thank you / Salamat po | |
 
 Tested 2026-11-26 (hosted and local): on 2.5 Flash the passphrase and poem leak every run; protected, the poem is blocked on the way in (`pi_and_jailbreak`), the passphrase and complaints on the way out (`sdp`). About 1 run in 10 the protected passphrase gets through (the dump has no PII for SDP to find). `gemini-4-argon` refused all three attacks in every run; `gemini-4-hydrogen`, which the deck now uses, refused all four attacks in 12 of 12 runs (2026-11-27). The Threat chip is gone from this deck: 2.5 Flash now refuses it on its own.
 
