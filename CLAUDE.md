@@ -33,7 +33,7 @@ Prerequisites on the Windows machine: Node.js, the gcloud CLI on PATH, and `gclo
 | `presentation/presentation.html` | Self-contained 36-slide talk — open directly in Chrome |
 | `presentation/proxy.js` | Local Node.js proxy (no npm deps) — relays chat to Vertex AI / Model Armor |
 | `presentation/start.sh` | One-command launcher: starts proxy + opens presentation |
-| `presentation/devfest-manila.html` | 34-slide DevFest Manila talk, "Your AI App Is Secure... Are you sure?". See its section below |
+| `presentation/devfest-manila.html` | 35-slide DevFest Manila talk, "Your AI App Is Secure... Are you sure?". See its section below |
 | `presentation/deploy.sh` | Deploys deck + proxy as one Cloud Run service (`securebank-talk`), behind a password from Secret Manager. Safe to re-run. `DECK`, `DECK_SERVICE`, `DECK_SECRET`, `DECK_MAX_INSTANCES` pick another deck and service |
 | `presentation/deploy-devfest-manila.sh` | Deploys the DevFest deck as `devfest-manila-talk` (own password, one instance) |
 | `presentation/Dockerfile` | Image for that service; built from a staging folder so `app/.env` never ships |
@@ -95,7 +95,7 @@ Redeploy after editing the deck: `./presentation/deploy.sh`. It runs as the `sec
 | `POST /chat-docs` | Answers from the docs bucket, no protection — slide 9 |
 | `POST /chat-docs-protected` | Same, with Model Armor — the "Summarise complaints" chip on slide 17 |
 | `GET /whereami` | Service, revision, region and service account on Cloud Run; `cloudRun: false` locally — slide 32 |
-| `GET /events` | Last 50 Model Armor verdicts on this instance (DevFest slide 30). Each verdict is also one JSON line on stdout, so Cloud Logging has it as `jsonPayload.securebank` |
+| `GET /events` | Last 50 Model Armor verdicts on this instance (DevFest slide 31). Each verdict is also one JSON line on stdout, so Cloud Logging has it as `jsonPayload.securebank` |
 
 The chat routes take an optional `model` in the body: `gemini-2.5-flash` (default) or `gemini-4-argon`, which is only served from `locations/global`. Anything else falls back to the default. Blocked responses include `filters`, the Model Armor filters that matched.
 | `POST /chat-redacted` | Returns `{ original, redacted, infoTypes }` — used by slide 21 redaction demo |
@@ -162,11 +162,11 @@ Auth via `gcloud auth print-access-token` (ADC). Run `gcloud auth login` if toke
 | 10 | Live Demo: docs bucket injection | **Live demo** |
 | 11 | OWASP grid: three attacks, LLM01/02/08 | Grid |
 | 12-14 | Not your security layer, Act two, four fixes | |
-| 15-18 | Fix 1 Model Armor: principle, product, how, demo (blocked answers show the filter) | |
-| 19-22 | Fix 2 SDP: principle, product, how, redaction demo | |
-| 23-26 | Fix 3 newest model: principle, Gemini 4 on Agent Platform, how an upgrade works, demo on `gemini-4-argon` with no Model Armor | |
-| 27-30 | Fix 4 observability: principle, Cloud Logging, how, demo of `/events` | |
-| 31-34 | Take these home (4), big picture, codelab QR, Thank you / Salamat po | |
+| 15-19 | Fix 1 Model Armor: principle, product, how (one template, two calls), integrate with the `google-cloud-solution-multi-agent-security` skill, demo (blocked answers show the filter) | |
+| 20-23 | Fix 2 SDP: principle, product, how, redaction demo | |
+| 24-27 | Fix 3 newest model: principle, Gemini 4 on Agent Platform, how an upgrade works, demo on `gemini-4-argon` with no Model Armor | |
+| 28-31 | Fix 4 observability: principle, Cloud Logging, how, demo of `/events` | |
+| 32-35 | Take these home (4), big picture, codelab QR, Thank you / Salamat po | |
 
 Tested 2026-11-26 (hosted and local): on 2.5 Flash the passphrase and poem leak every run; protected, the poem is blocked on the way in (`pi_and_jailbreak`), the passphrase and complaints on the way out (`sdp`). About 1 run in 10 the protected passphrase gets through (the dump has no PII for SDP to find). `gemini-4-argon` refused all three attacks in every run. The Threat chip is gone from this deck: 2.5 Flash now refuses it on its own.
 
