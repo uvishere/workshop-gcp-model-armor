@@ -88,7 +88,7 @@ fi
 
 # Warn if the redaction demo will fall back to scripted content.
 if curl -s http://localhost:3001/health | grep -q '"redactConfigured":false'; then
-  echo "⚠️   MODEL_ARMOR_TEMPLATE_REDACT not set — slide 21 will use its scripted fallback."
+  echo "⚠️   MODEL_ARMOR_TEMPLATE_REDACT not set — slide 20 will use its scripted fallback."
   echo "    Run ../setup-redaction.sh to enable the live redaction demo."
 fi
 
