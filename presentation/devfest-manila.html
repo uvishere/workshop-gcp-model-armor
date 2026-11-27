@@ -1276,6 +1276,76 @@
         font: 12px var(--mono);
         color: var(--faint);
       }
+
+      /* ── Light diagram cards, in the style of Google's codelab figures.
+         One colour per kind of thing, the same key as the big picture:
+         yellow Model Armor, blue the model, green SDP, purple logging,
+         red an attack. ── */
+      .hf,
+      .flow3 {
+        background: #f8f9fa;
+        border-radius: 16px;
+        padding: 22px 20px;
+      }
+      .hf .hn,
+      .flow3 .node,
+      .flow3 .ctx {
+        --bg: #fff;
+        --bd: #dadce0;
+        --hd: #f1f3f4;
+        --tx: #3c4043;
+        background: var(--bg);
+        border: 1.5px solid var(--bd);
+        border-radius: 12px;
+        padding: 0 14px 16px;
+        overflow: hidden;
+        color: #202124;
+      }
+      .hf .hn.c-ma, .flow3 .c-ma { --bg: #fef7e0; --bd: #fbbc04; --hd: #feefc3; --tx: #b06000; }
+      .hf .hn.c-model, .flow3 .c-model { --bg: #e8f0fe; --bd: #4285f4; --hd: #d2e3fc; --tx: #1967d2; }
+      .hf .hn.c-sdp { --bg: #e6f4ea; --bd: #34a853; --hd: #ceead6; --tx: #188038; }
+      .hf .hn.c-log { --bg: #f3e8fd; --bd: #a142f4; --hd: #e9d2fd; --tx: #8430ce; }
+      .hf .hn.bad, .flow3 .ctx { --bg: #fce8e6; --bd: #ea4335; --hd: #fad2cf; --tx: #c5221f; }
+      .hf .hn .t,
+      .flow3 .node .t,
+      .flow3 .ctx .t {
+        margin: 0 -14px 12px;
+        padding: 9px 14px;
+        background: var(--hd);
+        color: var(--tx);
+        font: 600 14px var(--sans);
+        letter-spacing: 0;
+        text-transform: none;
+      }
+      .hf .hn .x { color: #202124; }
+      .hf .hn .x.mono { color: #5f6368; }
+      .hf .hn .x.mono.green { color: #188038; }
+      .hf .hn .api { color: var(--tx); }
+      .hf .ha {
+        background: #9aa0a6;
+      }
+      .hf .ha::before {
+        content: '';
+        position: absolute;
+        right: -1px;
+        top: -4px;
+        border: 5px solid transparent;
+        border-left: 7px solid #9aa0a6;
+        border-right: 0;
+      }
+      .hf > .hs.shown .ha::after {
+        background: #4285f4;
+      }
+      .flow3 .ctx div + div { border-top-color: #f5c2bd; }
+      .flow3 .ctx .row { color: #202124; }
+      .flow3 .ctx .t + .row { border-top: 0; }
+      .flow3 .node .v.mono { color: var(--tx); font: 600 14px var(--mono); }
+      .flow3 .node .q { border-top-color: #aecbfa; color: #3c4043; }
+      .flow3 .node .say { color: #3c4043; }
+      .flow3 .arrow { color: #5f6368; font-size: 22px; }
+      .ma3 li { background: #fef7e0; border-color: #fbbc04; border-width: 1.5px; border-radius: 12px; }
+      .ma3 .n, .ma3 code { color: #b06000; }
+      .ma3 .t { color: #202124; }
     </style>
   </head>
   <body>
@@ -1311,7 +1381,7 @@
             </div>
             <div class="step">
               <div class="arrow">→</div>
-              <div class="node">
+              <div class="node c-model">
                 <div class="t">Gemini</div>
                 <div class="v mono">gemini-2.5-flash</div>
                 <div class="q">+ the customer's question</div>
@@ -1534,9 +1604,9 @@ Never share sensitive and confidential information.</b>
           </div>
           <div class="hf tight" data-build>
             <div class="hs"><div class="hn bad"><div class="t">Customer</div><div class="x">A poem with the keys</div></div></div>
-            <div class="hs"><div class="ha"></div><div class="hn guard"><div class="t">Model Armor</div><div class="x">Jailbreak: blocked</div></div></div>
-            <div class="hs"><div class="ha"></div><div class="hn"><div class="t">Gemini</div><div class="x">Clean prompts only</div></div></div>
-            <div class="hs"><div class="ha"></div><div class="hn guard"><div class="t">Model Armor</div><div class="x">Leak: masked</div></div></div>
+            <div class="hs"><div class="ha"></div><div class="hn c-ma"><div class="t">Model Armor</div><div class="x">Jailbreak: blocked</div></div></div>
+            <div class="hs"><div class="ha"></div><div class="hn c-model"><div class="t">Gemini</div><div class="x">Clean prompts only</div></div></div>
+            <div class="hs"><div class="ha"></div><div class="hn c-ma"><div class="t">Model Armor</div><div class="x">Leak: masked</div></div></div>
             <div class="hs"><div class="ha"></div><div class="hn"><div class="t">Customer</div><div class="x">Safe answer</div></div></div>
           </div>
         </section>
@@ -1612,9 +1682,9 @@ Never share sensitive and confidential information.</b>
           <p class="lede">Two templates: what to look for, and what to replace it with.</p>
           <div class="hf" data-build>
             <div class="hs"><div class="hn bad"><div class="t">Docs bucket</div><div class="x mono">Margaret Osei<br />margaret.osei@gmail.com<br />+61 412 668 190</div></div></div>
-            <div class="hs"><div class="ha"></div><div class="hn guard"><div class="t">Inspect template</div><div class="x">Finds PERSON_NAME, EMAIL_ADDRESS, PHONE_NUMBER</div></div></div>
-            <div class="hs"><div class="ha"></div><div class="hn guard"><div class="t">De-identify template</div><div class="x">Swaps each one for its type</div></div></div>
-            <div class="hs"><div class="ha"></div><div class="hn"><div class="t">Clean bucket</div><div class="x mono green">[PERSON_NAME]<br />[EMAIL_ADDRESS]<br />[PHONE_NUMBER]</div></div></div>
+            <div class="hs"><div class="ha"></div><div class="hn c-sdp"><div class="t">Inspect template</div><div class="x">Finds PERSON_NAME, EMAIL_ADDRESS, PHONE_NUMBER</div></div></div>
+            <div class="hs"><div class="ha"></div><div class="hn c-sdp"><div class="t">De-identify template</div><div class="x">Swaps each one for its type</div></div></div>
+            <div class="hs"><div class="ha"></div><div class="hn c-sdp"><div class="t">Clean bucket</div><div class="x mono green">[PERSON_NAME]<br />[EMAIL_ADDRESS]<br />[PHONE_NUMBER]</div></div></div>
           </div>
           <div data-build>
             <div class="callout">The bot reads the clean copy. And the same templates run inside Model Armor on every answer: that's the next demo.</div>
@@ -1675,8 +1745,8 @@ await ai.models.generateContent({ model: <span class="k">'gemini-4-hydrogen'</sp
           <div class="hf" data-build>
             <div class="hs"><div class="hn bad"><div class="t">Attack list</div><div class="x">Passphrase, poem, two poisoned complaints</div></div></div>
             <div class="hs"><div class="ha"></div><div class="hn bad"><div class="t">2.5 Flash</div><div class="x">Leaks the prompt and the keys</div></div></div>
-            <div class="hs"><div class="ha"></div><div class="hn guard"><div class="t">Gemini 4 Hydrogen</div><div class="x">Refuses all four</div></div></div>
-            <div class="hs"><div class="ha"></div><div class="hn guard"><div class="t">Model Armor</div><div class="x">Stays on for the next jailbreak</div></div></div>
+            <div class="hs"><div class="ha"></div><div class="hn c-model"><div class="t">Gemini 4 Hydrogen</div><div class="x">Refuses all four</div></div></div>
+            <div class="hs"><div class="ha"></div><div class="hn c-ma"><div class="t">Model Armor</div><div class="x">Stays on for the next jailbreak</div></div></div>
             <div class="hs"><div class="ha"></div><div class="hn"><div class="t">Ship</div><div class="x">One line changed, attack list kept</div></div></div>
           </div>
         </section>
@@ -1733,9 +1803,9 @@ await ai.models.generateContent({ model: <span class="k">'gemini-4-hydrogen'</sp
           <h2>How observability works</h2>
           <p class="lede">From one blocked prompt to someone getting paged.</p>
           <div class="hf" data-build>
-            <div class="hs"><div class="hn guard"><div class="t">Model Armor</div><div class="x">Blocks a prompt and returns the verdict</div></div></div>
-            <div class="hs"><div class="ha"></div><div class="hn"><div class="t">Cloud Logging</div><div class="x">Stores it with the caller and the filter that fired</div></div></div>
-            <div class="hs"><div class="ha"></div><div class="hn"><div class="t">Log-based metric</div><div class="api">blocked_prompts</div></div></div>
+            <div class="hs"><div class="hn c-ma"><div class="t">Model Armor</div><div class="x">Blocks a prompt and returns the verdict</div></div></div>
+            <div class="hs"><div class="ha"></div><div class="hn c-log"><div class="t">Cloud Logging</div><div class="x">Stores it with the caller and the filter that fired</div></div></div>
+            <div class="hs"><div class="ha"></div><div class="hn c-log"><div class="t">Log-based metric</div><div class="api">blocked_prompts</div></div></div>
             <div class="hs"><div class="ha"></div><div class="hn bad"><div class="t">Alert</div><div class="x">20 from one caller in 5 minutes</div></div></div>
             <div class="hs"><div class="ha"></div><div class="hn"><div class="t">You</div><div class="x">Email, Slack or a page</div></div></div>
           </div>
