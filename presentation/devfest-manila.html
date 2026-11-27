@@ -781,6 +781,8 @@
       /* ── Big picture: a light diagram card, Google Cloud codelab style ── */
       .gdiag {
         margin-top: 18px;
+        background: #f8f9fa;
+        border-radius: 16px;
       }
       .gsvg {
         display: block;
@@ -1552,8 +1554,8 @@ Never share sensitive and confidential information.</b>
           <h2>Defence in depth</h2>
           <p class="lede">Google's approach for secure AI agents: no single layer is enough.</p>
           <div class="did" data-build>
-            <div class="dl"><span class="n">Layer 1</span><span class="t">Deterministic controls</span><span class="x">Hard rules, whatever the model does</span><span class="us">Model Armor · SDP</span></div>
-            <div class="dl"><span class="n">Layer 2</span><span class="t">Reasoning-based defences</span><span class="x">A model that's harder to trick</span><span class="us">Gemini 4</span></div>
+            <div class="dl"><span class="n">Layer 1</span><span class="t">Deterministic controls</span><span class="x">Hard rules, whatever the model does</span><span class="us">SDP</span></div>
+            <div class="dl"><span class="n">Layer 2</span><span class="t">Reasoning-based defences</span><span class="x">A model that's harder to trick</span><span class="us">Model Armor · Gemini 4</span></div>
             <div class="dl"><span class="n">Layer 3</span><span class="t">Continuous assurance</span><span class="x">Watch it, and keep attacking it</span><span class="us">Cloud Logging</span></div>
           </div>
           <div class="did-src">Source: <em>An Introduction to Google's Approach for Secure AI Agents</em> · research.google</div>
@@ -1826,22 +1828,33 @@ Never share sensitive and confidential information.</b>
               <defs>
                 <marker id="ga-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#4285f4" /></marker>
                 <marker id="ga-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#34a853" /></marker>
+                <marker id="ga-grey" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#9aa0a6" /></marker>
                 <marker id="ga-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#a142f4" /></marker>
               </defs>
             </svg>
             <svg viewBox="0 0 860 400" class="gsvg" data-build role="img" aria-label="Customer to Model Armor to the SecureBank bot on Gemini 4, with Cloud Storage, Cloud Logging and SDP around it">
-              <!-- Row 1: the request path -->
+              <!-- 1: the app, customer and bot -->
               <g>
-                <rect x="0" y="0" width="860" height="400" rx="16" fill="#f8f9fa" />
-                <!-- Customer -->
+<line x1="150" y1="78" x2="518" y2="78" stroke="#9aa0a6" stroke-width="2" marker-end="url(#ga-grey)" />
+                <text x="334" y="68" class="gs" fill="#5f6368">nothing checked</text>
+<!-- Customer -->
                 <rect x="24" y="34" width="124" height="120" rx="12" fill="#fff" stroke="#dadce0" />
                 <circle cx="86" cy="72" r="13" fill="#4285f4" />
                 <path d="M62 104 Q86 88 110 104" stroke="#4285f4" stroke-width="7" fill="none" stroke-linecap="round" />
                 <text x="86" y="136" class="gl">Customer</text>
-                <!-- Request -->
-                <line x1="150" y1="78" x2="226" y2="78" stroke="#4285f4" stroke-width="2.5" marker-end="url(#ga-blue)" />
-                <text x="188" y="68" class="gs" fill="#1967d2">Request</text>
-                <!-- Model Armor -->
+                <!-- Bot -->
+                <rect x="522" y="18" width="210" height="152" rx="12" fill="#e8f0fe" stroke="#4285f4" stroke-width="2" />
+                <path d="M523 30 a11 11 0 0 1 11 -11 h186 a11 11 0 0 1 11 11 v20 h-208z" fill="#d2e3fc" />
+                <text x="627" y="42" class="gh" fill="#1967d2">SecureBank bot</text>
+                <rect x="621" y="58" width="12" height="8" rx="2" fill="#4285f4" />
+                <rect x="603" y="66" width="48" height="30" rx="8" fill="#fff" stroke="#4285f4" stroke-width="2.5" />
+                <circle cx="618" cy="81" r="4.5" fill="#4285f4" /><circle cx="636" cy="81" r="4.5" fill="#4285f4" />
+                <text x="627" y="128" class="gs">Gemini 4 Hydrogen</text>
+                <text x="627" y="146" class="gs" fill="#5f6368">on Agent Platform</text>
+              </g>
+              <!-- 2: Model Armor, in front and behind -->
+              <g>
+<!-- Model Armor -->
                 <rect x="230" y="18" width="210" height="152" rx="12" fill="#fef7e0" stroke="#fbbc04" stroke-width="2" />
                 <path d="M231 30 a11 11 0 0 1 11 -11 h186 a11 11 0 0 1 11 11 v20 h-208z" fill="#feefc3" />
                 <text x="335" y="42" class="gh" fill="#e37400">Model Armor</text>
@@ -1852,42 +1865,39 @@ Never share sensitive and confidential information.</b>
                 <line x1="335" y1="171" x2="335" y2="184" stroke="#ea4335" stroke-dasharray="3 3" stroke-width="1.5" />
                 <rect x="292" y="184" width="86" height="24" rx="6" fill="#fce8e6" stroke="#ea4335" />
                 <text x="335" y="200" class="gs" fill="#c5221f">✗ Blocked</text>
+                <!-- Request -->
+                <line x1="150" y1="78" x2="226" y2="78" stroke="#4285f4" stroke-width="2.5" marker-end="url(#ga-blue)" />
+                <text x="188" y="68" class="gs" fill="#1967d2">Request</text>
                 <!-- Clean -->
                 <line x1="442" y1="78" x2="518" y2="78" stroke="#34a853" stroke-width="2.5" marker-end="url(#ga-green)" />
                 <text x="480" y="68" class="gs" fill="#188038">Clean</text>
-                <!-- Bot -->
-                <rect x="522" y="18" width="210" height="152" rx="12" fill="#e8f0fe" stroke="#4285f4" stroke-width="2" />
-                <path d="M523 30 a11 11 0 0 1 11 -11 h186 a11 11 0 0 1 11 11 v20 h-208z" fill="#d2e3fc" />
-                <text x="627" y="42" class="gh" fill="#1967d2">SecureBank bot</text>
-                <rect x="621" y="58" width="12" height="8" rx="2" fill="#4285f4" />
-                <rect x="603" y="66" width="48" height="30" rx="8" fill="#fff" stroke="#4285f4" stroke-width="2.5" />
-                <circle cx="618" cy="81" r="4.5" fill="#4285f4" /><circle cx="636" cy="81" r="4.5" fill="#4285f4" />
-                <text x="627" y="128" class="gs">Gemini 4 Hydrogen</text>
-                <text x="627" y="146" class="gs" fill="#5f6368">on Agent Platform</text>
                 <!-- Response, checked on the way back -->
                 <line x1="520" y1="132" x2="444" y2="132" stroke="#4285f4" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#ga-blue)" />
                 <line x1="228" y1="132" x2="152" y2="132" stroke="#4285f4" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#ga-blue)" />
                 <text x="188" y="152" class="gs" fill="#1967d2">Answer</text>
               </g>
-              <!-- Row 2: what supports it -->
+              <!-- 3: SDP, the masked docs copy -->
               <g>
-                <line x1="627" y1="172" x2="627" y2="226" stroke="#34a853" stroke-width="2.5" marker-start="url(#ga-green)" />
+<line x1="627" y1="172" x2="627" y2="226" stroke="#34a853" stroke-width="2.5" marker-start="url(#ga-green)" />
                 <text x="636" y="204" class="gs" fill="#188038" text-anchor="start">reads</text>
                 <rect x="532" y="228" width="190" height="82" rx="12" fill="#e6f4ea" stroke="#34a853" stroke-width="2" />
                 <ellipse cx="566" cy="254" rx="13" ry="5" fill="none" stroke="#188038" stroke-width="2" />
                 <path d="M553 254 v20 a13 5 0 0 0 26 0 v-20" fill="none" stroke="#188038" stroke-width="2" />
                 <text x="650" y="262" class="gh" fill="#188038">Cloud Storage</text>
                 <text x="650" y="284" class="gs">docs, masked by SDP</text>
-                <line x1="262" y1="172" x2="262" y2="226" stroke="#a142f4" stroke-width="2" stroke-dasharray="2 4" marker-end="url(#ga-purple)" />
+              </g>
+              <!-- 4: Cloud Logging, every verdict -->
+              <g>
+<line x1="262" y1="172" x2="262" y2="226" stroke="#a142f4" stroke-width="2" stroke-dasharray="2 4" marker-end="url(#ga-purple)" />
                 <text x="253" y="204" class="gs" fill="#8430ce" text-anchor="end">every verdict</text>
                 <rect x="160" y="228" width="210" height="82" rx="12" fill="#f3e8fd" stroke="#a142f4" stroke-width="2" />
                 <rect x="180" y="250" width="22" height="3" rx="1.5" fill="#8430ce" /><rect x="180" y="258" width="16" height="3" rx="1.5" fill="#8430ce" /><rect x="180" y="266" width="22" height="3" rx="1.5" fill="#8430ce" /><rect x="180" y="274" width="12" height="3" rx="1.5" fill="#8430ce" />
                 <text x="290" y="262" class="gh" fill="#8430ce">Cloud Logging</text>
                 <text x="290" y="284" class="gs">alerts on a spike</text>
               </g>
-              <!-- Row 3: legend -->
+              <!-- 5: the whole picture -->
               <g>
-                <rect x="24" y="330" width="470" height="52" rx="10" fill="#fff" stroke="#dadce0" />
+<rect x="24" y="330" width="470" height="52" rx="10" fill="#fff" stroke="#dadce0" />
                 <rect x="42" y="350" width="12" height="12" rx="3" fill="#feefc3" stroke="#fbbc04" />
                 <text x="60" y="360" class="gs" text-anchor="start">Model Armor</text>
                 <rect x="160" y="350" width="12" height="12" rx="3" fill="#e8f0fe" stroke="#4285f4" />
@@ -1971,7 +1981,7 @@ Never share sensitive and confidential information.</b>
         "Act two. Four fixes: three layers around the model, and a better model in the middle. Defence in depth: no single layer catches everything, and we will see where each one stops.",
 
         /* 13: Defence in depth */
-        "DEFENCE IN DEPTH.\nThis is Google's own framing, from the whitepaper 'An Introduction to Google's Approach for Secure AI Agents' (research.google). It's also the first page of Google's secure customer-service agent codelab.\n\nClick through the three layers:\n1. Deterministic controls: rules in code and policy that hold no matter what the model decides. Runtime policy enforcement, access control, hard limits. Tonight: Model Armor and Sensitive Data Protection.\n2. Reasoning-based defences: make the model itself harder to fool. Hardened models, classifier guards, adversarial training. Tonight: Gemini 4.\n3. Continuous assurance: red teaming, regression testing, variant analysis. You keep attacking it and you watch what happens. Tonight: Cloud Logging, and the attack list you re-run on every change.\n\nThe line: the model is one layer of three, and it's the middle one. The tags on the right are tonight's four fixes. Next: fix one, Model Armor.",
+        "DEFENCE IN DEPTH.\nThis is Google's own framing, from the whitepaper 'An Introduction to Google's Approach for Secure AI Agents' (research.google). It's also the first page of Google's secure customer-service agent codelab.\n\nClick through the three layers:\n1. Deterministic controls: rules in code and policy that hold no matter what the model decides. Runtime policy enforcement, access control, hard limits. Tonight: Sensitive Data Protection, which masks the documents before the model ever sees them.\n2. Reasoning-based defences: make the model itself harder to fool. Hardened models, classifier guards, adversarial training. Tonight: Model Armor, a classifier guard that reads every prompt and answer, and Gemini 4, a model that's harder to trick.\n3. Continuous assurance: red teaming, regression testing, variant analysis. You keep attacking it and you watch what happens. Tonight: Cloud Logging, and the attack list you re-run on every change.\n\nThe line: the model is one layer of three, and it's the middle one. The tags on the right are tonight's four fixes. Next: fix one, Model Armor.",
         /* 14: Fix 1, principle */
         "Guardrails. Any text that crosses the model is untrusted: the customer's prompt, the documents you retrieve, and the model's own answer.\n\nThe key word is 'own'. The model's built-in safety is someone else's rules, tuned for the general public. Your guardrails encode your rules: what a bank's bot must never say.",
 
@@ -2023,7 +2033,7 @@ Never share sensitive and confidential information.</b>
         "Four habits, one per fix. Say them as habits, not products:\n- Check what goes in and what comes out, outside the model.\n- Keep personal data out of the model's reach. And keep secrets out of prompts entirely.\n- Run the newest model you can, and re-test it with your attack list.\n- Know when it happens. Silent protection isn't protection.\n\nThe gap to be honest about: none of these knows that 4.75% is a commercial secret. Some data simply should not be in the bot's reach.",
 
         /* 31: Big-picture architecture */
-        "Click through three steps.\n1. The request path: the customer's request hits Model Armor first. Injection, sensitive data and malicious links get blocked there. Only clean prompts reach the bot on Gemini 4 Hydrogen, and its answer goes back through Model Armor before the customer sees it.\n2. What supports it: the bot reads its documents from Cloud Storage, a copy SDP has already masked. Every Model Armor verdict lands in Cloud Logging, with an alert on a spike.\n3. The legend: four colours, four fixes. If one layer misses, the next one holds.\n\nThe line: the model is one box. Everything that makes it safe is around it.",
+        "Five clicks, one per section of the talk.\n1. The app: the customer and the bot on Gemini 4 Hydrogen. That's what we broke in act one.\n2. Model Armor, in front and behind: injection, sensitive data and malicious links blocked on the way in; every answer checked on the way out.\n3. SDP: the bot reads a copy of the documents SDP has already masked.\n4. Cloud Logging: every Model Armor verdict, with an alert on a spike.\n5. The whole picture, and the legend: four colours, four fixes. If one layer misses, the next one holds.\n\nThe line: the model is one box. Everything that makes it safe is around it.",
 
         /* 32: Follow along */
         "Leave this up for a moment. Everything from tonight is in the codelab, step by step, with the commands. It runs in Cloud Shell, so all anyone needs is a browser and a Google Cloud project with billing on (a free trial is fine).\n\nRemind people to clean up their projects afterwards: the last codelab section has the commands.",
