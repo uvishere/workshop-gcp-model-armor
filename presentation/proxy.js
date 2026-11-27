@@ -244,6 +244,7 @@ const DEFAULT_MODEL = 'gemini-2.5-flash';
 const MODELS = {
   'gemini-2.5-flash': { host: `${LOCATION}-aiplatform.googleapis.com`, location: LOCATION },
   'gemini-4-argon':   { host: 'aiplatform.googleapis.com', location: 'global' },
+  'gemini-4-hydrogen': { host: 'aiplatform.googleapis.com', location: 'global' },
 };
 function pickModel(name) {
   return MODELS[name] ? name : DEFAULT_MODEL;
