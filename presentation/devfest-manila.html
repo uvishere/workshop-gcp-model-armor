@@ -1784,7 +1784,6 @@ Never share sensitive and confidential information.</b>
           </div>
           <div class="ev-bar">
             <button class="chip g" onclick="loadEvents()">Show every verdict</button>
-            <code class="ev-q">jsonPayload.securebank.verdict="BLOCKED"</code>
           </div>
           <div class="ev-wrap">
             <table class="ev">
@@ -2010,7 +2009,7 @@ Never share sensitive and confidential information.</b>
         "Click through.\n1. Model Armor blocks a prompt and returns the verdict.\n2. Cloud Logging keeps it, with the caller and the filter that fired.\n3. A log-based metric counts them: blocked_prompts.\n4. An alert policy: twenty from one caller in five minutes. One blocked prompt is noise; twenty is a pattern.\n5. Someone gets an email, a Slack message or a page.\n\nThe callout is the gotcha: Model Armor's own sanitize-operation logging is OFF by default, so the template blocks attacks in total silence. Turn it on, or log the verdict yourself as this app does. And treat the logs as sensitive: they can contain the very PII you are protecting.",
 
         /* 28: Live demo, the security log */
-        "LIVE DEMO, THE SECURITY LOG.\nClick 'Show every verdict'. Every Model Armor check from tonight's demos appears: when, prompt or response, BLOCKED or ALLOWED, and which filter fired.\n\nThese are the same structured lines this service writes to Cloud Logging. Point at the query: jsonPayload.securebank.verdict=\"BLOCKED\". Paste that into Logs Explorer and you get the same list; make it a log-based metric and you can alert on it.\n\nThe prompt column is cut to 80 characters on purpose: logs are sensitive too.\n\nIf you present from the laptop, the badge says 'Local proxy' and the lines go to the terminal instead. Same lines, different destination.\n\nIf the list is empty, nobody has hit the protected demo on this instance yet (it restarted, or you skipped slide 18). Go back, send one, come back.",
+        "LIVE DEMO, THE SECURITY LOG.\nClick 'Show every verdict'. Every Model Armor check from tonight's demos appears: when, prompt or response, BLOCKED or ALLOWED, and which filter fired.\n\nThese are the same structured lines this service writes to Cloud Logging. If someone asks how to find them: the Logs Explorer query is jsonPayload.securebank.verdict=\"BLOCKED\", and it gives you the same list; make it a log-based metric and you can alert on it.\n\nThe prompt column is cut to 80 characters on purpose: logs are sensitive too.\n\nIf you present from the laptop, the badge says 'Local proxy' and the lines go to the terminal instead. Same lines, different destination.\n\nIf the list is empty, nobody has hit the protected demo on this instance yet (it restarted, or you skipped slide 18). Go back, send one, come back.",
 
         /* 29: Takeaways */
         "Four habits, one per fix. Say them as habits, not products:\n- Check what goes in and what comes out, outside the model.\n- Keep personal data out of the model's reach. And keep secrets out of prompts entirely.\n- Run the newest model you can, and re-test it with your attack list.\n- Know when it happens. Silent protection isn't protection.\n\nThe gap to be honest about: none of these knows that 4.75% is a commercial secret. Some data simply should not be in the bot's reach.",
