@@ -161,7 +161,7 @@ Auth via `gcloud auth print-access-token` (ADC). Run `gcloud auth login` if toke
 | 9 | Live Demo: docs bucket injection (complaints) and a planted phishing link (Locked-out customer) | **Live demo** |
 | 10 | OWASP grid: four attacks, LLM01/02/08/10 | Grid |
 | 11-12 | Not your security layer, Act two | |
-| 13 | Defence in depth: the three layers from Google's "An Introduction to Google's Approach for Secure AI Agents" whitepaper, mapped to tonight's fixes (SDP in layer 1; Model Armor and Gemini 4 in layer 2, as reasoning-based classifier guards; Cloud Logging in layer 3) | Explainer |
+| 13 | Defence in depth: the three layers from Google's "An Introduction to Google's Approach for Secure AI Agents" whitepaper, mapped to tonight's fixes (SDP in layer 1; Model Armor in layer 2, as a reasoning-based classifier guard; Cloud Logging in layer 3) | Explainer |
 | 14-18 | Fix 1 Model Armor: principle, product, how (one template, two calls), integrate with the `google-cloud-solution-multi-agent-security` skill, demo (blocked answers show the filter) | |
 | 19-22 | Fix 2 SDP: principle, product, how, redaction demo | |
 | 23-25 | Fix 3 newest model: principle, Gemini 4 on Agent Platform, demo on `gemini-4-hydrogen` with no Model Armor | |
