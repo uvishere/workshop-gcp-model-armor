@@ -64,6 +64,10 @@ cp "$ROOT"/app/docs/*.txt "$BUILD/app/docs/"
 cp "$ROOT"/presentation/{proxy.js,presentation.html,devfest-manila.html,codelab-qr.png,rate-qr.png} "$BUILD/presentation/"
 cp "$ROOT"/presentation/fonts/*.woff2 "$BUILD/presentation/fonts/"
 cp "$ROOT/presentation/Dockerfile" "$BUILD/"
+# The container runs as the unprivileged node user, so every file must be
+# world-readable. A file saved with owner-only permissions (say, an image
+# copied out of a temp folder) otherwise fails with EACCES at request time.
+chmod -R a+rX "$BUILD"
 
 # ── Deploy ───────────────────────────────────────────────────────────────────
 # Public at the network level; the proxy's own password gate does the rest.
