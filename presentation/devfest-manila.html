@@ -1279,6 +1279,34 @@
         color: var(--faint);
       }
 
+      /* Thank-you slide: rate-my-talk QR on the right */
+      .rate {
+        position: absolute;
+        right: 64px;
+        top: 50%;
+        transform: translateY(-50%);
+        text-align: center;
+      }
+      .rate img {
+        width: 210px;
+        height: 210px;
+        object-fit: contain;
+        background: #fff;
+        padding: 10px;
+        border-radius: 12px;
+        display: block;
+      }
+      .slide:has(.rate) .big {
+        font-size: 78px;
+      }
+      .rate .lab {
+        margin-top: 12px;
+        font: 600 15px var(--mono);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--green);
+      }
+
       /* ── Light diagram cards, in the style of Google's codelab figures.
          One colour per kind of thing, the same key as the big picture:
          yellow Model Armor, blue the model, green SDP, purple logging,
@@ -1918,6 +1946,10 @@ Never share sensitive and confidential information.</b>
         <!-- 32: Thank you -->
         <section class="slide poster" id="s32">
           <div class="big">Thank you.<br /><span class="green">Salamat po.</span></div>
+          <div class="rate">
+            <img src="rate-qr.png" alt="QR code to rate this talk" />
+            <div class="lab">Rate my talk</div>
+          </div>
           <div class="contact">
             <div><span class="lab">Web</span>uvishere.com</div>
             <div><span class="lab">LinkedIn</span>linkedin.com/in/yuba-raj-panta</div>

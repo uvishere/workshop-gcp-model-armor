@@ -386,6 +386,7 @@ const STATIC = {
   '/presentation.html': ['presentation.html', 'text/html; charset=utf-8'],
   '/devfest-manila.html': ['devfest-manila.html', 'text/html; charset=utf-8'],
   '/codelab-qr.png': ['codelab-qr.png', 'image/png'],
+  '/rate-qr.png':    ['rate-qr.png', 'image/png'],
   '/fonts/archivo-black-latin-400.woff2': ['fonts/archivo-black-latin-400.woff2', 'font/woff2'],
   '/fonts/inter-latin-var.woff2': ['fonts/inter-latin-var.woff2', 'font/woff2'],
   '/fonts/jetbrains-mono-latin-var.woff2': ['fonts/jetbrains-mono-latin-var.woff2', 'font/woff2'],

@@ -61,7 +61,7 @@ trap 'rm -rf "$BUILD"' EXIT
 mkdir -p "$BUILD/app/docs" "$BUILD/presentation/fonts"
 cp "$ROOT/app/knowledgebase.txt" "$BUILD/app/"
 cp "$ROOT"/app/docs/*.txt "$BUILD/app/docs/"
-cp "$ROOT"/presentation/{proxy.js,presentation.html,devfest-manila.html,codelab-qr.png} "$BUILD/presentation/"
+cp "$ROOT"/presentation/{proxy.js,presentation.html,devfest-manila.html,codelab-qr.png,rate-qr.png} "$BUILD/presentation/"
 cp "$ROOT"/presentation/fonts/*.woff2 "$BUILD/presentation/fonts/"
 cp "$ROOT/presentation/Dockerfile" "$BUILD/"
 

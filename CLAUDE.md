@@ -166,7 +166,7 @@ Auth via `gcloud auth print-access-token` (ADC). Run `gcloud auth login` if toke
 | 19-22 | Fix 2 SDP: principle, product, how, redaction demo | |
 | 23-24 | Fix 3 newest model: principle, demo on `gemini-4-hydrogen` with no Model Armor | |
 | 25-28 | Fix 4 observability: principle, Cloud Logging, how, demo of `/events` | |
-| 29-32 | Take these home (4), big picture (an SVG diagram in the style of Google's codelab figures, five clicks: app, Model Armor, SDP, Logging, whole picture), codelab QR, Thank you / Salamat po | |
+| 29-32 | Take these home (4), big picture (an SVG diagram in the style of Google's codelab figures, five clicks: app, Model Armor, SDP, Logging, whole picture), codelab QR, Thank you / Salamat po with the rate-my-talk QR (`rate-qr.png`) | |
 
 Diagrams (slides 3, 16, 21, 27, 30) use light cards in the style of Google's codelab figures, one colour per kind of thing: yellow `c-ma` Model Armor, blue `c-model` the model, green `c-sdp` SDP, purple `c-log` logging, red `bad` an attack. Put the class on the `.hn` node.
 
